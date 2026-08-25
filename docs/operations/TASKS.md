@@ -42,3 +42,10 @@
 - [x] Create a concise root guide and an AI-first entry-point file.
 - [x] Move project strategy, workflow, and record documents into intuitive folders.
 - [x] Verify the moved documents are referenced correctly and publish the clean structure.
+
+# Original Reference Library — Delivery Checklist
+
+- [x] Add the four original partner-provided source documents to the repository reference library.
+- [x] Add the Enterprise AI Strategy & Build Plan as a standalone reference document.
+- [x] Update the documentation index and AI context with the source-library location.
+- [x] Verify and publish the expanded reference library.

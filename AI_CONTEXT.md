@@ -42,4 +42,4 @@ Implement **one visible, testable task** at a time. State the user-visible outco
 
 ## Need more context?
 
-Read [`README.md`](README.md) for the repository map, then [`docs/README.md`](docs/README.md) for document purposes.
+Read [`README.md`](README.md) for the repository map, then [`docs/README.md`](docs/README.md) for document purposes. For the original source documents and the integrated strategy plan, use [`docs/reference-library/README.md`](docs/reference-library/README.md).

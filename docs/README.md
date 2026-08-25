@@ -28,7 +28,13 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | `GITHUB_WORKFLOW.md` | The source-of-truth repository rule and cross-tool synchronization routine. |
 | `BACKUP_INSTRUCTIONS.md` | Local backup and portable-archive guidance. |
 
+## `reference-library/` — Where did the product direction come from?
+
+| File or folder | Meaning |
+| --- | --- |
+| `ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md` | The standalone integrated plan connecting the original materials to the current product build. |
+| `originals/` | The four original partner-provided Word documents, preserved without edits. |
+
 ## Source materials
 
-The original Word documents and research video are intentionally **not** copied into this code repository. Keep them in the local archive and/or the project’s Google Drive folder. The key conclusions are already distilled in `strategy/RESEARCH_FINDINGS.md`.
-
+The four original Word documents are stored in `reference-library/originals/`. The research video is intentionally kept in the local archive and/or the project’s Google Drive folder rather than in the code repository. The key conclusions are also distilled in `strategy/RESEARCH_FINDINGS.md`.
