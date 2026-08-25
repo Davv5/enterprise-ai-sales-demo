@@ -34,4 +34,4 @@
 - [x] Inspect the current GitHub connection and available repository ownership path.
 - [x] Confirm the project source is ready for export without local build artifacts.
 - [x] Connect or create the project repository under the user’s GitHub account.
-- [ ] Add the plain-English GitHub routine to the local workflow documentation.
+- [x] Add the plain-English GitHub routine to the local workflow documentation.
