@@ -1,469 +1,396 @@
 /**
- * Operator's Fieldbook design reminder:
- * This page is an asymmetric, evidence-first operations dossier. Keep decisions and control gates
- * legible, use Signal Vermilion only for active risk/action, and avoid generic dashboard symmetry.
+ * Harborline Command design reminder:
+ * Build a premium operational demo, not a generic analytics dashboard. The UI should let a seller
+ * explain account coverage, evidence, control, and rep ownership in one clean narrative. Use
+ * Signal Vermilion only for active risks/actions; all data is fictional demonstration data.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowDownRight,
+  AlertTriangle,
+  ArrowLeft,
   ArrowRight,
   BadgeCheck,
-  Building2,
-  Check,
+  BellRing,
+  BookOpen,
   ChevronRight,
-  CircleAlert,
+  CircleCheck,
   ClipboardCheck,
-  FileText,
+  Clock3,
+  Command,
+  FileCheck2,
+  Filter,
   Gauge,
-  Layers2,
-  LockKeyhole,
+  LayoutDashboard,
   Mail,
-  MessageSquareText,
+  MoreHorizontal,
+  PackageCheck,
+  Play,
+  RefreshCcw,
   Route,
-  Scale,
+  Search,
   Send,
   ShieldCheck,
-  UserRoundCheck,
+  Sparkles,
+  UserRound,
+  UsersRound,
 } from "lucide-react";
 import {
-  Bar,
-  BarChart,
+  Area,
+  AreaChart,
   CartesianGrid,
-  Cell,
-  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 
-const trackCopy = {
-  communications: {
-    eyebrow: "TRACK A · PROOF OF CAPABILITY",
-    title: "Start with the missed reorder—not a CRM replacement.",
-    description:
-      "The communication sandbox is a controlled workflow product. It watches for a defined account signal, applies an approved eligibility rule, sends an approved message, preserves the evidence, and gives non-routine replies back to the human rep.",
-    outcome: "A narrow, credible demo that shows no account falls through the cracks.",
-    points: [
-      "Mock or explicitly consented test data only",
-      "One deterministic reorder reminder trigger",
-      "Visible audit event and human escalation",
-    ],
-  },
-  financial: {
-    eyebrow: "TRACK B · METHODOLOGY VALIDATION",
-    title: "Make the model explainable before making it client-facing.",
-    description:
-      "The financial-model product is a spreadsheet-first feasibility system for new beverage SKUs. Its initial deliverable is a model design review pack—not a set of unsupported outputs—with a formula map, input dictionary, source register, and scenario logic awaiting expert approval.",
-    outcome: "A reviewer-approved foundation for cost, timeline, channel, cash, and breakeven decisions.",
-    points: [
-      "Classify product and regulatory gates explicitly",
-      "Show sources, units, inputs, and formula lineage",
-      "Validate tax, margin cascade, and scenario method",
-    ],
-  },
-} as const;
+type View = "command" | "account" | "audit";
 
-const roadmapData = [
-  { phase: "Discover", weeks: 2, detail: "Interviews + constraints", color: "#E6533C" },
-  { phase: "Sandbox", weeks: 2, detail: "Controlled workflow", color: "#23384A" },
-  { phase: "Validate", weeks: 2, detail: "Pilot offer + review", color: "#526F62" },
-  { phase: "Prove", weeks: 2, detail: "Readiness + evidence", color: "#A6A49C" },
+const cadenceData = [
+  { cycle: "May 06", cases: 8 },
+  { cycle: "May 27", cases: 11 },
+  { cycle: "Jun 17", cases: 11 },
+  { cycle: "Jul 08", cases: 10 },
+  { cycle: "Jul 29", cases: 0 },
+  { cycle: "Aug 20", cases: 0 },
 ];
 
-const roadmapStages = [
+const riskAccounts = [
   {
-    id: "discover",
-    index: "01",
-    period: "Weeks 1–2",
-    title: "Listen before automating",
-    description:
-      "Interview retailers and reps about real communication patterns, preferred channels, relationship boundaries, and no-go situations.",
-    gate: "Problem statement + do-not-automate list",
+    id: "juniper",
+    name: "Juniper Bottle House",
+    place: "Montclair, NJ",
+    signal: "38d since reorder",
+    reason: "17 days beyond usual cadence",
+    owner: "Renee Lewis",
+    initials: "RL",
+    priority: "High",
+    product: "Solara Coastal Spritz · Citrus 4-pack",
+    status: "Ready for review",
+    tone: "high",
   },
   {
-    id: "sandbox",
-    index: "02",
-    period: "Weeks 3–4",
-    title: "Build a traceable sandbox",
-    description:
-      "Demonstrate one mock-data workflow: trigger, eligibility check, approved message, reply routing, and audit event.",
-    gate: "Every message traceable end to end",
+    id: "fleetwood",
+    name: "Fleetwood Spirits",
+    place: "Hoboken, NJ",
+    signal: "31d since reorder",
+    reason: "Missed expected order window",
+    owner: "Marcus Vale",
+    initials: "MV",
+    priority: "High",
+    product: "Nila Reserve Gin · 750ml",
+    status: "Rep review",
+    tone: "high",
   },
   {
-    id: "validate",
-    index: "03",
-    period: "Weeks 5–6",
-    title: "Validate the wedge",
-    description:
-      "Use warm conversations for feedback, package a constrained pilot, and obtain finance-model methodology review.",
-    gate: "Pilot interest + expert review outcome",
+    id: "corner",
+    name: "Corner Cellars",
+    place: "Maplewood, NJ",
+    signal: "26d since reorder",
+    reason: "Category cadence slowing",
+    owner: "Elise Park",
+    initials: "EP",
+    priority: "Medium",
+    product: "Northline Brut · 750ml",
+    status: "Monitor",
+    tone: "medium",
   },
   {
-    id: "prove",
-    index: "04",
-    period: "Weeks 7–8",
-    title: "Earn the right to expand",
-    description:
-      "Prepare a controlled opt-in pilot and a reviewer-approved spreadsheet skeleton with real baseline instrumentation.",
-    gate: "Evidence supports rollout, revision, or pivot",
+    id: "garnet",
+    name: "Garnet & Grain",
+    place: "Jersey City, NJ",
+    signal: "23d since reorder",
+    reason: "Approaching expected cadence",
+    owner: "Renee Lewis",
+    initials: "RL",
+    priority: "Medium",
+    product: "Kestrel Red Blend · 750ml",
+    status: "Monitor",
+    tone: "medium",
   },
 ];
 
-const architectureLayers = [
-  {
-    id: "data",
-    label: "01 · Data foundation",
-    title: "Make the operating record reliable first.",
-    copy: "Use stable account and product IDs, order history, channel preference, consent evidence, escalation owner, source date, and version owner. Manual or fragmented records are a data-readiness issue, not an AI prompt issue.",
-  },
-  {
-    id: "logic",
-    label: "02 · Reusable logic",
-    title: "Keep business rules inspectable.",
-    copy: "Separate trigger thresholds, audience eligibility, message templates, escalation rules, and audit-event schemas from client-specific configuration. The rule should be explainable without reading a model output.",
-  },
-  {
-    id: "custom",
-    label: "03 · Client customization",
-    title: "Configure the edge cases; do not hide them.",
-    copy: "Cadence, approved tone, CRM mappings, product classification flags, and channel terms are explicit client configuration. Those decisions must be visible to the project owner and reviewer.",
-  },
-  {
-    id: "execution",
-    label: "04 · Controlled execution",
-    title: "Automation must preserve a human exit.",
-    copy: "Use approved email/SMS delivery or spreadsheet outputs only after a control gate. Replies, complaints, disputes, and exceptions become a named human task—not an attempt to autonomously resolve the relationship.",
-  },
+const initialEvents = [
+  { time: "08:12", label: "Cadence signal detected", detail: "38d gap exceeds 21d expected cadence", icon: Gauge, state: "signal" },
+  { time: "08:13", label: "Eligibility confirmed", detail: "Account channel preference and owner assignment checked", icon: BadgeCheck, state: "verified" },
+  { time: "08:14", label: "Outreach prepared", detail: "Approved availability-check template selected", icon: Mail, state: "prepared" },
 ];
 
-const sources = [
-  {
-    n: "01",
-    name: "NJ ABC · Current Price List",
-    url: "https://www.njoag.gov/about/divisions-and-offices/division-of-alcoholic-beverage-control-home/licensing-bureau-applications-and-information/current-price-list-cpl/",
-    detail: "Primary state resource informing price/promotion control design.",
-  },
-  {
-    n: "02",
-    name: "TTB · Formulation guidance",
-    url: "https://www.ttb.gov/formulation",
-    detail: "Primary federal guidance informing product-approval timeline gates.",
-  },
-  {
-    n: "03",
-    name: "FCC · Robocalls and texts guidance",
-    url: "https://www.fcc.gov/consumers/guides/stop-unwanted-robocalls-and-texts",
-    detail: "Primary federal consumer guidance informing consent and opt-out controls.",
-  },
+const guidedSteps = [
+  { n: "01", name: "Coverage", detail: "Start with what needs attention" },
+  { n: "02", name: "Signal", detail: "Explain the account story" },
+  { n: "03", name: "Control", detail: "Review approved outreach" },
+  { n: "04", name: "Evidence", detail: "Open the audit trail" },
+  { n: "05", name: "Handoff", detail: "Give judgment back to the rep" },
 ];
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="section-label">{children}</p>;
+function LogoMark() {
+  return <img className="brand-mark" src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="Route and signal mark" />;
+}
+
+function Avatar({ initials, small = false }: { initials: string; small?: boolean }) {
+  return <span className={`avatar ${small ? "avatar-small" : ""}`}>{initials}</span>;
+}
+
+function Metric({ value, label, delta, tone = "neutral" }: { value: string; label: string; delta?: string; tone?: "neutral" | "risk" | "good" }) {
+  return (
+    <article className="metric-block">
+      <div className="metric-top"><span>{label}</span>{delta ? <em className={`metric-delta ${tone}`}>{delta}</em> : null}</div>
+      <strong>{value}</strong>
+    </article>
+  );
 }
 
 export default function Home() {
-  const [activeTrack, setActiveTrack] = useState<keyof typeof trackCopy>("communications");
-  const [activeStage, setActiveStage] = useState("discover");
-  const [activeLayer, setActiveLayer] = useState("data");
-  const [activeNav, setActiveNav] = useState("thesis");
-  const track = trackCopy[activeTrack];
-  const selectedStage = roadmapStages.find((stage) => stage.id === activeStage) ?? roadmapStages[0];
-  const selectedLayer = architectureLayers.find((layer) => layer.id === activeLayer) ?? architectureLayers[0];
+  const initialView: View = typeof window !== "undefined" && ["account", "audit"].includes(window.location.hash.slice(1))
+    ? window.location.hash.slice(1) as View
+    : "command";
+  const [view, setView] = useState<View>(initialView);
+  const [guided, setGuided] = useState(false);
+  const [guidedStep, setGuidedStep] = useState(0);
+  const [outreachOpen, setOutreachOpen] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [escalated, setEscalated] = useState(false);
+  const [showReadiness, setShowReadiness] = useState(false);
+
+  const events = useMemo(() => {
+    const list = [...initialEvents];
+    if (sent) list.push({ time: "09:02", label: "Approved outreach simulated", detail: "Availability-check email staged for demo recipient", icon: Send, state: "sent" });
+    if (escalated) list.push({ time: "09:08", label: "Reply escalated to Renee Lewis", detail: "Pricing-related request requires human review", icon: UserRound, state: "escalated" });
+    return list;
+  }, [sent, escalated]);
 
   useEffect(() => {
-    const sectionIds = ["thesis", "portfolio", "roadmap", "architecture", "controls", "next"];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveNav(visible.target.id);
-      },
-      { rootMargin: "-24% 0px -56% 0px", threshold: [0.05, 0.25, 0.6] },
-    );
-    sectionIds.forEach((id) => {
-      const section = document.getElementById(id);
-      if (section) observer.observe(section);
-    });
-    return () => observer.disconnect();
-  }, []);
+    const hash = view === "command" ? "" : `#${view}`;
+    window.history.replaceState(null, "", `${window.location.pathname}${hash}`);
+  }, [view]);
+
+  const resetDemo = () => {
+    setView("command");
+    setGuided(false);
+    setGuidedStep(0);
+    setOutreachOpen(false);
+    setSent(false);
+    setEscalated(false);
+    setShowReadiness(false);
+  };
+
+  const selectJuniper = () => {
+    setView("account");
+    if (guided) setGuidedStep(1);
+  };
+
+  const openOutreach = () => {
+    setView("account");
+    setOutreachOpen(true);
+    if (guided) setGuidedStep(2);
+  };
+
+  const showAudit = () => {
+    setView("audit");
+    if (guided) setGuidedStep(3);
+  };
+
+  const simulateSend = () => {
+    setSent(true);
+    setOutreachOpen(false);
+    setView("audit");
+    if (guided) setGuidedStep(3);
+  };
+
+  const simulateReply = () => {
+    setEscalated(true);
+    setView("audit");
+    if (guided) setGuidedStep(4);
+  };
 
   return (
-    <div className="fieldbook-shell">
-      <aside className="field-rail" aria-label="Report navigation">
-        <a className="rail-mark" href="#top" aria-label="Return to report start">
-          <img src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="Route and signal mark" />
-        </a>
-        <div className="rail-identity">
-          <strong>ROUTE / SIGNAL</strong>
-          <span>OPERATOR&apos;S<br />FIELDBOOK</span>
+    <div className="demo-app">
+      <aside className="demo-sidebar">
+        <div>
+          <div className="brand-lockup">
+            <LogoMark />
+            <div><strong>HARBORLINE</strong><span>COMMAND</span></div>
+          </div>
+          <div className="environment-pill"><span /> DEMO ENVIRONMENT</div>
+          <nav className="primary-nav" aria-label="Product navigation">
+            <button className={view === "command" ? "active" : ""} onClick={() => setView("command")}><LayoutDashboard size={18} /> Command center</button>
+            <button className={view === "account" ? "active" : ""} onClick={selectJuniper}><UsersRound size={18} /> Account stories</button>
+            <button className={view === "audit" ? "active" : ""} onClick={showAudit}><FileCheck2 size={18} /> Audit evidence</button>
+          </nav>
         </div>
-        <div className="rail-route-key"><i /> SIX CONTROL GATES</div>
-        <nav className="rail-nav">
-          <a className={activeNav === "thesis" ? "is-active" : ""} aria-current={activeNav === "thesis" ? "step" : undefined} href="#thesis"><i /><span>01</span><b>Thesis</b></a>
-          <a className={activeNav === "portfolio" ? "is-active" : ""} aria-current={activeNav === "portfolio" ? "step" : undefined} href="#portfolio"><i /><span>02</span><b>Two tracks</b></a>
-          <a className={activeNav === "roadmap" ? "is-active" : ""} aria-current={activeNav === "roadmap" ? "step" : undefined} href="#roadmap"><i /><span>03</span><b>Roadmap</b></a>
-          <a className={activeNav === "architecture" ? "is-active" : ""} aria-current={activeNav === "architecture" ? "step" : undefined} href="#architecture"><i /><span>04</span><b>Architecture</b></a>
-          <a className={activeNav === "controls" ? "is-active" : ""} aria-current={activeNav === "controls" ? "step" : undefined} href="#controls"><i /><span>05</span><b>Controls</b></a>
-          <a className={activeNav === "next" ? "is-active" : ""} aria-current={activeNav === "next" ? "step" : undefined} href="#next"><i /><span>06</span><b>Next actions</b></a>
-        </nav>
-        <div className="rail-footer">
-          <span className="status-dot" />
-          <p>Research synthesis<br />24 AUG 2026</p>
+
+        <div className="sidebar-bottom">
+          <div className="owner-mini"><Avatar initials="RL" small /><div><span>DEMO OWNER</span><strong>Renee Lewis</strong></div></div>
+          <button className="reset-button" onClick={resetDemo}><RefreshCcw size={14} /> Reset demo</button>
         </div>
       </aside>
 
-      <main id="top" className="report-main">
-        <header className="mobile-nav">
-          <a href="#top" className="mobile-brand">
-            <img src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="" />
-            <span>FIELD / 01</span>
-          </a>
-          <button type="button" onClick={() => window.print()} className="print-button">
-            <FileText size={15} /> Save briefing
-          </button>
+      <main className="demo-main">
+        <header className="topbar">
+          <div className="breadcrumb"><span>HARBORLINE /</span> <strong>{view === "command" ? "ACCOUNT COVERAGE" : view === "account" ? "ACCOUNT STORY" : "CONTROL LOG"}</strong></div>
+          <div className="topbar-actions">
+            <span className="fictional-badge"><Sparkles size={13} /> Fictional scenario</span>
+            <button className="icon-button" aria-label="Search"><Search size={18} /></button>
+            <button className="icon-button" aria-label="Notifications"><BellRing size={18} /><i /></button>
+            <button className="avatar-button"><Avatar initials="OL" small /></button>
+          </div>
         </header>
 
-        <section className="hero" aria-labelledby="hero-heading">
-          <div className="hero-copy">
-            <div className="hero-brandline">
-              <img src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="" />
-              <span><strong>ROUTE / SIGNAL</strong><small>OPERATOR&apos;S FIELDBOOK</small></span>
-              <em>CONTROL PATH / V1.0</em>
-            </div>
-            <SectionLabel>Enterprise AI strategy · leadership fieldbook</SectionLabel>
-            <h1 id="hero-heading">Build the proof <em>before</em> the platform.</h1>
-            <p className="hero-dek">
-              A two-track plan for a beverage-alcohol workflow sandbox and a new-product financial-model foundation—sequenced around evidence, accountable automation, and real validation gates.
-            </p>
-            <div className="hero-meta">
-              <span><Route size={15} /> TWO-TRACK PLAN</span>
-              <span><Gauge size={15} /> 8-WEEK SEQUENCE</span>
-              <span><ShieldCheck size={15} /> CONTROL FIRST</span>
-            </div>
-            <a href="#thesis" className="hero-link">Read the recommendation <ArrowDownRight size={18} /></a>
-          </div>
-          <div className="hero-visual" aria-hidden="true">
-            <img src="/manus-storage/enterprise-ai-hero_16488bbb.jpg" alt="" />
-            <div className="hero-index">FIELD<br />01</div>
-          </div>
-        </section>
-
-        <section id="thesis" className="thesis-section">
-          <div className="margin-note"><span>THE CALL</span><i /></div>
-          <div className="thesis-content">
-            <SectionLabel>01 / Executive recommendation</SectionLabel>
-            <div className="thesis-headline">
-              <h2>Run two tracks.<br /><em>Lead with one.</em></h2>
-              <p>
-                Use the distributor communications sandbox as the first proof-of-capability and market-learning vehicle. Keep the financial model on a parallel methodology-validation path until qualified review signs off the mechanics.
-              </p>
-            </div>
-            <div className="decision-grid">
-              <article className="decision-card priority-card">
-                <div className="card-icon"><Route size={20} /></div>
-                <img className="route-seal" src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="" />
-                <p className="card-kicker">First demo</p>
-                <h3>Reorder / restock reminder</h3>
-                <p>Lowest-complexity signal, clearest outcome, and simplest evidence trail.</p>
-                <span className="card-tag">START HERE</span>
-              </article>
-              <article className="decision-card">
-                <div className="card-icon"><UserRoundCheck size={20} /></div>
-                <p className="card-kicker">Commercial frame</p>
-                <h3>Extend rep reach</h3>
-                <p>More accounts covered, faster reorders, and fewer missed moments—not headcount replacement.</p>
-              </article>
-              <article className="decision-card">
-                <div className="card-icon"><Scale size={20} /></div>
-                <p className="card-kicker">Build constraint</p>
-                <h3>Controls are features</h3>
-                <p>Consent, eligibility, audit records, and a human exit belong in the initial definition of done.</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section id="portfolio" className="portfolio-section">
-          <div className="portfolio-topline">
-            <SectionLabel>02 / Portfolio structure</SectionLabel>
-            <p>Choose a track to inspect its initial job, bound, and test of credibility.</p>
-          </div>
-          <div className="track-toggle" role="tablist" aria-label="Select workstream">
-            <button
-              role="tab"
-              aria-selected={activeTrack === "communications"}
-              className={activeTrack === "communications" ? "is-active" : ""}
-              onClick={() => setActiveTrack("communications")}
-            >
-              <MessageSquareText size={17} /> Track A / Communication sandbox
-            </button>
-            <button
-              role="tab"
-              aria-selected={activeTrack === "financial"}
-              className={activeTrack === "financial" ? "is-active" : ""}
-              onClick={() => setActiveTrack("financial")}
-            >
-              <FileText size={17} /> Track B / Financial model
-            </button>
-          </div>
-          <div className="track-panel">
-            <div className="track-panel-copy">
-              <SectionLabel>{track.eyebrow}</SectionLabel>
-              <h2>{track.title}</h2>
-              <p>{track.description}</p>
-              <div className="track-outcome">
-                <ArrowRight size={18} /> <span><strong>Success looks like:</strong> {track.outcome}</span>
-              </div>
-              <ul>
-                {track.points.map((point) => <li key={point}><Check size={15} /> {point}</li>)}
-              </ul>
-            </div>
-            <div className="track-diagram">
-              {activeTrack === "communications" ? (
-                <>
-                  <div className="flow-node"><Building2 size={18} /><span>Order signal</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node active"><ClipboardCheck size={18} /><span>Eligibility</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node"><Send size={18} /><span>Approved send</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node"><UserRoundCheck size={18} /><span>Human handoff</span></div>
-                </>
-              ) : (
-                <>
-                  <div className="flow-node"><Layers2 size={18} /><span>Inputs</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node active"><Gauge size={18} /><span>Formula map</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node"><Scale size={18} /><span>Review gate</span></div>
-                  <ChevronRight className="flow-arrow" size={21} />
-                  <div className="flow-node"><FileText size={18} /><span>Scenario view</span></div>
-                </>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <section id="roadmap" className="roadmap-section">
-          <div className="roadmap-image" aria-hidden="true"><img src="/manus-storage/enterprise-ai-roadmap_e3b70f1e.jpg" alt="" /></div>
-          <div className="roadmap-heading">
-            <SectionLabel>03 / Sequenced implementation</SectionLabel>
-            <h2>Evidence is the<br /><em>route line.</em></h2>
-            <p>Every two weeks, the plan asks for a decision—not more vague activity.</p>
-          </div>
-          <div className="roadmap-chart-wrap" aria-label="Eight-week roadmap chart">
-            <ResponsiveContainer width="100%" height={222}>
-              <BarChart data={roadmapData} layout="vertical" margin={{ top: 2, right: 54, left: 0, bottom: 0 }}>
-                <CartesianGrid horizontal={false} stroke="#D7D4CB" strokeDasharray="2 5" />
-                <XAxis type="number" domain={[0, 2]} hide />
-                <YAxis type="category" dataKey="phase" width={70} tick={{ fill: "#42505A", fontSize: 11, fontWeight: 700 }} axisLine={false} tickLine={false} />
-                <Tooltip cursor={{ fill: "rgba(230,83,60,0.07)" }} contentStyle={{ border: "1px solid #D7D4CB", borderRadius: "0", boxShadow: "none", fontSize: "12px" }} formatter={(value) => [`${value} weeks`, "Duration"]} />
-                <Bar dataKey="weeks" radius={[0, 0, 0, 0]} barSize={24}>
-                  {roadmapData.map((item) => <Cell key={item.phase} fill={item.color} />)}
-                  <LabelList dataKey="detail" position="right" fill="#42505A" fontSize={11} />
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="stage-grid">
-            {roadmapStages.map((stage) => (
-              <button
-                key={stage.id}
-                type="button"
-                className={`stage-card ${activeStage === stage.id ? "is-selected" : ""}`}
-                onClick={() => setActiveStage(stage.id)}
-              >
-                <span className="stage-index">{stage.index}</span>
-                <span className="stage-period">{stage.period}</span>
-                <strong>{stage.title}</strong>
-                <span className="stage-gate">CONTROL GATE {stage.index}</span>
-              </button>
-            ))}
-          </div>
-          <div className="stage-detail">
-            <div><span>SELECTED PHASE</span><strong>{selectedStage.index} / {selectedStage.period}</strong></div>
-            <p>{selectedStage.description}</p>
-            <div className="gate-chip"><BadgeCheck size={16} /> Gate: {selectedStage.gate}</div>
-          </div>
-        </section>
-
-        <section id="architecture" className="architecture-section">
-          <div className="architecture-content">
-            <SectionLabel>04 / Enterprise AI stack applied</SectionLabel>
-            <h2>Data before AI.<br /><em>Control before scale.</em></h2>
-            <p className="architecture-intro">The video’s four-tier AI architecture becomes a practical build rule here: a reliable operating record, reusable workflow logic, explicit client configuration, and a controlled execution layer.</p>
-            <div className="architecture-list" role="tablist" aria-label="Architecture layers">
-              {architectureLayers.map((layer) => (
-                <button key={layer.id} role="tab" aria-selected={activeLayer === layer.id} onClick={() => setActiveLayer(layer.id)} className={activeLayer === layer.id ? "is-active" : ""}>
-                  <span>{layer.label}</span><ChevronRight size={17} />
+        {guided ? (
+          <section className="pitch-strip" aria-label="Guided pitch flow">
+            <div className="pitch-strip-heading"><Play size={14} fill="currentColor" /> <span>LIVE PITCH PATH</span></div>
+            <div className="pitch-steps">
+              {guidedSteps.map((step, index) => (
+                <button key={step.n} onClick={() => setGuidedStep(index)} className={index === guidedStep ? "current" : index < guidedStep ? "done" : ""}>
+                  <span>{step.n}</span><strong>{step.name}</strong>
                 </button>
               ))}
             </div>
-            <div className="layer-detail">
-              <p className="layer-number">{selectedLayer.label}</p>
-              <h3>{selectedLayer.title}</h3>
-              <p>{selectedLayer.copy}</p>
+            <p>{guidedSteps[guidedStep].detail}</p>
+          </section>
+        ) : null}
+
+        {view === "command" ? (
+          <section className="workspace command-workspace">
+            <div className="workspace-heading">
+              <div>
+                <p className="eyebrow">MONDAY, AUGUST 24 · 08:42</p>
+                <h1>Coverage, with <em>context.</em></h1>
+                <p className="workspace-dek">See the accounts that need attention, the evidence behind each signal, and the representative accountable for the relationship.</p>
+              </div>
+              <div className="heading-actions">
+                <button className="secondary-button" onClick={() => setShowReadiness(true)}><BookOpen size={16} /> Implementation view</button>
+                <button className="primary-button" onClick={() => { setGuided(true); setGuidedStep(0); }}><Play size={15} fill="currentColor" /> Start guided pitch</button>
+              </div>
             </div>
-          </div>
-          <div className="architecture-visual">
-            <img src="/manus-storage/enterprise-ai-stack_12d3d9aa.jpg" alt="Abstract four-tier system illustration representing data foundation, reusable logic, custom configuration, and controlled execution." />
-            <div className="visual-caption"><Layers2 size={16} /> 80 / 20 principle: reuse the foundation, configure the edge cases.</div>
-          </div>
-        </section>
 
-        <section id="controls" className="controls-section">
-          <div className="controls-visual">
-            <img src="/manus-storage/enterprise-ai-governance_14dcf7a6.jpg" alt="Abstract operational governance illustration with an approval tag and controlled routes." />
-          </div>
-          <div className="controls-content">
-            <div className="control-seal"><img src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="" /><span>CONTROLLED<br />EXECUTION</span></div>
-            <SectionLabel>05 / Non-negotiable controls</SectionLabel>
-            <h2>Make the human handoff visible.</h2>
-            <p>Price/promotion workflows and live messaging should not be treated as a prompt-writing exercise. The delivery system needs a visible permission record, a controlled audience, an approved message, a durable audit event, and a human exception path.</p>
-            <div className="control-list">
-              <div><LockKeyhole size={18} /><span><strong>Permission</strong> — Consent evidence, preferred channel, and suppression handling are modeled as data.</span></div>
-              <div><ClipboardCheck size={18} /><span><strong>Eligibility</strong> — A price/promo send attaches to an approved audience and terms record, not individual improvisation.</span></div>
-              <div><Mail size={18} /><span><strong>Evidence</strong> — Store trigger, template version, recipient, time, outcome, and exception in an exportable log.</span></div>
-              <div><UserRoundCheck size={18} /><span><strong>Escalation</strong> — Complaints, disputes, ambiguity, or repeat non-response become a named rep task.</span></div>
+            <section className="command-summary">
+              <div className="summary-story">
+                <div className="summary-flag"><Route size={16} /> ACTIVE COVERAGE WINDOW</div>
+                <h2>12 account moments deserve a human look today.</h2>
+                <p>Harborline’s command center does not replace the sales relationship. It makes the routine signals visible before an account falls through the cracks.</p>
+                <button onClick={selectJuniper} className="text-link">Open highest-priority account <ArrowRight size={16} /></button>
+              </div>
+              <div className="summary-metrics">
+                <Metric value="12" label="ATTENTION QUEUE" delta="+4 today" tone="risk" />
+                <Metric value="4" label="READY FOR REVIEW" delta="Eligible" tone="good" />
+                <Metric value="8" label="REP-OWNED" delta="No auto-send" />
+                <Metric value="100%" label="AUDIT VISIBLE" delta="Controlled" tone="good" />
+              </div>
+            </section>
+
+            <div className="dashboard-grid">
+              <section className="priority-panel">
+                <div className="section-heading"><div><span className="eyebrow">PRIORITY SIGNALS</span><h3>Account coverage queue</h3></div><button className="filter-button"><Filter size={15} /> Filter</button></div>
+                <div className="queue-list">
+                  {riskAccounts.map((account, index) => (
+                    <button className={`queue-row ${account.id === "juniper" ? "featured" : ""}`} key={account.id} onClick={account.id === "juniper" ? selectJuniper : () => setView("account")}>
+                      <span className={`risk-dot ${account.tone}`} />
+                      <div className="queue-account"><strong>{account.name}</strong><span>{account.place} · {account.product}</span></div>
+                      <div className="queue-signal"><strong>{account.signal}</strong><span>{account.reason}</span></div>
+                      <div className="queue-owner"><Avatar initials={account.initials} small /><span>{account.owner}</span></div>
+                      <ChevronRight size={18} className="queue-chevron" />
+                      {index === 0 ? <span className="queue-tag">START HERE</span> : null}
+                    </button>
+                  ))}
+                </div>
+                <div className="queue-foot"><span><CircleCheck size={15} /> Signals are ranked by account context, not sent automatically.</span><button onClick={() => setView("audit")}>View evidence log <ArrowRight size={14} /></button></div>
+              </section>
+
+              <section className="coverage-panel">
+                <div className="section-heading"><div><span className="eyebrow">TEAM LOAD</span><h3>Coverage balance</h3></div><MoreHorizontal size={19} /></div>
+                <div className="coverage-visual">
+                  <div className="coverage-ring"><span>18</span><small>REPS</small></div>
+                  <div className="coverage-info"><strong>91%</strong><span>accounts touched within planned coverage window</span></div>
+                </div>
+                <div className="rep-stack">
+                  <div><span><Avatar initials="RL" small /> Renee Lewis</span><b>3 signals</b></div>
+                  <div><span><Avatar initials="MV" small /> Marcus Vale</span><b>2 signals</b></div>
+                  <div><span><Avatar initials="EP" small /> Elise Park</span><b>2 signals</b></div>
+                </div>
+                <p className="panel-note"><ShieldCheck size={15} /> Ownership stays visible at every action point.</p>
+              </section>
             </div>
-            <div className="legal-note"><CircleAlert size={17} /> <span><strong>Planning note:</strong> State-specific alcohol trade-practice and messaging requirements require qualified legal review before a live deployment.</span></div>
-          </div>
-        </section>
+          </section>
+        ) : null}
 
-        <section id="next" className="next-section">
-          <div className="next-heading">
-            <SectionLabel>06 / Your next three actions</SectionLabel>
-            <h2>Move the work<br />one <em>gate</em> at a time.</h2>
-          </div>
-          <div className="next-actions">
-            <article><span>01</span><h3>Set the sandbox boundary</h3><p>Confirm mock-only versus explicit test consent, geography, and the initial delivery channel.</p></article>
-            <article><span>02</span><h3>Run the interview sprint</h3><p>Book five retailer and three distributor-side conversations. Record exact preferences and non-negotiables.</p></article>
-            <article><span>03</span><h3>Name your reviewers</h3><p>Secure alcohol-beverage compliance and finance/accounting reviewers for the respective gates.</p></article>
-          </div>
-        </section>
+        {view === "account" ? (
+          <section className="workspace account-workspace">
+            <button className="back-link" onClick={() => { setView("command"); if (guided) setGuidedStep(0); }}><ArrowLeft size={15} /> Back to coverage</button>
+            <div className="account-heading">
+              <div className="account-identity"><div className="account-monogram">JB</div><div><p className="eyebrow">HIGH-OPPORTUNITY ACCOUNT · MONTCLAIR, NJ</p><h1>Juniper Bottle House</h1><p><span className="status-live" /> Account owner <strong>Renee Lewis</strong> · Preferred channel <strong>Rep-approved email</strong></p></div></div>
+              <div className="account-actions"><button className="secondary-button" onClick={showAudit}><FileCheck2 size={16} /> Open audit</button><button className="primary-button" onClick={openOutreach}><Mail size={16} /> Review outreach</button></div>
+            </div>
 
-        <section className="sources-section">
-          <div>
-            <SectionLabel>Research trail</SectionLabel>
-            <h2>Sources that shaped the build.</h2>
-            <p>User-supplied briefs and video analysis were synthesized alongside the primary sources below. The report intentionally treats all starting assumptions as reviewable—not as production truth.</p>
-          </div>
-          <div className="source-list">
-            {sources.map((source) => (
-              <a href={source.url} target="_blank" rel="noreferrer" key={source.n}>
-                <span>{source.n}</span>
-                <div><strong>{source.name}</strong><small>{source.detail}</small></div>
-                <ArrowDownRight size={18} />
-              </a>
-            ))}
-          </div>
-        </section>
+            <section className="signal-banner">
+              <div className="signal-badge"><AlertTriangle size={18} /></div>
+              <div><span className="eyebrow">REORDER-RISK SIGNAL</span><h2>38 days since last order—17 days beyond this account’s expected cadence.</h2><p>Juniper ordered 30 cases across the prior three cycles. The system is prompting a relationship-led availability check, not an unapproved offer.</p></div>
+              <button onClick={openOutreach}>See controlled next step <ArrowRight size={16} /></button>
+            </section>
 
-        <footer className="report-footer">
-          <div className="footer-brand"><img src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="" /><span>FIELD / 01</span></div>
-          <p>Prepared as a planning and research synthesis. Not legal, tax, or financial advice; have qualified professionals review any live communication or client-facing model.</p>
-          <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Back to top <ArrowRight size={14} /></button>
-        </footer>
+            <div className="account-grid">
+              <section className="cadence-panel">
+                <div className="section-heading"><div><span className="eyebrow">PRODUCT HISTORY</span><h3>Solara Coastal Spritz · Citrus 4-pack</h3></div><span className="cadence-pill">Expected cadence · 21d</span></div>
+                <div className="chart-wrap">
+                  <ResponsiveContainer width="100%" height={230}>
+                    <AreaChart data={cadenceData} margin={{ left: -20, right: 4, top: 10, bottom: 0 }}>
+                      <defs><linearGradient id="cadenceFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#e6533c" stopOpacity={0.35} /><stop offset="100%" stopColor="#e6533c" stopOpacity={0.02} /></linearGradient></defs>
+                      <CartesianGrid stroke="#dde2df" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="cycle" tick={{ fill: "#74808a", fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <YAxis tick={{ fill: "#74808a", fontSize: 10 }} tickLine={false} axisLine={false} width={34} />
+                      <Tooltip contentStyle={{ background: "#122235", border: "none", borderRadius: 0, color: "#fff", fontSize: 11 }} labelStyle={{ color: "#b8c9d0" }} />
+                      <Area type="monotone" dataKey="cases" stroke="#e6533c" strokeWidth={3} fill="url(#cadenceFill)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="chart-caption"><div><span>LAST ORDER</span><strong>Jul 17 · 10 cases</strong></div><div><span>EXPECTED NEXT ORDER</span><strong>Aug 07</strong></div><div><span>RISK STATUS</span><strong className="risk-copy">Needs review</strong></div></div>
+              </section>
+
+              <aside className="account-facts">
+                <div className="fact-section"><span className="eyebrow">ACCOUNT CONTEXT</span><dl><div><dt>Category behavior</dt><dd>Strong RTD reorder pattern</dd></div><div><dt>Contact preference</dt><dd>Email before visit</dd></div><div><dt>Last rep activity</dt><dd>14 days ago</dd></div></dl></div>
+                <div className="fact-section"><span className="eyebrow">SYSTEM RECOMMENDATION</span><p>Ask whether the latest Solara Coastal Spritz availability aligns with their current demand.</p><button className="text-link" onClick={openOutreach}>Review approved outreach <ArrowRight size={15} /></button></div>
+              </aside>
+            </div>
+
+            <section className="ownership-panel"><div className="ownership-person"><Avatar initials="RL" /><div><span className="eyebrow">HUMAN ACCOUNT OWNER</span><h3>Renee Lewis</h3><p>Renee remains accountable for commercial judgment, account health, and non-routine communication.</p></div></div><div className="ownership-state"><BadgeCheck size={18} /><span>Outreach is prepared, not autonomously sent.</span></div></section>
+
+            {outreachOpen ? (
+              <section className="outreach-drawer">
+                <div className="drawer-heading"><div><span className="eyebrow">CONTROLLED OUTREACH · READY FOR REVIEW</span><h2>Availability check for Juniper Bottle House</h2></div><button className="close-button" onClick={() => setOutreachOpen(false)}>Close</button></div>
+                <div className="outreach-grid"><div className="message-card"><div className="message-meta"><span>TO · Lina Cho</span><span>CHANNEL · EMAIL</span></div><p>Hi Lina—Renee here from Harborline. We noticed it may be time to check in on Solara Coastal Spritz Citrus. Would it be helpful if I confirmed current availability for your next order window?</p><span>— Renee Lewis, Harborline Beverage Distribution</span></div><div className="control-card"><div><ClipboardCheck size={18} /><strong>Eligibility checked</strong><span>Preferred channel and account ownership confirmed.</span></div><div><ShieldCheck size={18} /><strong>Approved template</strong><span>Availability check only. No price, promotion, or deal terms.</span></div><button className="primary-button full-width" onClick={simulateSend}><Send size={16} /> Simulate approved send</button></div></div>
+              </section>
+            ) : null}
+          </section>
+        ) : null}
+
+        {view === "audit" ? (
+          <section className="workspace audit-workspace">
+            <div className="workspace-heading compact"><div><p className="eyebrow">JUNIPER BOTTLE HOUSE · CONTROL LOG</p><h1>Evidence before <em>automation.</em></h1><p className="workspace-dek">A clear record of what happened, why it happened, and who owns the next decision.</p></div><div className="heading-actions"><button className="secondary-button" onClick={selectJuniper}><UsersRound size={16} /> Return to account</button>{!sent ? <button className="primary-button" onClick={openOutreach}><Mail size={16} /> Review outreach</button> : null}</div></div>
+
+            <section className="audit-layout">
+              <div className="audit-timeline">
+                <div className="audit-intro"><span className="eyebrow">AUDIT EVENT TRAIL</span><p>Fictional demo evidence. Production delivery and retention policies are configured after a client implementation.</p></div>
+                {events.map((event, index) => {
+                  const Icon = event.icon;
+                  return <article className={`audit-event ${event.state}`} key={`${event.label}-${index}`}><div className="event-rail"><span><Icon size={16} /></span>{index < events.length - 1 ? <i /> : null}</div><div className="event-copy"><div><strong>{event.label}</strong><time>{event.time}</time></div><p>{event.detail}</p></div></article>;
+                })}
+              </div>
+              <aside className="audit-side">
+                <section className="control-summary"><span className="eyebrow">CURRENT CONTROL STATE</span><div className={escalated ? "state-card escalated" : sent ? "state-card sent" : "state-card ready"}>{escalated ? <UserRound size={22} /> : sent ? <Send size={22} /> : <ClipboardCheck size={22} />}<div><strong>{escalated ? "Human review required" : sent ? "Outreach simulated" : "Ready for review"}</strong><span>{escalated ? "Renee Lewis owns the pricing-related reply." : sent ? "No real message was delivered." : "The rep controls the next action."}</span></div></div></section>
+                {!sent ? <button className="primary-button full-width" onClick={openOutreach}><Mail size={16} /> Review approved outreach</button> : null}
+                {sent && !escalated ? <button className="secondary-button full-width urgent-action" onClick={simulateReply}><UserRound size={16} /> Simulate non-routine reply</button> : null}
+                {escalated ? <div className="handoff-card"><div><Avatar initials="RL" /><span><b>Assigned to Renee Lewis</b><small>Next step: review client request before response</small></span></div><button onClick={() => setShowReadiness(true)}>View implementation boundary <ArrowRight size={14} /></button></div> : null}
+              </aside>
+            </section>
+          </section>
+        ) : null}
+
+        {showReadiness ? (
+          <div className="readiness-overlay" role="dialog" aria-modal="true" aria-label="Implementation readiness">
+            <div className="readiness-modal"><button className="modal-close" onClick={() => setShowReadiness(false)}>Close</button><span className="eyebrow">FROM DEMO TO YOUR OPERATING SYSTEM</span><h2>Same flow. Your rules.</h2><p>What you are seeing is a fictional, seller-operated product experience. After a client agrees to proceed, Harborline Command is configured with their account data, users, ownership rules, approved templates, delivery channel, and review process.</p><div className="readiness-list"><div><PackageCheck size={18} /><span><strong>Connect operating records</strong> Client account, product, and order data.</span></div><div><UserRound size={18} /><span><strong>Assign owners and permissions</strong> The right manager and rep see the right actions.</span></div><div><ShieldCheck size={18} /><span><strong>Approve controlled workflows</strong> Templates, eligibility, channel, audit, and exception rules.</span></div></div><button className="primary-button" onClick={() => setShowReadiness(false)}>Return to demo <ArrowRight size={16} /></button></div>
+          </div>
+        ) : null}
       </main>
     </div>
   );

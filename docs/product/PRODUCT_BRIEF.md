@@ -42,6 +42,8 @@ Distributor sales representatives manage many retail accounts and can miss routi
 
 **Outcome:** A product landing/dashboard screen that lets the partner begin a live client pitch with a believable distributor overview, a prioritized reorder-risk queue, and clear evidence that every recommendation leads to an accountable action.
 
+**Demo scenario:** Use [`DEMO_SCENARIO_AND_PITCH_FLOW.md`](DEMO_SCENARIO_AND_PITCH_FLOW.md) as the required fictional distributor story and seller click path. Build the Harborline → Juniper Bottle House → Renee Lewis flow before adding a second story.
+
 **What success looks like:** A prospect immediately understands what needs attention, why it needs attention, and which rep owns the next step. The partner can transition from the dashboard to a specific account in under one minute.
 
 **Must not change:** The product must not present invented financial results, claim live client integrations, show real customer data, or imply that automated communication replaces the sales representative.

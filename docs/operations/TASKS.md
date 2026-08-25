@@ -64,3 +64,12 @@
 - [x] Separate essential improvements from later enhancements.
 - [x] Define the recommended first improvement and its success condition.
 - [x] Deliver the prioritized improvement backlog.
+
+# Premium Sales Demo — Milestone 1 Checklist
+
+- [x] Define the fictional distributor, account portfolio, products, reps, and reorder-risk story.
+- [x] Write the seller’s ten-minute click path from dashboard to rep handoff.
+- [x] Add the reusable demo scenario data and product vocabulary to the source of truth.
+- [x] Design and build the dashboard entry experience.
+- [x] Build the account-detail, controlled-outreach, audit, and rep-handoff flow.
+- [x] Test the seller path and publish the first demo-ready version.

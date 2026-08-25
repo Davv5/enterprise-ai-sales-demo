@@ -7,6 +7,8 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | File | Meaning |
 | --- | --- |
 | `PRODUCT_BRIEF.md` | The single current product scope, buyer story, build task, guardrails, and decision owners. |
+| `DEMO_SCENARIO_AND_PITCH_FLOW.md` | Fictional distributor data, primary account story, seller script, required states, and acceptance test for the live demo. |
+| `SALES_DEMO_RUNBOOK.md` | Ten-minute seller script, difficult-question responses, recovery instructions, and safe product claims. |
 | `PROJECT_LEAD_WORKBOOK.md` | Plain-English guide for explaining the project, leading meetings, and updating the sales partner. |
 | `EXECUTION_ROADMAP.md` | The original staged roadmap for the product and financial-model tracks. |
 

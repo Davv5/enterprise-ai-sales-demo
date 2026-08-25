@@ -65,3 +65,9 @@ Create a bold, text-free **route-and-signal mark**: a simplified vermilion path 
 
 ### Signature Brand Color
 **Signal Vermilion — #E6533C**
+
+## Style Decisions
+
+- **Harborline Command extension:** The live sales demo translates the Operator’s Fieldbook into a maritime operations room for account coverage: a deep-navy command shell, warm evidence surfaces, route traces, coverage arcs, signal grids, and accountable human handoffs.
+- **Command material hierarchy:** Dark navy anchors the command environment; warm off-white holds evidence and account context; Signal Vermilion is reserved for risk, active action, and operator intervention; sea-green signals eligibility, control, coverage health, and approved state.
+- **Operational typography:** Executive headlines use forceful scale and tight spacing; uppercase mono labels classify technical context; small evidence details remain precise and secondary. The result should read as an operating tool rather than a generic SaaS dashboard.
