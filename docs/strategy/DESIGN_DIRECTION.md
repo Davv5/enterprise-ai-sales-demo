@@ -73,3 +73,7 @@ Create a bold, text-free **route-and-signal mark**: a simplified vermilion path 
 - **Operational typography:** Executive headlines use forceful scale and tight spacing; uppercase mono labels classify technical context; small evidence details remain precise and secondary. The result should read as an operating tool rather than a generic SaaS dashboard.
 - **Controlled signal routing:** Every key product state uses visible routing lines, checkpoints, node markers, or evidence stamps to show how a communication moves through governed human control rather than disappearing into an opaque automation layer.
 - **Strict color semantics:** Signal Vermilion denotes the human decision, intervention, risk, or required action; sea-green denotes a verified, approved, safe, or system-passed state. Evidence views should bias toward sea-green rather than use vermilion as decorative emphasis.
+
+## Current Style Decisions
+
+The active product direction is now **Regulated Operations Command Center**: navy signals system authority, Signal Vermilion signals human action or an exception, and sea-green signals a verified control. Route-and-record geometry, compact manifest labels, and audit stamps make the control model visible throughout the application. Harborline copy should name judgment boundaries and accountable ownership rather than use generic demo language.

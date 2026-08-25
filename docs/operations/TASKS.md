@@ -97,3 +97,11 @@
 - [x] Specify the first controlled workflow: event, audience, eligibility, message, automation mode, reply, escalation, and audit event.
 - [x] Rebuild the home experience as a Workflow Center rather than a generic command dashboard.
 - [x] Test the full event-to-escalation path against the original Sandbox Build Brief.
+
+# Three-Workflow Sales Demo — Active Checklist
+
+- [x] Define the Allocation Alert and Policy-Gated Price/Promotion workflow scenarios.
+- [x] Design and build each scenario as a full controlled communication flow.
+- [x] Extend the exception and audit experiences across workflow types.
+- [x] Verify desktop, mobile, and direct pitch-entry states.
+- [x] Update seller guidance and synchronize the expanded suite.

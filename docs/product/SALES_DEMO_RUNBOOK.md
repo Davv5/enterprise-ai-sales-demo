@@ -2,81 +2,85 @@
 
 ## Purpose
 
-This runbook is for the **corrected premium live demo**. It presents Harborline as a controlled communication-operations product—not a generic CRM or a dashboard that happens to contain messages.
+This runbook is for the live **three-workflow product demo**. It presents Harborline as a controlled communication-operations layer—not a generic CRM, ERP, order marketplace, or autonomous salesperson.
 
-> **Central message:** Harborline turns routine account moments into a governed communication workflow. The product makes the trigger, controls, evidence, and responsible human visible before it takes any action.
+> **Central message:** Harborline turns different account moments into one governed operating sequence: event, audience, permitted message, human control, exception, and evidence.
 
-The demonstration uses fictional data and simulated delivery states. It is not connected to a prospect’s ERP, CRM, inbox, telephone system, customer data, or live compliance program.
+The demonstration uses fictional data and simulated delivery states. It is not connected to a prospect’s systems, inboxes, customer data, price lists, approval program, or live communication channels.
 
 ## Before the meeting
 
 | Check | What to do |
 | --- | --- |
-| **Starting state** | Open `/` and confirm **Workflow Center** displays the Juniper Reorder Reminder as **Needs rep approval**. |
-| **Core demonstration** | Use **Rep-approved send** as the default automation mode. It is the clearest early-pilot posture: human approval remains visible. |
+| **Starting state** | Open `/` and confirm that **Workflow Center** displays all three workflows: Reorder Reminder, New Allocation Alert, and Price / Promotion Notice. |
+| **Demo order** | Show Reorder first, Allocation second, and the Policy-Gated Notice third. The sequence moves from routine coverage to scarce inventory to policy-sensitive communication. |
 | **Reset control** | If an interaction goes wrong, select **Reset demo** in the lower-left rail. |
-| **Truthfulness** | Say that accounts, contacts, events, and message delivery are fictional and simulated. |
-| **Opening question** | Ask: “Which routine retailer communication is most likely to be missed or inconsistently handled by your team today?” |
+| **Truthfulness** | Say that all accounts, contacts, products, program details, terms references, and delivery states are fictional/simulated. |
+| **Opening question** | Ask: “Which retailer communication is most likely to be missed, inconsistently handled, or hard to govern on your team today?” |
 
-## Eight-minute seller script
+## Twelve-minute seller script
 
 | Time | Click or action | What to say | Buyer takeaway |
 | --- | --- | --- | --- |
-| **0:00–1:00** | Begin at **Workflow Center**. | “This is the communication operating layer. It is not another CRM dashboard; it shows the controlled account workflow that needs a decision now.” | The product has a narrow and credible job. |
-| **1:00–2:00** | Point to the workflow cards and open **Solara Coastal Spritz · Juniper Bottle House**. | “The system can support reorders, allocations, and policy-gated notices. We start with reorders because the rule, owner, and action are easy to inspect.” | The product can expand by workflow instead of becoming generic. |
-| **2:00–3:30** | Show the trigger, eligible account, assigned rep, preferred channel, and mode selector. | “Juniper is 38 days since its last Solara order against a 21-day cadence. Before communication is prepared, we verify the contact, assigned rep, channel, and level of human control.” | Automation is evidence-led and human-governed. |
-| **3:30–4:30** | Keep **Rep-approved send** selected and show the message. | “This is an availability check, not a commercial offer. The template excludes pricing, promotion, and terms. Renee owns the decision to approve it.” | The system extends coverage without negotiating for the rep. |
-| **4:30–5:30** | Click **Approve & simulate send**. | “This records a simulated, rep-approved action. In implementation, the client configures the delivery channel, permissions, workflow rules, and review process.” | The demo is realistic without pretending to be live production software. |
-| **5:30–6:30** | Click **Simulate non-routine reply**. | “The buyer asks about prior pricing. That needs commercial judgment, so the product does not create a reply. It routes the conversation to the human exception inbox.” | The system stops at the correct boundary. |
-| **6:30–7:15** | In **Replies & Exceptions**, select **Assign to Renee**. | “The original message, the question, the reason for escalation, and the accountable rep are visible together.” | A person—not automation—owns relationship-sensitive work. |
-| **7:15–8:00** | Open **Audit & Policy**. | “This is the evidence trace: trigger, eligibility, template, automation mode, send state, exception, and named handoff.” | The workflow is inspectable and defensible. |
+| **0:00–1:00** | Begin at **Workflow Center**. | “This is a communication operating layer. It does not replace your CRM, ERP, ordering portal, or reps. It makes a controlled account workflow visible when a team needs to act.” | Harborline has a narrow, credible job. |
+| **1:00–4:00** | Open **Reorder Reminder — Juniper Bottle House**. Show the cadence trigger, account context, rep-approved mode, availability-check template, simulated send, and the pricing reply exception. | “A routine reorder moment is detected. We verify owner, contact, channel, and template before we act. The system can prepare coverage, but it stops when a buyer asks for commercial judgment.” | A rep retains control while routine coverage becomes more consistent. |
+| **4:00–7:00** | Return to Workflow Center and open **New Allocation Alert — Fleetwood Spirits**. Record the draft, simulate Marcus-approved send, then show the quantity/price exception. | “This is a different business moment: limited inventory. Harborline qualifies an audience and prepares an interest check, but it does not promise cases, set price, or allocate inventory. Marcus owns that decision.” | One system handles scarcity with explicit human judgment. |
+| **7:00–10:00** | Return to Workflow Center and open **Price / Promotion Notice**. Show the locked 12-account audience and terms-packet reference. Select **Verify terms & audience**, then simulate distribution. | “This is not a price engine. The system makes the reviewed audience, reference, owner, and policy gate visible before a notice can be simulated. The demo deliberately contains no actual commercial terms.” | Policy-sensitive communication can be controlled without hiding the boundary. |
+| **10:00–11:00** | Open **Replies & Exceptions** from any workflow. | “The question is not whether automation exists. The question is where it stops. Price, quantity, allocation, eligibility exceptions, complaints, and special treatment remain with a named person.” | Harborline protects relationships and accountability. |
+| **11:00–12:00** | Open **Audit & Policy**. | “Every workflow creates the same inspection trail: the event, the audience rule, the template boundary, control posture, action state, exception, and responsible owner.” | The product is consistent across workflows and ready to configure around a client’s reality. |
 
 ## Direct pitch-recovery states
 
-These address-bar states help the seller recover quickly during a meeting. They are demo controls, not production links.
+These address-bar states are controlled demo entry points, not production links.
 
 | URL state | Useful when |
 | --- | --- |
-| `/` | Normal start at Workflow Center. |
-| `/#workflow` | Begin directly at Juniper’s Reorder Reminder. |
-| `/?demo=sent#workflow` | Resume the workflow after the simulated send. |
-| `/?demo=exception#replies` | Begin at the non-routine reply in the exception inbox. |
-| `/?demo=exception&assigned=true#replies` | Begin with the exception already assigned to Renee. |
-| `/?demo=exception#audit` | Begin with the exception-ready audit record. |
+| `/` | Normal start with all three workflow cards. |
+| `/#workflow` | Begin directly at the Juniper Reorder Reminder. |
+| `/?demo=exception#replies` | Begin at the Reorder Reminder’s price exception. |
+| `/?workflow=allocation#workflow` | Begin at the Allocation Alert draft. |
+| `/?workflow=allocation&demo=drafted#workflow` | Resume after Marcus’s interest-check draft is recorded. |
+| `/?workflow=allocation&demo=sent#workflow` | Resume after the simulated allocation interest check. |
+| `/?workflow=allocation&demo=exception#replies` | Begin at the Fleetwood quantity-and-price exception. |
+| `/?workflow=promo#workflow` | Begin at the Policy-Gated Notice review state. |
+| `/?workflow=promo&terms=verified#workflow` | Begin after the fictional terms/audience gate has been recorded. |
+| `/?workflow=promo&terms=verified&demo=sent#workflow` | Begin after the simulated policy-gated distribution. |
+| `/?workflow=promo&terms=verified&demo=exception#replies` | Begin at the eligibility/special-treatment exception. |
 
 ## Safe responses to difficult questions
 
 | Buyer question | Response |
 | --- | --- |
 | “Is this connected to our systems?” | “Not in this demonstration. After scope is agreed, the client’s approved records, owners, communication channel, rules, and controls are configured into the same operating experience.” |
-| “Does it send messages automatically?” | “The product supports different automation modes. The demo uses rep-approved send because the responsible person remains visible. Policy-approved delivery is a later configuration decision, not a default assumption.” |
-| “Can it make pricing or allocation decisions?” | “No. It prepares the governed communication and records the evidence. Commercial terms, price, allocation decisions, disputes, and relationship-sensitive questions remain with qualified people.” |
-| “Does it replace our CRM or sales reps?” | “No. Its immediate job is more consistent communication coverage and clearer human follow-up around a defined workflow.” |
-| “What happens after we decide to proceed?” | “We map the first workflow’s trigger, account data, ownership, audience/eligibility, templates, delivery channel, approval gates, and evidence policy before enabling activity.” |
+| “Does it send messages automatically?” | “The product supports different control postures. Reorder starts rep-approved; allocation starts as a draft; a policy-sensitive notice cannot move until the defined review gate is recorded. Live delivery is a later client implementation decision.” |
+| “Can it make pricing or allocation decisions?” | “No. It prepares and records a governed communication path. Price, quantity, allocation, terms, disputes, eligibility exceptions, and relationship-sensitive questions remain with qualified people.” |
+| “Does it replace our CRM or sales reps?” | “No. Its immediate job is consistent communication coverage and visible accountability around a defined workflow.” |
+| “What happens after we decide to proceed?” | “We map one workflow’s trigger, data context, ownership, audience rule, permitted message, delivery channel, approval gates, exception policy, and evidence record before enabling activity.” |
 
 ## Recovery guide
 
 | Situation | What to do |
 | --- | --- |
-| You lose the narrative. | Press **Reset demo**, return to Workflow Center, and restart with the active Reorder Reminder. |
-| The buyer opens Accounts early. | Explain that account records are supporting relationship context, then select **Open Juniper workflow**. |
-| The buyer focuses on the exception. | Go to `/?demo=exception#replies` and show the handoff boundary first. |
-| The buyer asks about governance. | Go to `/?demo=exception#audit` and trace the seven recorded decision points. |
-| The buyer wants every workflow. | Complete the Reorder Reminder first; explain that allocation and promotion messages reuse the same controlled workflow structure after validation. |
+| You lose the narrative. | Press **Reset demo**, return to Workflow Center, and restart with Reorder Reminder. |
+| The buyer wants to see limited inventory. | Open `/?workflow=allocation#workflow` and explain the interest-check versus allocation-decision boundary. |
+| The buyer asks about promotions or pricing. | Open `/?workflow=promo#workflow` and explain that the demo shows controls and an audience gate, not commercial terms. |
+| The buyer focuses on relationship risk. | Open either exception URL and show the named-human boundary first. |
+| The buyer asks about governance. | Open the workflow’s Audit & Policy screen and trace the record from event to handoff. |
 
 ## Do not say
 
-1. Do not say it is connected to live data, delivery channels, policy engines, or a legal approval program.
-2. Do not say it guarantees reorder revenue, cost savings, or regulatory compliance.
-3. Do not call it an autonomous salesperson, CRM replacement, automatic pricing tool, or allocation decision engine.
+1. Do not say it is connected to live data, delivery channels, policy engines, price lists, or a legal approval program.
+2. Do not say it guarantees revenue, cost savings, regulatory compliance, message deliverability, or client adoption.
+3. Do not call it an autonomous salesperson, CRM replacement, automatic pricing tool, allocation decision engine, or policy determination system.
 
 ## Close the conversation
 
-> “If we configured one controlled communication workflow around the accounts your team most often misses, where would the first improvement in coverage and accountability appear?”
+> “Which of these three moments—missed reorder, new allocation, or policy-sensitive notice—would be most useful for us to map around your team’s actual process first?”
 
-Record the prospect’s response in [`../operations/DECISION_LOG.md`](../operations/DECISION_LOG.md). It becomes evidence for the first client-specific workflow decision.
+Record the answer in [`../operations/INTERVIEW_EVIDENCE_LOG.md`](../operations/INTERVIEW_EVIDENCE_LOG.md). It becomes evidence for the first client-specific pilot decision.
 
 ## References
 
 [1] [Sandbox Build Brief — original product definition](../reference-library/originals/Sandbox_Build_Brief.docx)
-[2] [Reorder Reminder Workflow Specification — active product acceptance test](REORDER_REMINDER_WORKFLOW_SPEC.md)
+[2] [Reorder Reminder Workflow Specification](REORDER_REMINDER_WORKFLOW_SPEC.md)
+[3] [Three-Workflow Demo Suite Specification](MULTI_WORKFLOW_SUITE_SPEC.md)

@@ -95,6 +95,21 @@ button:disabled { cursor:default; }
 @media (min-width:1024px) { .ops-sidebar { display:flex; }.ops-workspace { width:min(1420px,calc(100% - 76px)); }.ops-center-layout { grid-template-columns:minmax(0,1fr) 330px; }.ops-workflow-layout { grid-template-columns:222px minmax(0,1fr); }.ops-context-grid { grid-template-columns:minmax(0,1fr) 330px; }.ops-reply-layout { grid-template-columns:minmax(0,1fr) 310px; }.ops-audit-layout { grid-template-columns:minmax(0,1fr) 310px; } }
 @media (prefers-reduced-motion:no-preference) { .ops-workflow-card,.ops-primary,.ops-secondary,.ops-nav button { transition:transform .16s cubic-bezier(.23,1,.32,1),background .16s ease,box-shadow .16s ease,color .16s ease; }.ops-workflow-card.primary-workflow:hover { transform:translateX(2px); } }
 
+/* Three-workflow suite states: selected workflow, policy gate, and calm verified control. */
+.ops-card-mark.policy { color:#3c7b67; background:#e2f3eb; }
+.ops-card-status.policy { color:#3b7967; background:#e4f3eb; }
+.ops-workflow-card.active-workflow { background:linear-gradient(90deg,#f5fbf8,#fff); box-shadow:inset 3px 0 0 var(--green); }
+.ops-workflow-card.active-workflow.primary-workflow { background:linear-gradient(90deg,#fffaf8,#fff); box-shadow:inset 3px 0 0 var(--verm); }
+.ops-trigger-card.policy-trigger { background:linear-gradient(125deg,#f4fbf7,#fff); }
+.ops-trigger-card.policy-trigger::after { border-color:rgba(35,114,95,.23); box-shadow:0 0 0 15px rgba(35,114,95,.05); }
+.ops-policy-gate { display:grid; grid-template-columns:18px 1fr; gap:9px; border:1px solid #eed5cc; border-radius:8px; padding:13px; color:#a55344; background:#fff8f5; }
+.ops-policy-gate.verified { border-color:#93c5ae; color:#367461; background:#edf8f2; }
+.ops-policy-gate strong,.ops-policy-gate small { display:block; }
+.ops-policy-gate strong { font-size:10px; }
+.ops-policy-gate small { margin-top:3px; font-size:8px; line-height:1.5; }
+.ops-policy-gate > :last-child { grid-column:2; justify-self:start; }
+.ops-policy-gate .ops-text-button { font-size:9px; }
+
 /* Harborline controlled-signal routing refinement. */
 .ops-main { position:relative; }
 .ops-workspace { position:relative; }
@@ -112,3 +127,25 @@ button:disabled { cursor:default; }
 .ops-step strong { color:#41545c; font-size:11px; }
 .ops-audit-trail { position:relative; }
 .ops-audit-trail::after { position:absolute; z-index:2; top:9px; right:10px; border:1px solid rgba(35,114,95,.22); border-radius:3px; padding:4px 5px; color:rgba(35,114,95,.6); content:"EVIDENCE TRACE"; font-family:var(--mono); font-size:7px; letter-spacing:.08em; transform:rotate(3deg); }
+
+/* Regulated operations command center: route-and-record geometry makes control visible. */
+.ops-sidebar { position:relative; overflow:hidden; }
+.ops-sidebar::before { position:absolute; right:-18px; bottom:82px; width:170px; height:160px; border-top:1px solid rgba(113,174,155,.16); border-left:1px solid rgba(113,174,155,.16); content:""; background:radial-gradient(circle at 0 100%,rgba(113,174,155,.45) 0 3px,transparent 4px),radial-gradient(circle at 44% 55%,rgba(113,174,155,.31) 0 3px,transparent 4px),radial-gradient(circle at 100% 0,rgba(230,83,60,.48) 0 3px,transparent 4px),linear-gradient(146deg,transparent 49%,rgba(113,174,155,.13) 50% 51%,transparent 52%); pointer-events:none; }
+.ops-sidebar > * { position:relative; z-index:1; }
+.ops-brand { position:relative; padding-bottom:13px; }
+.ops-brand::after { position:absolute; bottom:0; left:40px; width:104px; height:8px; content:""; background:radial-gradient(circle at 5px 4px,#7ab5a4 0 2px,transparent 3px),radial-gradient(circle at 49px 4px,#7ab5a4 0 2px,transparent 3px),radial-gradient(circle at 93px 4px,var(--verm) 0 2px,transparent 3px),linear-gradient(transparent 3px,rgba(122,181,164,.48) 3px 5px,transparent 5px); }
+.ops-brand > svg { filter:drop-shadow(0 5px 10px rgba(230,83,60,.22)); stroke-width:2.4; }
+.ops-environment { border-left:1px solid rgba(122,181,164,.33); padding-left:9px; }
+.ops-primary { letter-spacing:.01em; }
+.ops-trigger-card { border-color:#d1ddd7; box-shadow:0 14px 30px rgba(24,58,69,.08),inset 4px 0 0 var(--verm); }
+.ops-trigger-card.policy-trigger { box-shadow:0 14px 30px rgba(24,58,69,.08),inset 4px 0 0 var(--green); }
+.ops-trigger-card > div:nth-child(2)::before { display:block; margin-bottom:7px; color:#a35343; content:"LIVE DECISION RECORD"; font-family:var(--mono); font-size:8px; font-weight:700; letter-spacing:.08em; }
+.ops-trigger-card.policy-trigger > div:nth-child(2)::before { color:#3d7867; content:"CONTROLLED DISTRIBUTION RECORD"; }
+.ops-context-card { box-shadow:0 10px 22px rgba(30,58,68,.045); }
+.ops-mode-card { border-color:#cfe0d8; box-shadow:0 10px 22px rgba(30,58,68,.045); }
+.ops-message-card { border-color:#cbdcd4; box-shadow:0 16px 32px rgba(30,58,68,.065); }
+.ops-message-heading { border-top:3px solid var(--green); }
+.ops-reply-card { border-left:4px solid var(--verm); box-shadow:0 14px 30px rgba(80,40,32,.07); }
+.ops-policy-card { border-top:3px solid var(--green); }
+.ops-state-pill.policy { color:#3d7867; background:#e4f3eb; }
+@media (min-width:700px) { .ops-heading::after { right:16px; } }
