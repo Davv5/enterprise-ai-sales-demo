@@ -36,7 +36,7 @@ import {
   UsersRound,
 } from "lucide-react";
 
-type View = "workflows" | "workflow" | "replies" | "accounts" | "audit";
+type View = "brief" | "workflows" | "workflow" | "replies" | "accounts" | "audit";
 type WorkflowId = "reorder" | "allocation" | "promo";
 type WorkflowState = "approval" | "drafted" | "sent" | "exception";
 type Mode = "draft" | "rep" | "policy";
@@ -287,7 +287,7 @@ export default function Home() {
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const requestedWorkflow = searchParams.get("workflow");
   const initialWorkflow: WorkflowId = requestedWorkflow === "allocation" || requestedWorkflow === "promo" ? requestedWorkflow : "reorder";
-  const initialView: View = typeof window !== "undefined" && ["workflow", "replies", "accounts", "audit"].includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) as View : "workflows";
+  const initialView: View = typeof window !== "undefined" && ["brief", "workflows", "workflow", "replies", "accounts", "audit"].includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) as View : "brief";
   const requestedState = searchParams.get("demo");
   const parsedState: WorkflowState = requestedState === "exception" || requestedState === "sent" || requestedState === "drafted" ? requestedState : "approval";
   // The promo workflow has no drafted state; coerce rather than render an impossible posture.
@@ -312,7 +312,7 @@ export default function Home() {
     if (assigned) params.set("assigned", "true");
     if (activeWorkflow === "promo" && policyReady) params.set("terms", "verified");
     const query = params.toString();
-    const hash = view === "workflows" ? "" : `#${view}`;
+    const hash = view === "brief" ? "" : `#${view}`;
     window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${hash}`);
   }, [view, activeWorkflow, state, assigned, policyReady]);
 
@@ -328,7 +328,7 @@ export default function Home() {
   }, [config, state, assigned, policyReady, hasDrafted]);
 
   const resetDemo = () => {
-    setView("workflows");
+    setView("brief");
     setActiveWorkflow("reorder");
     setState("approval");
     setMode("rep");
@@ -347,6 +347,16 @@ export default function Home() {
     setPolicyReady(false);
     setHasDrafted(false);
     setView("workflow");
+  };
+
+  const openBriefException = () => {
+    setActiveWorkflow("reorder");
+    setState("exception");
+    setMode("rep");
+    setAssigned(false);
+    setPolicyReady(false);
+    setHasDrafted(false);
+    setView("replies");
   };
 
   const advanceWorkflow = () => {
@@ -381,16 +391,55 @@ export default function Home() {
   };
 
   const navigation = [
-    { id: "workflows" as View, label: "Workflow center", icon: LayoutList },
+    { id: "brief" as View, label: "Daily brief", icon: Sparkles },
+    { id: "workflows" as View, label: "Workflow library", icon: LayoutList },
     { id: "replies" as View, label: "Replies & exceptions", icon: MessageSquareWarning },
     { id: "accounts" as View, label: "Accounts", icon: UsersRound },
     { id: "audit" as View, label: "Audit & policy", icon: FileCheck2 },
   ];
 
-  const breadcrumb = { workflows: "WORKFLOW CENTER", workflow: config.type, replies: "REPLIES & EXCEPTIONS", accounts: "ACCOUNT CONTEXT", audit: "AUDIT RECORD" }[view];
+  const breadcrumb = { brief: "DAILY OPERATING BRIEF", workflows: "WORKFLOW LIBRARY", workflow: config.type, replies: "REPLIES & EXCEPTIONS", accounts: "ACCOUNT CONTEXT", audit: "OPERATING MEMORY" }[view];
   const cardStatus = (item: WorkflowConfig) => item.id === activeWorkflow ? stateLabel(item, state, policyReady, assigned) : item.initialStatus;
   const activeException = state === "exception";
   const modeTitle = config.id === "promo" ? "Policy gate controls distribution." : "Choose the level of human control.";
+  const briefMoments = [
+    {
+      key: "reorder",
+      workflow: "reorder" as WorkflowId,
+      code: "RR-04",
+      type: "COVERAGE MOMENT",
+      icon: Mail,
+      title: "Juniper may be falling outside normal coverage.",
+      detail: "38 days since a Solara reorder. Account, owner, channel, and availability-check boundary are ready.",
+      owner: "Renee · decide whether to send",
+      tone: activeWorkflow === "reorder" ? state : "attention",
+      status: activeWorkflow === "reorder" ? stateLabel(configurations.reorder, state, policyReady, assigned) : "Needs decision",
+    },
+    {
+      key: "allocation",
+      workflow: "allocation" as WorkflowId,
+      code: "AL-09",
+      type: "SCARCE INVENTORY",
+      icon: PackageCheck,
+      title: "Three accounts qualify for the Nila Reserve allocation.",
+      detail: "An interest-check draft is prepared. Quantity, price, and allocation commitment remain excluded.",
+      owner: "Marcus · review the interest check",
+      tone: activeWorkflow === "allocation" ? state : "planned",
+      status: activeWorkflow === "allocation" ? stateLabel(configurations.allocation, state, policyReady, assigned) : "Draft ready",
+    },
+    {
+      key: "promo",
+      workflow: "promo" as WorkflowId,
+      code: "PN-18",
+      type: "POLICY-SENSITIVE NOTICE",
+      icon: ShieldCheck,
+      title: "A seasonal notice is waiting on a recorded policy gate.",
+      detail: "The twelve-account audience is locked. Terms are referenced, never displayed, and distribution stays blocked.",
+      owner: "Alicia · verify terms and audience",
+      tone: activeWorkflow === "promo" ? state : "policy",
+      status: activeWorkflow === "promo" ? stateLabel(configurations.promo, state, policyReady, assigned) : "Policy review",
+    },
+  ];
 
   return (
     <div className="ops-app">
@@ -401,7 +450,7 @@ export default function Home() {
           <nav className="ops-nav" aria-label="Product navigation">
             {navigation.map((item) => {
               const Icon = item.icon;
-              const active = view === item.id || (item.id === "workflows" && view === "workflow");
+              const active = view === item.id || (item.id === "brief" && view === "workflow");
               return <button key={item.id} className={active ? "active" : ""} onClick={() => setView(item.id)}><Icon size={18} /><span>{item.label}</span>{item.id === "replies" && activeException ? <b>1</b> : null}</button>;
             })}
           </nav>
@@ -412,9 +461,39 @@ export default function Home() {
       <main className="ops-main">
         <header className="ops-topbar"><div className="ops-breadcrumb"><span>HARBORLINE /</span><strong>{breadcrumb}</strong></div><div className="ops-top-actions"><span className="ops-fictional"><Sparkles size={13} /> Sandbox record</span><button aria-label="Search" className="ops-icon"><Search size={18} /></button><button aria-label="Notifications" className="ops-icon"><BellRing size={18} /></button><Avatar initials="OL" small /></div></header>
 
+        {view === "brief" ? (
+          <section className="ops-workspace daily-brief">
+            <div className="ops-brief-hero">
+              <div>
+                <p className="ops-eyebrow">AI OPERATIONS LEAD · MORNING BRIEF</p>
+                <h1>Good morning,<br /><em>Renee.</em></h1>
+                <p>This fictional operating day is already organized around account coverage, human decisions, policy gates, and customer conversations that need a person.</p>
+                <div className="ops-brief-meta"><span><Sparkles size={14} /> SIMULATED OPERATING DAY</span><span>MONDAY · 08:16</span><span>SALES OPERATIONS / EAST</span></div>
+              </div>
+              <aside className="ops-ai-brief"><div className="ops-ai-mark"><Sparkles size={19} /></div><p className="ops-eyebrow">TODAY’S AI BRIEF</p><h2>Six account moments need protection.</h2><p>Two are ready for a human decision. One is held at a policy gate. One buyer question must stay with a person.</p><button className="ops-secondary" onClick={() => selectWorkflow("reorder")}>Open first decision <ArrowRight size={15} /></button></aside>
+            </div>
+
+            <section className="ops-posture-ledger" aria-label="Simulated operating posture">
+              <div><span>02</span><p><strong>Prepared</strong><small>Approved context is ready</small></p><CircleCheck size={18} /></div>
+              <div><span>02</span><p><strong>Human decision</strong><small>A named owner must act</small></p><ClipboardCheck size={18} /></div>
+              <div><span>01</span><p><strong>Policy review</strong><small>Distribution stays blocked</small></p><ShieldCheck size={18} /></div>
+              <div className="exception"><span>01</span><p><strong>Customer exception</strong><small>Relationship judgment required</small></p><MessageSquareWarning size={18} /></div>
+            </section>
+
+            <div className="ops-brief-layout">
+              <section className="ops-priority-stack"><div className="ops-section-title"><div><p className="ops-eyebrow">PRIORITY ACCOUNT MOMENTS</p><h2>What needs the team today</h2></div><button className="ops-filter" onClick={() => setView("workflows")}><LayoutList size={15} /> All workflows</button></div>{briefMoments.map((moment, index) => { const Icon = moment.icon; return <button key={moment.key} className={`ops-brief-moment ${moment.tone}`} onClick={() => selectWorkflow(moment.workflow)}><span className="ops-brief-order">{String(index + 1).padStart(2, "0")}</span><span className="ops-brief-icon"><Icon size={18} /></span><span className="ops-brief-copy"><small>{moment.type} · {moment.code}</small><strong>{moment.title}</strong><em>{moment.detail}</em><b><UserRound size={13} /> {moment.owner}</b></span><span className="ops-brief-state">{moment.status}</span><ChevronRight size={18} /></button>; })}</section>
+
+              <aside className="ops-brief-rail">
+                <section className="ops-decision-queue"><div className="ops-section-title"><div><p className="ops-eyebrow">HUMAN DECISION QUEUE</p><h2>People unblock the day</h2></div><ClipboardCheck size={19} /></div><button onClick={() => selectWorkflow("reorder")}><span><Avatar initials="RL" small /><div><strong>Renee Lewis</strong><small>Choose Juniper’s next coverage action</small></div></span><ChevronRight size={15} /></button><button onClick={() => selectWorkflow("promo")}><span><Avatar initials="AC" small /><div><strong>Alicia Chen</strong><small>Verify the PN-18 policy gate</small></div></span><ChevronRight size={15} /></button><button className="needs-person" onClick={openBriefException}><span><Avatar initials="LC" small /><div><strong>Lina Cho needs a person</strong><small>Prior-price question · no response prepared</small></div></span><ChevronRight size={15} /></button></section>
+                <section className="ops-memory-preview"><div><p className="ops-eyebrow">OPERATING MEMORY</p><h2>What changed since yesterday</h2></div><ol><li><time>08:12</time><span /><p><strong>Juniper cadence signal surfaced</strong>RR-04 was prepared with terms excluded.</p></li><li><time>09:12</time><span /><p><strong>Fleetwood interest check prepared</strong>Marcus retains quantity and price judgment.</p></li><li><time>10:05</time><span /><p><strong>Program notice held at policy gate</strong>The locked audience awaits Alicia’s review.</p></li></ol><button className="ops-text-button" onClick={() => setView("audit")}>Open complete operating memory <ArrowRight size={15} /></button></section>
+              </aside>
+            </div>
+          </section>
+        ) : null}
+
         {view === "workflows" ? (
           <section className="ops-workspace workflow-center">
-            <div className="ops-heading"><div><p className="ops-eyebrow">CONTROLLED DISTRIBUTION LEDGER</p><h1>Run the <em>right</em> message.<br />Keep the relationship human.</h1><p>Three workflow types, one accountable system. Harborline records the event, audience, message boundary, approval posture, human owner, and evidence before a communication action is simulated.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setGuided(!guided)}><Play size={15} /> {guided ? "Hide flow guide" : "Show flow guide"}</button><button className="ops-primary" onClick={() => setView("workflow")}>Open selected workflow <ArrowRight size={16} /></button></div></div>
+            <div className="ops-heading"><div><p className="ops-eyebrow">CONTROLLED DISTRIBUTION LEDGER</p><h1>Every account moment.<br /><em>One operating memory.</em></h1><p>Browse the three governed workflow types behind the Daily Operating Brief. Each keeps the signal, control boundary, accountable person, and evidence record visible before an action is simulated.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setGuided(!guided)}><Play size={15} /> {guided ? "Hide flow guide" : "Show flow guide"}</button><button className="ops-primary" onClick={() => setView("brief")}>Return to daily brief <ArrowLeft size={16} /></button></div></div>
             {guided ? <div className="ops-flow-guide">{config.steps.map((step, index) => { const Icon = step.icon; return <div key={step.id}><span>{String(index + 1).padStart(2, "0")}</span><Icon size={16} /><strong>{step.title}</strong><small>{step.detail}</small></div>; })}</div> : null}
             <div className="ops-center-layout">
               <section className="ops-workflow-list"><div className="ops-section-title"><div><p className="ops-eyebrow">ACTIVE COMMUNICATION WORKFLOWS</p><h2>What can run now</h2></div><button className="ops-filter"><Filter size={15} /> All statuses</button></div>{workflowOrder.map((id) => { const item = configurations[id]; const Icon = item.id === "allocation" ? PackageCheck : item.id === "promo" ? ShieldCheck : Mail; return <button key={item.id} className={`ops-workflow-card ${item.id === activeWorkflow ? "active-workflow" : ""} ${item.tone === "attention" ? "primary-workflow" : ""}`} onClick={() => selectWorkflow(item.id)}><span className={`ops-card-mark ${item.tone}`}><Icon size={17} /></span><span className="ops-card-copy"><small>{item.type}</small><strong>{item.title}</strong><em>{item.cardDetail}</em></span><span className={`ops-card-status ${item.tone}`}>{cardStatus(item)}</span><ChevronRight size={18} /></button>; })}</section>
@@ -425,12 +504,12 @@ export default function Home() {
 
         {view === "workflow" ? (
           <section className="ops-workspace workflow-detail">
-            <button className="ops-back" onClick={() => setView("workflows")}><ArrowLeft size={15} /> Workflow center</button>
+            <button className="ops-back" onClick={() => setView("brief")}><ArrowLeft size={15} /> Daily operating brief</button>
             <div className="ops-heading compact"><div><p className="ops-eyebrow">{config.eyebrow}</p><h1>{config.heading.split("\n")[0]}<br />{config.heading.split("\n")[1]} <em>{config.emphasis}</em></h1><p>{config.description}</p></div><div className="ops-heading-actions"><StatePill config={config} state={state} policyReady={policyReady} assigned={assigned} /><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
             <div className="ops-workflow-layout"><aside className="ops-step-rail">{config.steps.map((step, index) => { const Icon = step.icon; const actionComplete = state === "sent" || state === "exception"; const complete = index < 3 || (index === 3 && actionComplete) || (index === 4 && state === "exception"); const current = (state === "approval" && index === 3) || (state === "drafted" && index === 3) || (state === "sent" && index === 4); return <div className={`ops-step ${complete ? "complete" : ""} ${current ? "current" : ""}`} key={step.id}><span><Icon size={15} /></span><div><small>{String(index + 1).padStart(2, "0")}</small><strong>{step.title}</strong><em>{step.detail}</em></div></div>; })}</aside>
               <div className="ops-workflow-canvas"><section className={`ops-trigger-card ${config.id === "promo" ? "policy-trigger" : ""}`}><div className="ops-trigger-icon">{config.id === "allocation" ? <PackageCheck size={20} /> : config.id === "promo" ? <FileText size={20} /> : <Gauge size={20} />}</div><div><p className="ops-eyebrow">{config.triggerKind}</p><h2>{config.triggerTitle}</h2><p>{config.triggerDescription}</p></div><span>{config.triggerCode}<br /><small>{config.triggerKind}</small></span></section>
                 <div className="ops-context-grid"><section className="ops-context-card"><p className="ops-eyebrow">{config.contextLabel}</p><div className="ops-account-row"><span className="ops-monogram">{config.monogram}</span><div><strong>{config.contextName}</strong><small>{config.contextMeta}</small></div></div><dl>{config.contextRows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl></section><section className="ops-mode-card"><p className="ops-eyebrow">{config.id === "promo" ? "POLICY CONTROL" : "AUTOMATION MODE"}</p><h3>{modeTitle}</h3>{config.id === "promo" ? <div className={`ops-policy-gate ${policyReady ? "verified" : ""}`}><ShieldCheck size={18} /><div><strong>{policyReady ? "Terms & audience verified" : "Terms & audience review required"}</strong><small>{policyReady ? "PN-18-TERM and audience rule PR-18 are recorded for this fictional demo state." : "No distribution can be simulated until the terms packet reference and 12-account audience are reviewed."}</small></div>{policyReady ? <Check size={16} /> : <button className="ops-text-button" onClick={() => { setPolicyReady(true); setMode("policy"); }}>Verify gate <ArrowRight size={14} /></button>}</div> : <><button className={mode === "draft" ? "selected" : ""} onClick={() => setMode("draft")}><span><ClipboardCheck size={17} /><strong>Draft for rep</strong><small>{config.id === "allocation" ? "Prepare only; Marcus reviews before a message can be simulated." : `Prepare only; ${config.ownerName.split(" ")[0]} decides whether to send.`}</small></span>{mode === "draft" ? <Check size={16} /> : null}</button>{config.id === "reorder" ? <button className={mode === "rep" ? "selected" : ""} onClick={() => setMode("rep")}><span><UserRound size={17} /><strong>Rep-approved send</strong><small>Renee approves before the message is recorded.</small></span>{mode === "rep" ? <Check size={16} /> : null}</button> : <div className="ops-future-mode"><UserRound size={16} /><span><strong>Rep approval follows draft</strong><small>Marcus makes the final send and any allocation decision.</small></span></div>}<div className="ops-future-mode"><ShieldCheck size={16} /><span><strong>Policy-approved send</strong><small>Available only after validated rules and review.</small></span></div></>}</section></div>
-                <section className="ops-message-card"><div className="ops-message-heading"><div><p className="ops-eyebrow">{config.id === "promo" ? "POLICY-GATED NOTICE" : "APPROVED OUTREACH"}</p><h3>{config.template}</h3></div><span><ShieldCheck size={15} /> {config.termsLabel}</span></div><div className="ops-message-meta">{config.meta.map((item) => <span key={item}>{item}</span>)}</div><p>{config.messageBody}</p><small>{config.signature}</small><div className="ops-message-foot"><span><CircleCheck size={15} /> {config.controlCopy}</span>{state === "exception" ? <button className="ops-secondary" onClick={() => setView("replies")}>Open assigned exception <ArrowRight size={16} /></button> : <button className="ops-primary" onClick={advanceWorkflow}>{actionLabel()} {state === "sent" ? <MessageSquareWarning size={16} /> : state === "approval" && config.id === "promo" && !policyReady ? <ShieldCheck size={16} /> : <Send size={16} />}</button>}</div></section>
+                <section className="ops-message-card"><div className="ops-message-heading"><div><p className="ops-eyebrow">{config.id === "promo" ? "POLICY-GATED NOTICE" : "APPROVED OUTREACH"}</p><h3>{config.template}</h3></div><span><ShieldCheck size={15} /> {config.termsLabel}</span></div><div className="ops-message-meta">{config.meta.map((item) => <span key={item}>{item}</span>)}</div><p>{config.messageBody}</p><small>{config.signature}</small><div className="ops-message-foot"><span><CircleCheck size={15} /> {config.controlCopy}</span>{state === "exception" ? <button className="ops-secondary" onClick={() => setView("replies")}>Open human exception <ArrowRight size={16} /></button> : <button className="ops-primary" onClick={advanceWorkflow}>{actionLabel()} {state === "sent" ? <MessageSquareWarning size={16} /> : state === "approval" && config.id === "promo" && !policyReady ? <ShieldCheck size={16} /> : <Send size={16} />}</button>}</div></section>
               </div></div>
           </section>
         ) : null}

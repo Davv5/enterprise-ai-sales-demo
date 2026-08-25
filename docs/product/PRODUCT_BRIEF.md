@@ -1,66 +1,85 @@
-# Source of Truth — Enterprise AI Sales Demo
+# Source of Truth — AI Operations Lead Sales Demo
 
 ## What we are building
 
-We are building a **premium live sales-demo version** of an account-communication product for wine and spirits distributors. A sales partner should be able to open the system in a client meeting and demonstrate exactly how a distributor would identify reorder risk, communicate through an approved workflow, preserve a record of that activity, and return complex conversations to the assigned sales rep.
+We are building a **premium live sales-demo** for a distributor AI Operations Lead. A seller must be able to put a distributor executive in the seat of a sales manager or operations lead and demonstrate how the product organizes the operating day, prepares controlled account work, preserves human ownership, routes sensitive exceptions, and keeps operating memory.
 
-**Canonical code repository:** `https://github.com/Davv5/enterprise-ai-sales-demo.git` on branch `main`. Before implementation, read [`../reference-library/AI_INTERPRETATION_MEMO.md`](../reference-library/AI_INTERPRETATION_MEMO.md) for source-backed decisions and constraints, then read [`../operations/GITHUB_WORKFLOW.md`](../operations/GITHUB_WORKFLOW.md) for the shared-code routine.
+**Canonical code repository:** `https://github.com/Davv5/enterprise-ai-sales-demo.git` on branch `main`.
 
-The demo should look and behave like the product a client will buy. It uses fictional or preloaded data. After a sale, the same experience would be configured with the client’s users, data, business rules, approved communication channel, and controls.
+The demo should look and behave like the product a client will buy. It uses fictional/preloaded data. It is not connected to a real distributor, live model, delivery channel, price list, policy program, or customer database.
+
+## The product promise
+
+> **The AI Operations Lead runs the process so your people can own the relationships and decisions that matter.**
+
+The product observes approved operating signals, organizes account moments, prepares bounded work, explains why it surfaced, routes non-routine customer questions, and preserves an evidence record. It does not replace a CRM, ERP, ordering portal, distributor rep, or commercial decision-maker.
 
 ## The buyer problem
 
-Distributor sales representatives manage many retail accounts and can miss routine moments to follow up. The product’s purpose is to increase meaningful account coverage without pretending to replace the rep or autonomously resolve relationship-sensitive issues.
+Distributor teams manage many retail accounts across signals, inboxes, spreadsheets, orders, and human memory. Routine moments can be missed; responsible people may not know what needs them; and sensitive customer questions can lose their context between systems.
+
+The product’s purpose is to create clearer account coverage and operating accountability without pretending that AI should decide pricing, allocation, terms, policy interpretation, or relationship-sensitive responses.
 
 ## The first story the demo must tell
 
-> A manager opens an active reorder-reminder workflow, sees the rule that created it and the eligible account, checks the named rep and preferred channel, reviews the approved message and automation mode, records a controlled demonstration send, then sees a non-routine reply arrive in the assigned rep’s exception inbox with a complete audit record.
+1. A fictional Sales Manager / Operations Lead opens the **Daily Operating Brief**.
+2. The AI Operations Lead has organized the simulated day into prepared work, human decisions, policy review, and customer exceptions.
+3. The manager opens a Reorder Reminder, Allocation Alert, or Policy-Gated Notice to see the signal, permitted action, named owner, and decision boundary.
+4. A qualified person makes or records the next action; a non-routine reply becomes a named human handoff.
+5. Operating Memory shows the connected signal, control, person, simulated action, exception, and next decision.
 
 ## Product principles
 
 | Principle | Meaning in the demo |
 | --- | --- |
-| **Evidence before automation** | Every visible action has a reason, timestamp, owner, and next state. |
-| **Rep extension, not replacement** | The rep appears as the accountable owner of the account and of exceptions. |
-| **Control before scale** | The demo shows eligibility, approval, and audit visibility before it shows a send action. |
-| **Premium, not gimmicky** | The product feels like an operations system a distributor could trust, not a generic AI chat interface. |
-| **Demo data is not production data** | Fictional data is clearly used for the sales demonstration; real integrations are implementation work after a sale. |
+| **AI leads the process, humans own judgment** | AI organizes, prepares, explains, routes, and remembers. People decide price, terms, quantity, allocation, policy interpretation, exceptions, and sensitive communication. |
+| **Evidence before automation** | Every visible action has a reason, timestamp, owner, control posture, and next state. |
+| **Operating day before workflow detail** | The first screen makes team coverage, decisions, gates, and exceptions intelligible before the buyer enters a specific workflow. |
+| **Rep extension, not replacement** | A rep or qualified owner remains accountable for the account relationship and non-routine work. |
+| **Premium, not gimmicky** | The product feels like an operating environment a distributor could trust—not a generic AI chat tool or metrics dashboard. |
+| **Demo data is not production data** | Fictional data and simulated actions are visibly disclosed. Real integrations, delivery, and permissions are later implementation work. |
+
+## Active demo architecture
+
+| Surface | Role in the demo |
+| --- | --- |
+| **Daily Operating Brief** | Primary opening. Displays the fictional operating day, posture, priority account moments, human decision queue, and operating-memory preview. |
+| **Workflow Library** | Secondary browse surface for the three governed workflow types. |
+| **Reorder Reminder** | Shows cadence signal, bounded availability check, rep approval/draft, pricing exception, and Renee handoff. |
+| **New Allocation Alert** | Shows qualified audience, interest-check draft, Marcus approval, and quantity/price boundary. |
+| **Policy-Gated Notice** | Shows locked audience, terms reference, recorded review gate, and Alicia handoff. |
+| **Replies & Exceptions** | Makes the point where automation stops visible and owned. |
+| **Accounts** | Provides supporting relationship or audience context—not a replacement CRM. |
+| **Operating Memory / Audit** | Preserves what surfaced, why, what was permitted, who acted, and what remains owned. |
 
 ## What is already complete
 
 | Item | Current status |
 | --- | --- |
-| Strategic synthesis and roadmap | Complete. |
-| Project Lead Workbook | Complete. |
-| Interactive strategy report | Complete. |
-| Dashboard-led sales prototype | Built as a visual and component foundation; retired as the active product hierarchy. |
-| Correct communication-workflow product demo | Complete for the first Reorder Reminder vertical slice; fictional and simulated only. |
-| Real client integration, consent management, delivery channel, and production controls | Not yet built. |
+| Strategy, original-source interpretation, project-lead materials, and GitHub continuity | Complete. |
+| Premium three-workflow fictional demo and integrity pass | Complete. |
+| AI Operations Lead Daily Operating Brief demo slice | Complete; fictional and simulated only. |
+| Real client workspace, data ingestion, database, live LLM call, authentication, delivery channel, consent/policy program, and production integrations | Not built. |
 
-## Current Build Task
+## Current build direction
 
-**Task name:** Reorder Reminder workflow and Workflow Center — complete first vertical slice.
+The active demo direction is specified in [`AI_OPERATIONS_LEAD_DAILY_BRIEF_SPEC.md`](AI_OPERATIONS_LEAD_DAILY_BRIEF_SPEC.md). Future implementation must retain the Daily Operating Brief as the primary home and treat individual workflows as its drill-down evidence.
 
-**Outcome:** A communication operations workspace that lets a distributor user see an active reorder workflow, its trigger, eligible account, owner, message, automation mode, response exception, and evidence record without relying on an executive dashboard as the product’s primary surface.
-
-**Implementation specification:** Build against [`REORDER_REMINDER_WORKFLOW_SPEC.md`](REORDER_REMINDER_WORKFLOW_SPEC.md). Use [`DEMO_SCENARIO_AND_PITCH_FLOW.md`](DEMO_SCENARIO_AND_PITCH_FLOW.md) for fictional names and business context; the Juniper → Renee path remains the first workflow, but it is now embedded in Workflow Center rather than a dashboard-first journey.
-
-**What success looks like:** A prospect can follow the full governed sequence in under two minutes: trigger → eligible account → approved message and mode → controlled send → reply exception → assigned rep → audit record. This sequence is implemented and verified as a fictional sales-demo state; client integrations and live delivery remain later implementation work.
-
-**Must not change:** The product must not present invented financial results, claim live client integrations, show real customer data, or imply that automated communication replaces the sales representative.
+The current name is provisional. Do not rename product code or generate a new identity until a replacement naming direction is selected and appropriately screened.
 
 ## Decision owners
 
 | Decision | Primary owner | Input required |
 | --- | --- | --- |
 | Which buyer story creates the strongest urgency | Partner | Distributor and retailer conversations. |
-| What the product looks like and how the demo flows | You | Partner feedback and Manus product review. |
-| How the software is implemented | Fable / Claude | The current build brief and project source. |
+| Product story, name, visual direction, and demo flow | You | Partner feedback and product review. |
+| Implementation quality and technical sequence | Manus | Product specifications and verified test criteria. |
 | Whether a live workflow can send regulated communications | Qualified reviewer and client | State, channel, consent, and operating context. |
 
 ## Current open questions
 
-1. Which kind of distributor will be represented in the demo: small regional wine and spirits distributor, multi-state distributor, or a specific fictional ideal client?
-2. What exact customer communication tone should the demo use: concise operational, relationship-led, or product/allocation-forward?
-3. Which automation mode will the first real pilot use: draft-for-rep, rep-approved send, or policy-approved send?
-4. Which discovery evidence from retailers and reps is sufficient to move from a demo to a live pilot?
+1. What replacement brand direction best carries the AI Operations Lead promise?
+2. What type of distributor will the demo represent most closely: regional, multi-state, or an ideal fictional client?
+3. Which workflow should become the first real customer implementation: reorder, allocation, or a policy-sensitive notice?
+4. Which approved system will eventually provide the first real source signal?
+5. Which narrow, reviewable AI assistance would be useful only after the controlled product core works?

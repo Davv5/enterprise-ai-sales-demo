@@ -121,3 +121,10 @@ Source: `FABLE_FIRST_REVIEW.md` (2026-08-25). Every item below was reproduced ag
 - [x] Extend the exception and audit experiences across workflow types.
 - [x] Verify desktop, mobile, and direct pitch-entry states.
 - [x] Update seller guidance and synchronize the expanded suite.
+
+# AI Operations Lead Daily Operating Brief — Completed Checklist
+
+- [x] Reframe the product opening around a fictional Sales Manager / Operations Lead operating day rather than a workflow-card-first home.
+- [x] Build the Daily Operating Brief with a simulated operating posture, priority account moments, named human decision queue, and Operating Memory preview.
+- [x] Preserve the Reorder, Allocation, Policy-Gated Notice, exception, account, audit, Reset demo, and direct recovery paths as governed drill-downs.
+- [x] Verify desktop and mobile presentation, direct recovery states, typecheck, production build, repository integrity, and seller-runbook alignment.
