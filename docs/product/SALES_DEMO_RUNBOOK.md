@@ -30,6 +30,26 @@ This is the operating script for the **first premium live demo**. It helps the s
 | **8:30–9:30** | Point to the handoff and audit event trail. | “This gives managers a record of the signal, the controlled action, and the person who owns the exception.” | The workflow is traceable and manager-visible. |
 | **9:30–10:00** | Click **Implementation view** if needed. | “What you are seeing is the operating experience. After a decision to proceed, we configure it with your accounts, product records, user ownership, templates, channels, and review process.” | The buyer sees a credible path from demonstration to implementation. |
 
+## Optional extension — second workflow and implementation canvas
+
+Use this only after the primary Juniper story has landed, or when a buyer asks whether the system supports more than missed reorders.
+
+| Click or action | What to say | Proof point |
+| --- | --- | --- |
+| Open **Allocation review** or click Fleetwood Spirits from the command center. | “The same discipline applies to a different account moment. Fleetwood is surfaced for a limited allocation review because of visible category-fit and prior-allocation evidence.” | The product supports more than one workflow without becoming a generic CRM. |
+| Point to the qualification panel. | “This does not decide who receives inventory. It gives Marcus the operating context needed to make a responsible decision.” | The workflow is evidence-led and commercially controlled. |
+| Click **Simulate quantity question**. | “When the buyer asks about quantity, the system does not invent an answer. The question returns to Marcus for human judgment.” | Control and human ownership remain explicit at the difficult moment. |
+| Open **Implementation design**. | “This is the client-specific implementation canvas. The same command experience is configured around your records, rules, templates, owners, and evidence policy.” | The buyer sees how the demo becomes their operating system after the sale. |
+
+## Direct pitch entry points
+
+| Use this URL state | When it is helpful |
+| --- | --- |
+| `/#account` | Begin directly at the primary Juniper reorder-risk story. |
+| `/#audit` | Begin with evidence, controls, and human handoff for a manager or risk-focused buyer. |
+| `/#allocation` | Show the Fleetwood allocation-review workflow as a second controlled use case. |
+| `/#configuration` | Open the client-configuration canvas for implementation, operations, or executive stakeholders. |
+
 ## If the buyer asks a difficult question
 
 | Question | Safe response |

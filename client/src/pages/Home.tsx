@@ -30,9 +30,11 @@ import {
   Search,
   Send,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   UserRound,
   UsersRound,
+  Workflow,
 } from "lucide-react";
 import {
   Area,
@@ -44,7 +46,7 @@ import {
   YAxis,
 } from "recharts";
 
-type View = "command" | "account" | "audit";
+type View = "command" | "account" | "allocation" | "audit" | "configuration";
 
 const cadenceData = [
   { cycle: "May 06", cases: 8 },
@@ -124,6 +126,14 @@ const guidedSteps = [
   { n: "05", name: "Handoff", detail: "Give judgment back to the rep" },
 ];
 
+const configurationDetails = [
+  { title: "Operating records", eyebrow: "DATA FOUNDATION", statement: "Map the records your team already trusts.", examples: ["Retail account and contact fields", "Product and package catalog", "Order and replenishment history", "Territory and rep ownership"] },
+  { title: "Coverage rules", eyebrow: "DECISION LOGIC", statement: "Define what deserves attention and what does not.", examples: ["Expected reorder cadence", "Risk windows and queue priority", "Allocation review qualification", "Excluded accounts and exception rules"] },
+  { title: "Communication controls", eyebrow: "CONTROLLED OUTREACH", statement: "Preserve your voice, approval path, and channel preferences.", examples: ["Template library and allowed language", "Contact preference and eligibility", "Rep review or manager approval", "Approved delivery configuration"] },
+  { title: "Human ownership", eyebrow: "ACCOUNTABILITY", statement: "Keep every important customer moment with the right person.", examples: ["Named account owner", "Manager queue visibility", "Commercial judgment handoff", "Escalation service level"] },
+  { title: "Evidence policy", eyebrow: "TRUST AND TRACEABILITY", statement: "Make activity inspectable before it becomes scalable.", examples: ["Signal and action event trail", "Message and ownership record", "Exception reporting", "Configured retention and access policy"] },
+];
+
 function LogoMark() {
   return <img className="brand-mark" src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="Route and signal mark" />;
 }
@@ -142,7 +152,7 @@ function Metric({ value, label, delta, tone = "neutral" }: { value: string; labe
 }
 
 export default function Home() {
-  const initialView: View = typeof window !== "undefined" && ["account", "audit"].includes(window.location.hash.slice(1))
+  const initialView: View = typeof window !== "undefined" && ["account", "allocation", "audit", "configuration"].includes(window.location.hash.slice(1))
     ? window.location.hash.slice(1) as View
     : "command";
   const [view, setView] = useState<View>(initialView);
@@ -151,6 +161,9 @@ export default function Home() {
   const [outreachOpen, setOutreachOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const [escalated, setEscalated] = useState(false);
+  const [allocationReviewed, setAllocationReviewed] = useState(false);
+  const [allocationEscalated, setAllocationEscalated] = useState(false);
+  const [configFocus, setConfigFocus] = useState(0);
   const [showReadiness, setShowReadiness] = useState(false);
 
   const events = useMemo(() => {
@@ -172,11 +185,19 @@ export default function Home() {
     setOutreachOpen(false);
     setSent(false);
     setEscalated(false);
+    setAllocationReviewed(false);
+    setAllocationEscalated(false);
+    setConfigFocus(0);
     setShowReadiness(false);
   };
 
   const selectJuniper = () => {
     setView("account");
+    if (guided) setGuidedStep(1);
+  };
+
+  const selectFleetwood = () => {
+    setView("allocation");
     if (guided) setGuidedStep(1);
   };
 
@@ -216,7 +237,9 @@ export default function Home() {
           <nav className="primary-nav" aria-label="Product navigation">
             <button className={view === "command" ? "active" : ""} onClick={() => setView("command")}><LayoutDashboard size={18} /> Command center</button>
             <button className={view === "account" ? "active" : ""} onClick={selectJuniper}><UsersRound size={18} /> Account stories</button>
+            <button className={view === "allocation" ? "active" : ""} onClick={selectFleetwood}><PackageCheck size={18} /> Allocation review</button>
             <button className={view === "audit" ? "active" : ""} onClick={showAudit}><FileCheck2 size={18} /> Audit evidence</button>
+            <button className={view === "configuration" ? "active" : ""} onClick={() => setView("configuration")}><SlidersHorizontal size={18} /> Implementation design</button>
           </nav>
         </div>
 
@@ -228,7 +251,7 @@ export default function Home() {
 
       <main className="demo-main">
         <header className="topbar">
-          <div className="breadcrumb"><span>HARBORLINE /</span> <strong>{view === "command" ? "ACCOUNT COVERAGE" : view === "account" ? "ACCOUNT STORY" : "CONTROL LOG"}</strong></div>
+          <div className="breadcrumb"><span>HARBORLINE /</span> <strong>{view === "command" ? "ACCOUNT COVERAGE" : view === "account" ? "ACCOUNT STORY" : view === "allocation" ? "ALLOCATION REVIEW" : view === "audit" ? "CONTROL LOG" : "IMPLEMENTATION DESIGN"}</strong></div>
           <div className="topbar-actions">
             <span className="fictional-badge"><Sparkles size={13} /> Fictional scenario</span>
             <button className="icon-button" aria-label="Search"><Search size={18} /></button>
@@ -260,7 +283,7 @@ export default function Home() {
                 <p className="workspace-dek">See the accounts that need attention, the evidence behind each signal, and the representative accountable for the relationship.</p>
               </div>
               <div className="heading-actions">
-                <button className="secondary-button" onClick={() => setShowReadiness(true)}><BookOpen size={16} /> Implementation view</button>
+                <button className="secondary-button" onClick={() => setView("configuration")}><BookOpen size={16} /> Implementation view</button>
                 <button className="primary-button" onClick={() => { setGuided(true); setGuidedStep(0); }}><Play size={15} fill="currentColor" /> Start guided pitch</button>
               </div>
             </div>
@@ -285,7 +308,7 @@ export default function Home() {
                 <div className="section-heading"><div><span className="eyebrow">PRIORITY SIGNALS</span><h3>Account coverage queue</h3></div><button className="filter-button"><Filter size={15} /> Filter</button></div>
                 <div className="queue-list">
                   {riskAccounts.map((account, index) => (
-                    <button className={`queue-row ${account.id === "juniper" ? "featured" : ""}`} key={account.id} onClick={account.id === "juniper" ? selectJuniper : () => setView("account")}>
+                    <button className={`queue-row ${account.id === "juniper" ? "featured" : ""}`} key={account.id} onClick={account.id === "juniper" ? selectJuniper : account.id === "fleetwood" ? selectFleetwood : () => setView("account")}>
                       <span className={`risk-dot ${account.tone}`} />
                       <div className="queue-account"><strong>{account.name}</strong><span>{account.place} · {account.product}</span></div>
                       <div className="queue-signal"><strong>{account.signal}</strong><span>{account.reason}</span></div>
@@ -364,6 +387,24 @@ export default function Home() {
           </section>
         ) : null}
 
+        {view === "allocation" ? (
+          <section className="workspace allocation-workspace">
+            <button className="back-link" onClick={() => setView("command")}><ArrowLeft size={15} /> Back to coverage</button>
+            <div className="allocation-heading">
+              <div className="account-identity"><div className="account-monogram allocation-monogram">FS</div><div><p className="eyebrow">SPECIALTY SPIRITS RETAILER · HOBOKEN, NJ</p><h1>Fleetwood Spirits</h1><p><span className="status-live" /> Account owner <strong>Marcus Vale</strong> · Allocation workflow <strong>Rep review required</strong></p></div></div>
+              <div className="account-actions"><button className="secondary-button" onClick={() => setView("configuration")}><SlidersHorizontal size={16} /> View configuration</button><button className="primary-button" onClick={() => setAllocationReviewed(true)}><ClipboardCheck size={16} /> {allocationReviewed ? "Review recorded" : "Mark ready for rep review"}</button></div>
+            </div>
+
+            <section className="allocation-banner"><div className="allocation-signal"><PackageCheck size={20} /></div><div><span className="eyebrow">LIMITED ALLOCATION · CONTROLLED REVIEW WINDOW</span><h2>12 cases of Nila Reserve Gin are available for a human allocation review.</h2><p>Fleetwood is surfaced because it received six cases in the last comparable allocation and has verified specialty-spirits category fit. The workflow does not promise quantity, price, or commercial terms.</p></div><span className="allocation-window"><Clock3 size={15} /> Review window · 18h</span></section>
+
+            <div className="allocation-grid">
+              <section className="allocation-evidence"><div className="section-heading"><div><span className="eyebrow">ACCOUNT QUALIFICATION</span><h3>Why Fleetwood is in the review lane</h3></div><span className="cadence-pill">Evidence-based</span></div><div className="qualification-grid"><div><span>PRIOR ALLOCATION</span><strong>6 cases</strong><p>Received in the last comparable release.</p></div><div><span>CATEGORY FIT</span><strong>Verified</strong><p>Specialty gin sell-through pattern is on file.</p></div><div><span>ACCOUNT OWNER</span><strong>Marcus Vale</strong><p>Commercial judgment stays with the assigned rep.</p></div><div><span>ACCOUNT STATUS</span><strong>In good standing</strong><p>No active hold or unresolved service exception.</p></div></div><div className="allocation-evidence-note"><ShieldCheck size={17} /><span><strong>No automatic allocation:</strong> this evidence prepares a review, not a commercial commitment.</span></div></section>
+              <aside className="allocation-control-card"><span className="eyebrow">CONTROLLED OUTREACH</span><h3>Availability check prepared</h3><p>Marcus can confirm interest before any allocation decision is made.</p><div className="allocation-message"><span>TO · Dani Rivera, Buyer</span><p>Hi Dani—Marcus from Harborline here. We are reviewing availability for a small Nila Reserve Gin allocation. Would it be helpful to discuss whether there is current interest on your side?</p><small>— Marcus Vale</small></div><div className="allocation-status"><BadgeCheck size={16} /><span>Template approved · quantity and terms excluded</span></div>{!allocationEscalated ? <button className="primary-button full-width" onClick={() => { setAllocationReviewed(true); setAllocationEscalated(true); }}><UserRound size={16} /> Simulate quantity question</button> : <div className="allocation-handoff"><Avatar initials="MV" /><div><strong>Marcus review required</strong><span>Fleetwood asked about available quantity. No response was generated.</span></div></div>}</aside>
+            </div>
+            <section className="allocation-footer"><div><Route size={18} /><span><strong>Second workflow, same operating principle.</strong> Signal → evidence → controlled preparation → named human judgment.</span></div><button onClick={() => setView("configuration")}>See how this becomes client-specific <ArrowRight size={16} /></button></section>
+          </section>
+        ) : null}
+
         {view === "audit" ? (
           <section className="workspace audit-workspace">
             <div className="workspace-heading compact"><div><p className="eyebrow">JUNIPER BOTTLE HOUSE · CONTROL LOG</p><h1>Evidence before <em>automation.</em></h1><p className="workspace-dek">A clear record of what happened, why it happened, and who owns the next decision.</p></div><div className="heading-actions"><button className="secondary-button" onClick={selectJuniper}><UsersRound size={16} /> Return to account</button>{!sent ? <button className="primary-button" onClick={openOutreach}><Mail size={16} /> Review outreach</button> : null}</div></div>
@@ -383,6 +424,20 @@ export default function Home() {
                 {escalated ? <div className="handoff-card"><div><Avatar initials="RL" /><span><b>Assigned to Renee Lewis</b><small>Next step: review client request before response</small></span></div><button onClick={() => setShowReadiness(true)}>View implementation boundary <ArrowRight size={14} /></button></div> : null}
               </aside>
             </section>
+          </section>
+        ) : null}
+
+        {view === "configuration" ? (
+          <section className="workspace configuration-workspace">
+            <div className="workspace-heading compact"><div><p className="eyebrow">FROM DEMO TO CLIENT OPERATING SYSTEM</p><h1>Same command center.<br /><em>Your operating rules.</em></h1><p className="workspace-dek">Harborline Command is not installed as a generic template. The system is configured around the client’s records, coverage logic, communication controls, accountable owners, and evidence policy.</p></div><div className="heading-actions"><button className="secondary-button" onClick={() => setView("command")}><LayoutDashboard size={16} /> Return to demo</button><button className="primary-button" onClick={() => setConfigFocus(0)}><RefreshCcw size={15} /> Reset configuration view</button></div></div>
+            <div className="configuration-hero"><div className="configuration-route"><span>01</span><i /><span>02</span><i /><span>03</span><i /><span>04</span><i /><span>05</span></div><div><span className="eyebrow">CLIENT CONFIGURATION CANVAS</span><h2>Five deliberate layers turn the demo into a trusted operating workflow.</h2></div><div className="configuration-hero-note"><ShieldCheck size={18} /><span><strong>Implementation principle</strong> Configure controls before enabling activity.</span></div></div>
+            <div className="configuration-grid"><section className="config-layers">{[
+              { code: "01", title: "Operating records", note: "Accounts, products, order history, territory and owner mapping.", icon: PackageCheck, color: "green" },
+              { code: "02", title: "Coverage rules", note: "Cadence thresholds, allocation windows, priority logic, and exclusions.", icon: Gauge, color: "verm" },
+              { code: "03", title: "Communication controls", note: "Approved templates, channel preferences, eligibility, and review gates.", icon: Mail, color: "green" },
+              { code: "04", title: "Human ownership", note: "Rep routing, manager visibility, exception queues, and escalation pathways.", icon: UserRound, color: "navy" },
+              { code: "05", title: "Evidence policy", note: "Audit events, retention, operational reporting, and decision visibility.", icon: FileCheck2, color: "navy" },
+            ].map((layer, index) => { const Icon = layer.icon; return <button key={layer.code} className={`config-layer ${configFocus === index ? "selected" : ""}`} onClick={() => setConfigFocus(index)}><span className="config-code">{layer.code}</span><span className={`config-icon ${layer.color}`}><Icon size={18} /></span><span className="config-copy"><strong>{layer.title}</strong><small>{layer.note}</small></span><ChevronRight size={17} /></button>; })}</section><aside className="config-inspector">{configurationDetails.slice(configFocus, configFocus + 1).map((item) => <div key={item.title}><span className="eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.statement}</p><div className="inspector-list">{item.examples.map((example) => <span key={example}><CircleCheck size={15} /> {example}</span>)}</div><div className="inspector-note"><Workflow size={16} /><span><strong>Buyer takeaway</strong> This is configured to the client’s process; it is not a black-box automation layer.</span></div></div>)}</aside></div>
           </section>
         ) : null}
 

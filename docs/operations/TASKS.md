@@ -73,3 +73,11 @@
 - [x] Design and build the dashboard entry experience.
 - [x] Build the account-detail, controlled-outreach, audit, and rep-handoff flow.
 - [x] Test the seller path and publish the first demo-ready version.
+
+# Premium Sales Demo — Milestone 2 Checklist
+
+- [x] Define the second account workflow and its distinct business purpose.
+- [x] Define the client-configuration concepts a serious buyer needs to see.
+- [x] Build the second account story and direct pitch entry point.
+- [x] Build the client configuration experience and implementation narrative.
+- [x] Test both flows and publish the next demo milestone.

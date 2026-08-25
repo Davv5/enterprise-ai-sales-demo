@@ -61,6 +61,37 @@ The system does not “decide to sell” or invent an offer. It notices a visibl
 5. **Rep handoff:** Renee owns the ambiguous reply and the clear next step.
 6. **Reset:** The demo returns to its opening state without persistent actions or live delivery.
 
+## Second account story — allocation review
+
+The second story proves that Harborline Command does more than notice missed reorders. It can help a distributor prepare a higher-control account moment while keeping commercial judgment with the responsible representative.
+
+| Field | Demo value |
+| --- | --- |
+| **Retail account** | Fleetwood Spirits |
+| **Account profile** | Fictional specialty spirits retailer in Hoboken, NJ; previously responsive to small-batch allocation notices. |
+| **Assigned rep** | Marcus Vale |
+| **Product** | Nila Reserve Gin · 750ml |
+| **Signal** | A limited 12-case allocation is available for a defined review window. |
+| **Why Fleetwood is surfaced** | The account received six cases in the prior comparable allocation and has a verified category fit. |
+| **Recommended action** | Marcus reviews a neutral availability-check message. The workflow cannot offer a price, promise quantity, or confirm a commercial term. |
+| **Human-control moment** | Marcus must review any interest, quantity question, or deal request before response. |
+
+### Seller framing
+
+> “The workflow is not deciding who receives inventory or what the commercial terms should be. It is bringing the right account moment to the rep with the evidence, a controlled message, and a visible owner.”
+
+## Client configuration model
+
+The configuration screen should make the implementation path credible without presenting a generic settings page. It shows that the same operating experience becomes the client’s system through five deliberate configuration layers.
+
+| Layer | What a buyer sees | Why it matters |
+| --- | --- | --- |
+| **Operating records** | Account, product, order-history, and ownership inputs. | The client understands that recommendations are grounded in their own operating data. |
+| **Coverage rules** | Cadence thresholds, allocation windows, risk indicators, and excluded accounts. | The client controls what creates a signal. |
+| **Communication controls** | Approved templates, preferred channels, eligibility, and review requirements. | The client controls what may be prepared or delivered. |
+| **Human ownership** | Rep routing, manager visibility, and escalation handling. | The client sees that accountability remains explicit. |
+| **Evidence policy** | Audit event schema, retention, and management visibility. | The client sees a controlled implementation path rather than a black box. |
+
 ## Non-negotiable copy rules
 
 | Use language like | Avoid language like |

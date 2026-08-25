@@ -9,6 +9,7 @@ Use one entry for each meaningful product, pitch, scope, or review decision. Thi
 | 2026-08-24 | Position the system as extending sales-rep coverage. | “Replacement” language creates adoption and sales risk. | Partner | Strategic Analysis. | Use this framing in demo copy and pitch. |
 | 2026-08-24 | Use fictional/preloaded data in the sales demo. | It supports a polished, controlled pitch without using customer data. | Project Lead | Product principle. | Create a fictional distributor and account dataset. |
 | 2026-08-25 | The Harborline Command dashboard, Juniper account story, and audit-evidence views are visually verified at desktop and mobile breakpoints. | The primary seller path is legible, uses strict risk/control color semantics, and can be opened directly through command, account, and audit states. | Project Lead | Desktop/mobile visual review; `/#account` and `/#audit` direct-entry checks. | Run the live seller script and publish the first demo-ready version. |
+| 2026-08-25 | The Fleetwood allocation-review workflow and five-layer implementation configuration canvas are visually verified at desktop pitch size. | The demo now proves a second controlled workflow and answers the buyer’s “how does this become ours?” implementation question without implying live integrations. | Project Lead | Direct-entry visual checks at `/#allocation` and `/#configuration`. | Test the extended seller flow and publish milestone two. |
 
 ## Decision-entry template
 
