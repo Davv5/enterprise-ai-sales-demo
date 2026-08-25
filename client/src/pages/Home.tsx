@@ -132,6 +132,7 @@ const configurations: Record<WorkflowId, WorkflowConfig> = {
       { time: "08:13", title: "Eligibility confirmed", detail: "Lina Cho is an approved account contact; Renee Lewis owns the relationship; preferred channel is email.", icon: BadgeCheck, tone: "control" },
       { time: "08:14", title: "Availability-check template prepared", detail: "Template RR-04 selected. Price, promotion, and commercial terms are excluded.", icon: Mail, tone: "control" },
     ],
+    draftedEvent: { time: "08:41", title: "Draft recorded for Renee", detail: "A fictional availability-check draft was recorded for rep review. No production message was delivered.", icon: ClipboardCheck, tone: "sent" },
     sentEvent: { time: "09:02", title: "Rep-approved send simulated", detail: "A fictional email event was recorded for Lina Cho. No production message was delivered.", icon: Send, tone: "sent" },
     exceptionEvent: { time: "09:08", title: "Prior-price question received", detail: "Lina asked about prior pricing. Human commercial judgment is required.", icon: UserRound, tone: "exception" },
     exceptionName: "Lina Cho",
@@ -268,18 +269,18 @@ function Avatar({ initials, small = false }: { initials: string; small?: boolean
   return <span className={`ops-avatar ${small ? "small" : ""}`}>{initials}</span>;
 }
 
-function stateLabel(config: WorkflowConfig, state: WorkflowState, policyReady: boolean) {
-  if (state === "exception") return "Exception assigned";
+function stateLabel(config: WorkflowConfig, state: WorkflowState, policyReady: boolean, assigned: boolean) {
+  if (state === "exception") return assigned ? "Exception assigned" : "Needs assignment";
   if (state === "drafted") return "Draft recorded";
   if (state === "sent") return config.id === "promo" ? "Distribution recorded" : "Send recorded";
-  if (config.id === "promo" && !policyReady) return "Policy review pending";
+  if (config.id === "promo") return policyReady ? "Policy gate recorded" : "Policy review pending";
   return config.defaultMode === "draft" ? "Draft for rep" : "Needs rep approval";
 }
 
-function StatePill({ config, state, policyReady }: { config: WorkflowConfig; state: WorkflowState; policyReady: boolean }) {
-  const copy = stateLabel(config, state, policyReady);
-  const Icon = state === "exception" ? UserRound : state === "sent" ? Send : state === "drafted" ? ClipboardCheck : stateLabel(config, state, policyReady).includes("Policy") ? ShieldCheck : Clock3;
-  return <span className={`ops-state-pill ${state === "approval" && config.id === "promo" && !policyReady ? "policy" : state}`}><Icon size={13} />{copy}</span>;
+function StatePill({ config, state, policyReady, assigned }: { config: WorkflowConfig; state: WorkflowState; policyReady: boolean; assigned: boolean }) {
+  const copy = stateLabel(config, state, policyReady, assigned);
+  const Icon = state === "exception" ? UserRound : state === "sent" ? Send : state === "drafted" ? ClipboardCheck : config.id === "promo" ? ShieldCheck : Clock3;
+  return <span className={`ops-state-pill ${state === "approval" && config.id === "promo" ? "policy" : state}`}><Icon size={13} />{copy}</span>;
 }
 
 export default function Home() {
@@ -288,13 +289,19 @@ export default function Home() {
   const initialWorkflow: WorkflowId = requestedWorkflow === "allocation" || requestedWorkflow === "promo" ? requestedWorkflow : "reorder";
   const initialView: View = typeof window !== "undefined" && ["workflow", "replies", "accounts", "audit"].includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) as View : "workflows";
   const requestedState = searchParams.get("demo");
-  const initialState: WorkflowState = requestedState === "exception" || requestedState === "sent" || requestedState === "drafted" ? requestedState : "approval";
+  const parsedState: WorkflowState = requestedState === "exception" || requestedState === "sent" || requestedState === "drafted" ? requestedState : "approval";
+  // The promo workflow has no drafted state; coerce rather than render an impossible posture.
+  const initialState: WorkflowState = initialWorkflow === "promo" && parsedState === "drafted" ? "approval" : parsedState;
+  // A promo distribution or exception can only exist after the gate; direct-entry URLs must not express a gate bypass.
+  const initialPolicyReady = initialWorkflow === "promo" && (searchParams.get("terms") === "verified" || initialState === "sent" || initialState === "exception");
+  const initialDrafted = initialState === "drafted" || (initialWorkflow === "allocation" && (initialState === "sent" || initialState === "exception"));
   const [view, setView] = useState<View>(initialView);
   const [activeWorkflow, setActiveWorkflow] = useState<WorkflowId>(initialWorkflow);
   const [state, setState] = useState<WorkflowState>(initialState);
-  const [mode, setMode] = useState<Mode>(configurations[initialWorkflow].defaultMode);
+  const [mode, setMode] = useState<Mode>(initialState === "drafted" ? "draft" : configurations[initialWorkflow].defaultMode);
   const [assigned, setAssigned] = useState(searchParams.get("assigned") === "true" && initialState === "exception");
-  const [policyReady, setPolicyReady] = useState(searchParams.get("terms") === "verified" && initialWorkflow === "promo");
+  const [policyReady, setPolicyReady] = useState(initialPolicyReady);
+  const [hasDrafted, setHasDrafted] = useState(initialDrafted);
   const [guided, setGuided] = useState(false);
   const config = configurations[activeWorkflow];
 
@@ -314,11 +321,11 @@ export default function Home() {
     if (config.id === "promo" && policyReady) {
       list.push({ time: "10:10", title: "Policy gate recorded", detail: "Terms packet reference and the locked 12-account audience were marked reviewed in this fictional demo state.", icon: ShieldCheck, tone: "control" });
     }
-    if (state === "drafted" && config.draftedEvent) list.push(config.draftedEvent);
+    if (hasDrafted && config.draftedEvent && state !== "approval") list.push(config.draftedEvent);
     if (state === "sent" || state === "exception") list.push(config.sentEvent);
     if (state === "exception") list.push({ ...config.exceptionEvent, title: assigned ? `Exception assigned to ${config.ownerName}` : config.exceptionEvent.title, detail: assigned ? `${config.exceptionTitle} is now assigned to the named workflow owner; no automated response was created.` : config.exceptionEvent.detail });
     return list;
-  }, [config, state, assigned, policyReady]);
+  }, [config, state, assigned, policyReady, hasDrafted]);
 
   const resetDemo = () => {
     setView("workflows");
@@ -327,6 +334,7 @@ export default function Home() {
     setMode("rep");
     setAssigned(false);
     setPolicyReady(false);
+    setHasDrafted(false);
     setGuided(false);
   };
 
@@ -337,6 +345,7 @@ export default function Home() {
     setMode(next.defaultMode);
     setAssigned(false);
     setPolicyReady(false);
+    setHasDrafted(false);
     setView("workflow");
   };
 
@@ -346,8 +355,9 @@ export default function Home() {
       setMode("policy");
       return;
     }
-    if (state === "approval" && config.id === "allocation") {
+    if (state === "approval" && mode === "draft" && config.id !== "promo") {
       setState("drafted");
+      setHasDrafted(true);
       return;
     }
     if (state === "approval" || state === "drafted") {
@@ -361,11 +371,11 @@ export default function Home() {
   };
 
   const actionLabel = () => {
+    const ownerFirst = config.ownerName.split(" ")[0];
     if (state === "approval" && config.id === "promo" && !policyReady) return "Verify terms & audience";
-    if (state === "approval" && config.id === "allocation") return "Record draft for Marcus";
-    if (state === "drafted") return "Simulate Marcus-approved send";
     if (state === "approval" && config.id === "promo") return "Simulate approved distribution";
-    if (state === "approval") return mode === "draft" ? `Record draft for ${config.ownerName.split(" ")[0]}` : "Approve & simulate send";
+    if (state === "approval") return mode === "draft" ? `Record draft for ${ownerFirst}` : "Approve & simulate send";
+    if (state === "drafted") return `Simulate ${ownerFirst}-approved send`;
     if (state === "sent") return "Simulate non-routine reply";
     return "Open assigned exception";
   };
@@ -378,7 +388,7 @@ export default function Home() {
   ];
 
   const breadcrumb = { workflows: "WORKFLOW CENTER", workflow: config.type, replies: "REPLIES & EXCEPTIONS", accounts: "ACCOUNT CONTEXT", audit: "AUDIT RECORD" }[view];
-  const cardStatus = (item: WorkflowConfig) => item.id === activeWorkflow ? stateLabel(item, state, policyReady) : item.initialStatus;
+  const cardStatus = (item: WorkflowConfig) => item.id === activeWorkflow ? stateLabel(item, state, policyReady, assigned) : item.initialStatus;
   const activeException = state === "exception";
   const modeTitle = config.id === "promo" ? "Policy gate controls distribution." : "Choose the level of human control.";
 
@@ -416,7 +426,7 @@ export default function Home() {
         {view === "workflow" ? (
           <section className="ops-workspace workflow-detail">
             <button className="ops-back" onClick={() => setView("workflows")}><ArrowLeft size={15} /> Workflow center</button>
-            <div className="ops-heading compact"><div><p className="ops-eyebrow">{config.eyebrow}</p><h1>{config.heading.split("\n")[0]}<br />{config.heading.split("\n")[1]} <em>{config.emphasis}</em></h1><p>{config.description}</p></div><div className="ops-heading-actions"><StatePill config={config} state={state} policyReady={policyReady} /><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
+            <div className="ops-heading compact"><div><p className="ops-eyebrow">{config.eyebrow}</p><h1>{config.heading.split("\n")[0]}<br />{config.heading.split("\n")[1]} <em>{config.emphasis}</em></h1><p>{config.description}</p></div><div className="ops-heading-actions"><StatePill config={config} state={state} policyReady={policyReady} assigned={assigned} /><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
             <div className="ops-workflow-layout"><aside className="ops-step-rail">{config.steps.map((step, index) => { const Icon = step.icon; const actionComplete = state === "sent" || state === "exception"; const complete = index < 3 || (index === 3 && actionComplete) || (index === 4 && state === "exception"); const current = (state === "approval" && index === 3) || (state === "drafted" && index === 3) || (state === "sent" && index === 4); return <div className={`ops-step ${complete ? "complete" : ""} ${current ? "current" : ""}`} key={step.id}><span><Icon size={15} /></span><div><small>{String(index + 1).padStart(2, "0")}</small><strong>{step.title}</strong><em>{step.detail}</em></div></div>; })}</aside>
               <div className="ops-workflow-canvas"><section className={`ops-trigger-card ${config.id === "promo" ? "policy-trigger" : ""}`}><div className="ops-trigger-icon">{config.id === "allocation" ? <PackageCheck size={20} /> : config.id === "promo" ? <FileText size={20} /> : <Gauge size={20} />}</div><div><p className="ops-eyebrow">{config.triggerKind}</p><h2>{config.triggerTitle}</h2><p>{config.triggerDescription}</p></div><span>{config.triggerCode}<br /><small>{config.triggerKind}</small></span></section>
                 <div className="ops-context-grid"><section className="ops-context-card"><p className="ops-eyebrow">{config.contextLabel}</p><div className="ops-account-row"><span className="ops-monogram">{config.monogram}</span><div><strong>{config.contextName}</strong><small>{config.contextMeta}</small></div></div><dl>{config.contextRows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl></section><section className="ops-mode-card"><p className="ops-eyebrow">{config.id === "promo" ? "POLICY CONTROL" : "AUTOMATION MODE"}</p><h3>{modeTitle}</h3>{config.id === "promo" ? <div className={`ops-policy-gate ${policyReady ? "verified" : ""}`}><ShieldCheck size={18} /><div><strong>{policyReady ? "Terms & audience verified" : "Terms & audience review required"}</strong><small>{policyReady ? "PN-18-TERM and audience rule PR-18 are recorded for this fictional demo state." : "No distribution can be simulated until the terms packet reference and 12-account audience are reviewed."}</small></div>{policyReady ? <Check size={16} /> : <button className="ops-text-button" onClick={() => { setPolicyReady(true); setMode("policy"); }}>Verify gate <ArrowRight size={14} /></button>}</div> : <><button className={mode === "draft" ? "selected" : ""} onClick={() => setMode("draft")}><span><ClipboardCheck size={17} /><strong>Draft for rep</strong><small>{config.id === "allocation" ? "Prepare only; Marcus reviews before a message can be simulated." : `Prepare only; ${config.ownerName.split(" ")[0]} decides whether to send.`}</small></span>{mode === "draft" ? <Check size={16} /> : null}</button>{config.id === "reorder" ? <button className={mode === "rep" ? "selected" : ""} onClick={() => setMode("rep")}><span><UserRound size={17} /><strong>Rep-approved send</strong><small>Renee approves before the message is recorded.</small></span>{mode === "rep" ? <Check size={16} /> : null}</button> : <div className="ops-future-mode"><UserRound size={16} /><span><strong>Rep approval follows draft</strong><small>Marcus makes the final send and any allocation decision.</small></span></div>}<div className="ops-future-mode"><ShieldCheck size={16} /><span><strong>Policy-approved send</strong><small>Available only after validated rules and review.</small></span></div></>}</section></div>
@@ -427,7 +437,7 @@ export default function Home() {
 
         {view === "replies" ? (
           <section className="ops-workspace replies-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">HUMAN JUDGMENT QUEUE</p><h1>Replies that need<br /><em>a person.</em></h1><p>Harborline does not negotiate price, resolve disputes, decide allocation, or alter an audience. Non-routine conversation stays visibly with the named workflow owner.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setView("workflow")}><ArrowLeft size={15} /> Return to workflow</button><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
-            {!activeException ? <div className="ops-reply-empty"><CircleCheck size={26} /><h2>No exceptions waiting</h2><p>Advance the selected {config.type.toLowerCase()} through its fictional scenario to demonstrate the named-human handoff.</p><button className="ops-primary" onClick={() => setView("workflow")}>Open selected workflow <ArrowRight size={16} /></button></div> : <div className="ops-reply-layout"><section className="ops-reply-card"><div className="ops-reply-top"><span className="ops-reply-unread" /><div><Avatar initials={config.exceptionName.split(" ").map((name) => name[0]).join("")} /><div><strong>{config.exceptionName}</strong><small>{config.exceptionAccount} · received at {config.exceptionTime}</small></div></div><StatePill config={config} state="exception" policyReady={policyReady} /></div><div className="ops-reply-quote"><span>{config.exceptionQuoteLabel}</span><p>{config.exceptionQuote}</p></div><div className="ops-reply-reason"><MessageSquareWarning size={18} /><div><strong>{config.exceptionTitle}</strong><p>{config.exceptionDetail}</p></div></div><div className="ops-reply-actions"><div><Avatar initials={config.ownerInitials} /><span><small>ASSIGNED WORKFLOW OWNER</small><strong>{config.ownerName}</strong></span></div>{assigned ? <span className="ops-assigned"><Check size={15} /> {config.ownerName.split(" ")[0]} has been assigned</span> : <button className="ops-primary" onClick={() => setAssigned(true)}>Assign to {config.ownerName.split(" ")[0]} <UserRound size={16} /></button>}</div></section><aside className="ops-reply-context"><p className="ops-eyebrow">ORIGINAL WORKFLOW CONTEXT</p><dl><div><dt>TRIGGER</dt><dd>{config.triggerKind}</dd></div><div><dt>MESSAGE</dt><dd>{config.template}</dd></div><div><dt>MODE</dt><dd>{config.id === "promo" ? "Policy-gated notice" : mode === "draft" ? "Draft then rep review" : "Rep-approved send"}</dd></div><div><dt>AUDIT</dt><dd>{events.length} recorded events</dd></div></dl><button className="ops-text-button" onClick={() => setView("audit")}>View complete audit record <ArrowRight size={15} /></button></aside></div>}
+            {!activeException ? <div className="ops-reply-empty"><CircleCheck size={26} /><h2>No exceptions waiting</h2><p>Advance the selected {config.type.toLowerCase()} through its fictional scenario to demonstrate the named-human handoff.</p><button className="ops-primary" onClick={() => setView("workflow")}>Open selected workflow <ArrowRight size={16} /></button></div> : <div className="ops-reply-layout"><section className="ops-reply-card"><div className="ops-reply-top"><span className="ops-reply-unread" /><div><Avatar initials={config.exceptionName.split(" ").map((name) => name[0]).join("")} /><div><strong>{config.exceptionName}</strong><small>{config.exceptionAccount} · received at {config.exceptionTime}</small></div></div><StatePill config={config} state="exception" policyReady={policyReady} assigned={assigned} /></div><div className="ops-reply-quote"><span>{config.exceptionQuoteLabel}</span><p>{config.exceptionQuote}</p></div><div className="ops-reply-reason"><MessageSquareWarning size={18} /><div><strong>{config.exceptionTitle}</strong><p>{config.exceptionDetail}</p></div></div><div className="ops-reply-actions"><div><Avatar initials={config.ownerInitials} /><span><small>ASSIGNED WORKFLOW OWNER</small><strong>{config.ownerName}</strong></span></div>{assigned ? <span className="ops-assigned"><Check size={15} /> {config.ownerName.split(" ")[0]} has been assigned</span> : <button className="ops-primary" onClick={() => setAssigned(true)}>Assign to {config.ownerName.split(" ")[0]} <UserRound size={16} /></button>}</div></section><aside className="ops-reply-context"><p className="ops-eyebrow">ORIGINAL WORKFLOW CONTEXT</p><dl><div><dt>TRIGGER</dt><dd>{config.triggerKind}</dd></div><div><dt>MESSAGE</dt><dd>{config.template}</dd></div><div><dt>MODE</dt><dd>{config.id === "promo" ? "Policy-gated notice" : mode === "draft" ? "Draft then rep review" : "Rep-approved send"}</dd></div><div><dt>AUDIT</dt><dd>{events.length} recorded events</dd></div></dl><button className="ops-text-button" onClick={() => setView("audit")}>View complete audit record <ArrowRight size={15} /></button></aside></div>}
           </section>
         ) : null}
 
@@ -436,7 +446,7 @@ export default function Home() {
         ) : null}
 
         {view === "audit" ? (
-          <section className="ops-workspace audit-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">CONTROLLED COMMUNICATION RECORD</p><h1>One workflow.<br /><em>Complete evidence.</em></h1><p>Every visible action is tied to an event, audience or eligible account, bounded template, control mode, owner, and next human decision.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setView("workflow")}><ArrowLeft size={15} /> Return to workflow</button><StatePill config={config} state={state} policyReady={policyReady} /></div></div><div className="ops-audit-layout"><section className="ops-audit-trail"><div className="ops-audit-intro"><div><p className="ops-eyebrow">EVENT TRAIL · {config.triggerCode}</p><h2>{config.title}</h2></div><span>Sandbox evidence record</span></div>{events.map((event, index) => { const Icon = event.icon; return <article className={`ops-audit-event ${event.tone}`} key={event.time + event.title}><div className="ops-event-rail"><span><Icon size={16} /></span>{index < events.length - 1 ? <i /> : null}</div><div><div><strong>{event.title}</strong><time>{event.time}</time></div><p>{event.detail}</p></div></article>; })}</section><aside className="ops-policy-card"><ShieldCheck size={20} /><p className="ops-eyebrow">POLICY VIEW</p><h3>What is recorded</h3><ul>{config.auditPolicyItems.map((item) => <li key={item}><Check size={14} /> {item}</li>)}</ul><button className="ops-text-button" onClick={() => setView("replies")}>Open replies & exceptions <ArrowRight size={15} /></button></aside></div></section>
+          <section className="ops-workspace audit-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">CONTROLLED COMMUNICATION RECORD</p><h1>One workflow.<br /><em>Complete evidence.</em></h1><p>Every visible action is tied to an event, audience or eligible account, bounded template, control mode, owner, and next human decision.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setView("workflow")}><ArrowLeft size={15} /> Return to workflow</button><StatePill config={config} state={state} policyReady={policyReady} assigned={assigned} /></div></div><div className="ops-audit-layout"><section className="ops-audit-trail"><div className="ops-audit-intro"><div><p className="ops-eyebrow">EVENT TRAIL · {config.triggerCode}</p><h2>{config.title}</h2></div><span>Sandbox evidence record</span></div>{events.map((event, index) => { const Icon = event.icon; return <article className={`ops-audit-event ${event.tone}`} key={event.time + event.title}><div className="ops-event-rail"><span><Icon size={16} /></span>{index < events.length - 1 ? <i /> : null}</div><div><div><strong>{event.title}</strong><time>{event.time}</time></div><p>{event.detail}</p></div></article>; })}</section><aside className="ops-policy-card"><ShieldCheck size={20} /><p className="ops-eyebrow">POLICY VIEW</p><h3>What is recorded</h3><ul>{config.auditPolicyItems.map((item) => <li key={item}><Check size={14} /> {item}</li>)}</ul><button className="ops-text-button" onClick={() => setView("replies")}>Open replies & exceptions <ArrowRight size={15} /></button></aside></div></section>
         ) : null}
       </main>
     </div>
