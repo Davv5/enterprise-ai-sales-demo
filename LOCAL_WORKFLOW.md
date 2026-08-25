@@ -54,6 +54,7 @@ Send Manus four things: a screenshot or short screen recording, what was built, 
 | `DECISION_LOG.md` | A record of what you decided, why, and who owns the next move. | It becomes your “show your work” record. |
 | `Project_Lead_Workbook.md` | Plain-English guide for running the project and updating your partner. | It tells you how to explain the product and your role. |
 | `LOCAL_WORKFLOW.md` | This operating routine. | It tells you how the parts work together. |
+| `GITHUB_SOURCE_OF_TRUTH.md` | The repository location and shared-code routine. | It prevents separate tools from building from different versions. |
 
 ## Non-negotiable rules
 
@@ -64,3 +65,7 @@ Send Manus four things: a screenshot or short screen recording, what was built, 
 | Use fictional/demo data until a client explicitly authorizes real use. | Placing real customer data or messages into a demo casually. |
 | Keep a human review/exception step in the product. | Presenting the system as autonomous relationship management. |
 | Get qualified review for live regulated messaging and financial-model methodology. | Promising production compliance or financial conclusions from a demo. |
+
+## Shared-code rule
+
+The application code now has one canonical home: `https://github.com/Davv5/enterprise-ai-sales-demo.git`. Before any external implementation session, start from its latest `main` branch; after testing a completed change, return that change to `main`. Read `GITHUB_SOURCE_OF_TRUTH.md` for the exact routine.
