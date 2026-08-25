@@ -81,3 +81,11 @@
 - [x] Build the second account story and direct pitch entry point.
 - [x] Build the client configuration experience and implementation narrative.
 - [x] Test both flows and publish the next demo milestone.
+
+# Core Product-Model Review — Delivery Checklist
+
+- [x] Re-extract the intended end-user workflow from the original briefs.
+- [x] Compare the intended product model with the current dashboard-led prototype.
+- [x] Identify which parts of the existing demo are core, secondary, or misdirected.
+- [x] Specify the recommended user roles, first-use moment, and core screen architecture.
+- [ ] Present the product-model verdict before further redesign work.
