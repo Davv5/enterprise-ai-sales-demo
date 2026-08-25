@@ -58,7 +58,7 @@ Review the current application as if you were a distributor executive seeing it 
 
 Evaluate only these questions:
 1. Is the buyer problem understandable in the first 30 seconds?
-2. Can a seller navigate from a dashboard to one compelling account story quickly?
+2. Can a seller navigate from Workflow Center through one complete governed communication workflow quickly?
 3. Does the system show evidence, ownership, and control before an automation action?
 4. Does the design feel premium and believable without claiming production capabilities that do not exist?
 5. What are the three most important changes before a live client pitch?

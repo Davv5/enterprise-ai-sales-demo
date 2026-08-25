@@ -7,6 +7,9 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | File | Meaning |
 | --- | --- |
 | `PRODUCT_BRIEF.md` | The single current product scope, buyer story, build task, guardrails, and decision owners. |
+| `REORDER_REMINDER_WORKFLOW_SPEC.md` | The active end-to-end Reorder Reminder specification: workflow states, screen architecture, automation modes, and acceptance test. |
+| `RECOMMENDED_PRODUCT_ARCHITECTURE.md` | The product-model verdict: why the product is a communication operations hub rather than a dashboard-led CRM, and the recommended core screens. |
+| `PRODUCT_MODEL_REVIEW_NOTES.md` | The source-to-product analysis that compares the original briefs with the retired dashboard-led prototype. |
 | `DEMO_SCENARIO_AND_PITCH_FLOW.md` | Fictional distributor data, primary account story, seller script, required states, and acceptance test for the live demo. |
 | `SALES_DEMO_RUNBOOK.md` | Ten-minute seller script, difficult-question responses, recovery instructions, and safe product claims. |
 | `PROJECT_LEAD_WORKBOOK.md` | Plain-English guide for explaining the project, leading meetings, and updating the sales partner. |

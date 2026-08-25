@@ -1,5 +1,9 @@
 # Significant Improvement Backlog
 
+## Status update — superseded product model
+
+> **Important:** The dashboard-first P0 recommendations below were completed as an exploratory prototype and then superseded by the documented product-model review. The active build order is now governed by [`../product/RECOMMENDED_PRODUCT_ARCHITECTURE.md`](../product/RECOMMENDED_PRODUCT_ARCHITECTURE.md) and [`../product/REORDER_REMINDER_WORKFLOW_SPEC.md`](../product/REORDER_REMINDER_WORKFLOW_SPEC.md): Workflow Center → controlled communication workflow → Replies & Exceptions → Audit & Policy.
+
 ## The main finding
 
 The strategy, source library, AI interpretation layer, repository, and continuity workflow are now unusually well prepared. The **largest remaining gap is product reality**: the current application is a polished strategy fieldbook, not yet the interactive distributor sales-demo product your partner will run in a client pitch.

@@ -88,4 +88,12 @@
 - [x] Compare the intended product model with the current dashboard-led prototype.
 - [x] Identify which parts of the existing demo are core, secondary, or misdirected.
 - [x] Specify the recommended user roles, first-use moment, and core screen architecture.
-- [ ] Present the product-model verdict before further redesign work.
+- [x] Present the product-model verdict before further redesign work.
+
+# Communication Operations Hub — Reset Checklist
+
+- [x] Preserve the current visual system, audit components, account context, and human-handoff elements as reusable assets.
+- [x] Retire the dashboard-led hierarchy from the active product specification.
+- [x] Specify the first controlled workflow: event, audience, eligibility, message, automation mode, reply, escalation, and audit event.
+- [x] Rebuild the home experience as a Workflow Center rather than a generic command dashboard.
+- [x] Test the full event-to-escalation path against the original Sandbox Build Brief.

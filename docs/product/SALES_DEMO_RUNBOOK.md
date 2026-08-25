@@ -1,84 +1,82 @@
-# Harborline Command — Sales Demo Runbook
+# Harborline Communication Ops — Sales Demo Runbook
 
 ## Purpose
 
-This is the operating script for the **first premium live demo**. It helps the sales partner run the product as a believable distributor operating system, without overstating what the fictional scenario does today.
+This runbook is for the **corrected premium live demo**. It presents Harborline as a controlled communication-operations product—not a generic CRM or a dashboard that happens to contain messages.
 
-> **The central message:** Harborline Command does not replace the sales representative. It gives the team earlier, clearer visibility into account moments that deserve attention—and preserves the evidence and ownership behind every action.
+> **Central message:** Harborline turns routine account moments into a governed communication workflow. The product makes the trigger, controls, evidence, and responsible human visible before it takes any action.
+
+The demonstration uses fictional data and simulated delivery states. It is not connected to a prospect’s ERP, CRM, inbox, telephone system, customer data, or live compliance program.
 
 ## Before the meeting
 
 | Check | What to do |
 | --- | --- |
-| **Browser state** | Open the demo in a desktop browser and press **Reset demo** in the left rail. |
-| **Starting screen** | Confirm the app opens to **Command center** with Juniper Bottle House at the top of the attention queue. |
-| **Pitch mode** | Keep **Start guided pitch** available. Use it if you want the five-step route visible while presenting. |
-| **Truthfulness** | State that the demo uses a fictional distributor scenario. Do not claim that it is connected to the prospect’s data, CRM, ERP, email, or SMS system. |
-| **Opening question** | Ask: “Where do account follow-ups most often become inconsistent for your team today?” |
+| **Starting state** | Open `/` and confirm **Workflow Center** displays the Juniper Reorder Reminder as **Needs rep approval**. |
+| **Core demonstration** | Use **Rep-approved send** as the default automation mode. It is the clearest early-pilot posture: human approval remains visible. |
+| **Reset control** | If an interaction goes wrong, select **Reset demo** in the lower-left rail. |
+| **Truthfulness** | Say that accounts, contacts, events, and message delivery are fictional and simulated. |
+| **Opening question** | Ask: “Which routine retailer communication is most likely to be missed or inconsistently handled by your team today?” |
 
-## Ten-minute seller script
+## Eight-minute seller script
 
-| Time | Click or action | What to say | What the buyer should understand |
+| Time | Click or action | What to say | Buyer takeaway |
 | --- | --- | --- | --- |
-| **0:00–1:00** | Begin at **Command center**. | “This is the daily coverage view. It does not bury your team in data; it surfaces the account moments that deserve a human look.” | The system feels operational and focused. |
-| **1:00–2:00** | Point to **12 account moments** and the **Account coverage queue**. | “Each account is ranked with a reason, an accountable owner, and a clear next move. It is not automatically sending anything.” | The system improves visibility without removing control. |
-| **2:00–3:30** | Click **Juniper Bottle House** or **Open highest-priority account**. | “Juniper has gone 38 days without a reorder, versus a typical 21-day cadence. We can see what changed before a rep has to hunt through records.” | The recommendation has a visible business reason. |
-| **3:30–5:00** | Point to product history, risk banner, and **Renee Lewis** as account owner. | “The operating context stays connected to the rep. Renee owns the relationship; the system simply prepares the right moment for a review.” | It extends sales capacity rather than replacing a person. |
-| **5:00–6:30** | Click **Review outreach**. | “The message is an approved availability check. It does not invent pricing, promotions, or terms; the distributor controls the template and policy.” | Communication is controlled and configurable. |
-| **6:30–7:30** | Click **Simulate approved send**. | “For the demo, this records a simulated action. In implementation, the client chooses the approved channel, permission rules, and workflow controls.” | The demo is realistic without pretending to be a live deployment. |
-| **7:30–8:30** | On **Control log**, click **Simulate non-routine reply**. | “Now the buyer asks about a prior deal. That is commercial judgment, so the system does not answer. It escalates the thread to Renee.” | The human handoff is explicit and safe. |
-| **8:30–9:30** | Point to the handoff and audit event trail. | “This gives managers a record of the signal, the controlled action, and the person who owns the exception.” | The workflow is traceable and manager-visible. |
-| **9:30–10:00** | Click **Implementation view** if needed. | “What you are seeing is the operating experience. After a decision to proceed, we configure it with your accounts, product records, user ownership, templates, channels, and review process.” | The buyer sees a credible path from demonstration to implementation. |
+| **0:00–1:00** | Begin at **Workflow Center**. | “This is the communication operating layer. It is not another CRM dashboard; it shows the controlled account workflow that needs a decision now.” | The product has a narrow and credible job. |
+| **1:00–2:00** | Point to the workflow cards and open **Solara Coastal Spritz · Juniper Bottle House**. | “The system can support reorders, allocations, and policy-gated notices. We start with reorders because the rule, owner, and action are easy to inspect.” | The product can expand by workflow instead of becoming generic. |
+| **2:00–3:30** | Show the trigger, eligible account, assigned rep, preferred channel, and mode selector. | “Juniper is 38 days since its last Solara order against a 21-day cadence. Before communication is prepared, we verify the contact, assigned rep, channel, and level of human control.” | Automation is evidence-led and human-governed. |
+| **3:30–4:30** | Keep **Rep-approved send** selected and show the message. | “This is an availability check, not a commercial offer. The template excludes pricing, promotion, and terms. Renee owns the decision to approve it.” | The system extends coverage without negotiating for the rep. |
+| **4:30–5:30** | Click **Approve & simulate send**. | “This records a simulated, rep-approved action. In implementation, the client configures the delivery channel, permissions, workflow rules, and review process.” | The demo is realistic without pretending to be live production software. |
+| **5:30–6:30** | Click **Simulate non-routine reply**. | “The buyer asks about prior pricing. That needs commercial judgment, so the product does not create a reply. It routes the conversation to the human exception inbox.” | The system stops at the correct boundary. |
+| **6:30–7:15** | In **Replies & Exceptions**, select **Assign to Renee**. | “The original message, the question, the reason for escalation, and the accountable rep are visible together.” | A person—not automation—owns relationship-sensitive work. |
+| **7:15–8:00** | Open **Audit & Policy**. | “This is the evidence trace: trigger, eligibility, template, automation mode, send state, exception, and named handoff.” | The workflow is inspectable and defensible. |
 
-## Optional extension — second workflow and implementation canvas
+## Direct pitch-recovery states
 
-Use this only after the primary Juniper story has landed, or when a buyer asks whether the system supports more than missed reorders.
+These address-bar states help the seller recover quickly during a meeting. They are demo controls, not production links.
 
-| Click or action | What to say | Proof point |
-| --- | --- | --- |
-| Open **Allocation review** or click Fleetwood Spirits from the command center. | “The same discipline applies to a different account moment. Fleetwood is surfaced for a limited allocation review because of visible category-fit and prior-allocation evidence.” | The product supports more than one workflow without becoming a generic CRM. |
-| Point to the qualification panel. | “This does not decide who receives inventory. It gives Marcus the operating context needed to make a responsible decision.” | The workflow is evidence-led and commercially controlled. |
-| Click **Simulate quantity question**. | “When the buyer asks about quantity, the system does not invent an answer. The question returns to Marcus for human judgment.” | Control and human ownership remain explicit at the difficult moment. |
-| Open **Implementation design**. | “This is the client-specific implementation canvas. The same command experience is configured around your records, rules, templates, owners, and evidence policy.” | The buyer sees how the demo becomes their operating system after the sale. |
-
-## Direct pitch entry points
-
-| Use this URL state | When it is helpful |
+| URL state | Useful when |
 | --- | --- |
-| `/#account` | Begin directly at the primary Juniper reorder-risk story. |
-| `/#audit` | Begin with evidence, controls, and human handoff for a manager or risk-focused buyer. |
-| `/#allocation` | Show the Fleetwood allocation-review workflow as a second controlled use case. |
-| `/#configuration` | Open the client-configuration canvas for implementation, operations, or executive stakeholders. |
+| `/` | Normal start at Workflow Center. |
+| `/#workflow` | Begin directly at Juniper’s Reorder Reminder. |
+| `/?demo=sent#workflow` | Resume the workflow after the simulated send. |
+| `/?demo=exception#replies` | Begin at the non-routine reply in the exception inbox. |
+| `/?demo=exception&assigned=true#replies` | Begin with the exception already assigned to Renee. |
+| `/?demo=exception#audit` | Begin with the exception-ready audit record. |
 
-## If the buyer asks a difficult question
+## Safe responses to difficult questions
 
-| Question | Safe response |
+| Buyer question | Response |
 | --- | --- |
-| “Is this connected to my system already?” | “Not in this demonstration. The product experience is designed first; implementation connects the approved client data, users, and workflows after scope is agreed.” |
-| “Does it send messages automatically?” | “The workflow is controlled by your chosen rules and approved channel. This demo intentionally shows that the rep and manager retain ownership.” |
-| “Will it decide what price to offer?” | “No. It identifies the account moment and preserves the context. Pricing, terms, and relationship-sensitive decisions remain with the qualified team member.” |
-| “What would this take to implement?” | “We would map the account and order inputs, owners, templates, channel permissions, controls, and rollout plan to your operating process.” |
-| “Can it replace our CRM or sales reps?” | “That is not the first value proposition. The immediate value is more consistent account coverage and clearer human follow-up.” |
+| “Is this connected to our systems?” | “Not in this demonstration. After scope is agreed, the client’s approved records, owners, communication channel, rules, and controls are configured into the same operating experience.” |
+| “Does it send messages automatically?” | “The product supports different automation modes. The demo uses rep-approved send because the responsible person remains visible. Policy-approved delivery is a later configuration decision, not a default assumption.” |
+| “Can it make pricing or allocation decisions?” | “No. It prepares the governed communication and records the evidence. Commercial terms, price, allocation decisions, disputes, and relationship-sensitive questions remain with qualified people.” |
+| “Does it replace our CRM or sales reps?” | “No. Its immediate job is more consistent communication coverage and clearer human follow-up around a defined workflow.” |
+| “What happens after we decide to proceed?” | “We map the first workflow’s trigger, account data, ownership, audience/eligibility, templates, delivery channel, approval gates, and evidence policy before enabling activity.” |
 
 ## Recovery guide
 
 | Situation | What to do |
 | --- | --- |
-| You click the wrong item or lose the narrative. | Press **Reset demo** and return to the Command center. Say: “Let me restart with the normal manager view.” |
-| You reach the account screen too early. | Use the back arrow to return to the coverage queue, then explain the signal before revisiting Juniper. |
-| The buyer wants to talk implementation early. | Open **Implementation view**, clarify that the data and controls are configured after sale, then return to the current screen. |
-| A buyer wants to explore every feature. | Say: “Let me finish the primary account story first; this is the core workflow we would configure for your team.” |
+| You lose the narrative. | Press **Reset demo**, return to Workflow Center, and restart with the active Reorder Reminder. |
+| The buyer opens Accounts early. | Explain that account records are supporting relationship context, then select **Open Juniper workflow**. |
+| The buyer focuses on the exception. | Go to `/?demo=exception#replies` and show the handoff boundary first. |
+| The buyer asks about governance. | Go to `/?demo=exception#audit` and trace the seven recorded decision points. |
+| The buyer wants every workflow. | Complete the Reorder Reminder first; explain that allocation and promotion messages reuse the same controlled workflow structure after validation. |
 
 ## Do not say
 
-1. Do not say that the demonstration has real client data, a live ERP/CRM connection, deployed delivery channels, or automatic legal/compliance approval.
-2. Do not promise a price, special deal, financial return, or account outcome.
-3. Do not describe the product as an autonomous salesperson, CRM replacement, or system that negotiates on a rep’s behalf.
+1. Do not say it is connected to live data, delivery channels, policy engines, or a legal approval program.
+2. Do not say it guarantees reorder revenue, cost savings, or regulatory compliance.
+3. Do not call it an autonomous salesperson, CRM replacement, automatic pricing tool, or allocation decision engine.
 
 ## Close the conversation
 
-End by asking a discovery question rather than immediately selling a feature list:
+> “If we configured one controlled communication workflow around the accounts your team most often misses, where would the first improvement in coverage and accountability appear?”
 
-> “If we configured this around one account segment and one controlled follow-up workflow for your team, where would the first visible improvement in account coverage come from?”
+Record the prospect’s response in [`../operations/DECISION_LOG.md`](../operations/DECISION_LOG.md). It becomes evidence for the first client-specific workflow decision.
 
-Then capture the answer in `../operations/DECISION_LOG.md` and use it to refine the next demo or implementation conversation.
+## References
+
+[1] [Sandbox Build Brief — original product definition](../reference-library/originals/Sandbox_Build_Brief.docx)
+[2] [Reorder Reminder Workflow Specification — active product acceptance test](REORDER_REMINDER_WORKFLOW_SPEC.md)

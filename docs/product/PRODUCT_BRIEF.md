@@ -14,7 +14,7 @@ Distributor sales representatives manage many retail accounts and can miss routi
 
 ## The first story the demo must tell
 
-> A manager sees several accounts at reorder risk. They open one account, see a product-level order pattern and a clear reason for the alert, preview an approved outreach, trigger the controlled demo action, then open the audit timeline. A non-routine reply is visibly assigned to the human rep.
+> A manager opens an active reorder-reminder workflow, sees the rule that created it and the eligible account, checks the named rep and preferred channel, reviews the approved message and automation mode, records a controlled demonstration send, then sees a non-routine reply arrive in the assigned rep’s exception inbox with a complete audit record.
 
 ## Product principles
 
@@ -33,18 +33,19 @@ Distributor sales representatives manage many retail accounts and can miss routi
 | Strategic synthesis and roadmap | Complete. |
 | Project Lead Workbook | Complete. |
 | Interactive strategy report | Complete. |
-| Premium live product demo | Not yet built. |
+| Dashboard-led sales prototype | Built as a visual and component foundation; retired as the active product hierarchy. |
+| Correct communication-workflow product demo | Complete for the first Reorder Reminder vertical slice; fictional and simulated only. |
 | Real client integration, consent management, delivery channel, and production controls | Not yet built. |
 
 ## Current Build Task
 
-**Task name:** Sales-demo blueprint and first dashboard.
+**Task name:** Reorder Reminder workflow and Workflow Center — complete first vertical slice.
 
-**Outcome:** A product landing/dashboard screen that lets the partner begin a live client pitch with a believable distributor overview, a prioritized reorder-risk queue, and clear evidence that every recommendation leads to an accountable action.
+**Outcome:** A communication operations workspace that lets a distributor user see an active reorder workflow, its trigger, eligible account, owner, message, automation mode, response exception, and evidence record without relying on an executive dashboard as the product’s primary surface.
 
-**Demo scenario:** Use [`DEMO_SCENARIO_AND_PITCH_FLOW.md`](DEMO_SCENARIO_AND_PITCH_FLOW.md) as the required fictional distributor story and seller click path. Build the Harborline → Juniper Bottle House → Renee Lewis flow before adding a second story.
+**Implementation specification:** Build against [`REORDER_REMINDER_WORKFLOW_SPEC.md`](REORDER_REMINDER_WORKFLOW_SPEC.md). Use [`DEMO_SCENARIO_AND_PITCH_FLOW.md`](DEMO_SCENARIO_AND_PITCH_FLOW.md) for fictional names and business context; the Juniper → Renee path remains the first workflow, but it is now embedded in Workflow Center rather than a dashboard-first journey.
 
-**What success looks like:** A prospect immediately understands what needs attention, why it needs attention, and which rep owns the next step. The partner can transition from the dashboard to a specific account in under one minute.
+**What success looks like:** A prospect can follow the full governed sequence in under two minutes: trigger → eligible account → approved message and mode → controlled send → reply exception → assigned rep → audit record. This sequence is implemented and verified as a fictional sales-demo state; client integrations and live delivery remain later implementation work.
 
 **Must not change:** The product must not present invented financial results, claim live client integrations, show real customer data, or imply that automated communication replaces the sales representative.
 
@@ -61,5 +62,5 @@ Distributor sales representatives manage many retail accounts and can miss routi
 
 1. Which kind of distributor will be represented in the demo: small regional wine and spirits distributor, multi-state distributor, or a specific fictional ideal client?
 2. What exact customer communication tone should the demo use: concise operational, relationship-led, or product/allocation-forward?
-3. Which demo channel should appear first: email, SMS, or an internal rep approval queue?
-4. What three buyer pain points should the partner lead with in a ten-minute pitch?
+3. Which automation mode will the first real pilot use: draft-for-rep, rep-approved send, or policy-approved send?
+4. Which discovery evidence from retailers and reps is sufficient to move from a demo to a live pilot?

@@ -1,28 +1,27 @@
 /**
  * Harborline Command design reminder:
- * Build a premium operational demo, not a generic analytics dashboard. The UI should let a seller
- * explain account coverage, evidence, control, and rep ownership in one clean narrative. Use
- * Signal Vermilion only for active risks/actions; all data is fictional demonstration data.
+ * This is a controlled communication operations hub, not a generic analytics dashboard.
+ * The product centers the sequence: trigger → eligibility → approved message → human action
+ * → exception → audit. Signal Vermilion means active human attention; sea-green means control.
+ * All accounts, messages, and events are fictional demonstration data.
  */
 import { useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   BadgeCheck,
   BellRing,
-  BookOpen,
+  Check,
   ChevronRight,
   CircleCheck,
   ClipboardCheck,
   Clock3,
-  Command,
   FileCheck2,
   Filter,
   Gauge,
-  LayoutDashboard,
+  LayoutList,
   Mail,
-  MoreHorizontal,
+  MessageSquareWarning,
   PackageCheck,
   Play,
   RefreshCcw,
@@ -30,421 +29,183 @@ import {
   Search,
   Send,
   ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   UserRound,
   UsersRound,
-  Workflow,
+  X,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
-type View = "command" | "account" | "allocation" | "audit" | "configuration";
+type View = "workflows" | "workflow" | "replies" | "accounts" | "audit";
+type WorkflowState = "approval" | "sent" | "exception";
+type Mode = "draft" | "rep";
 
-const cadenceData = [
-  { cycle: "May 06", cases: 8 },
-  { cycle: "May 27", cases: 11 },
-  { cycle: "Jun 17", cases: 11 },
-  { cycle: "Jul 08", cases: 10 },
-  { cycle: "Jul 29", cases: 0 },
-  { cycle: "Aug 20", cases: 0 },
-];
-
-const riskAccounts = [
+const workflowCards = [
   {
-    id: "juniper",
-    name: "Juniper Bottle House",
-    place: "Montclair, NJ",
-    signal: "38d since reorder",
-    reason: "17 days beyond usual cadence",
-    owner: "Renee Lewis",
-    initials: "RL",
-    priority: "High",
-    product: "Solara Coastal Spritz · Citrus 4-pack",
-    status: "Ready for review",
-    tone: "high",
+    id: "reorder",
+    type: "REORDER REMINDER",
+    title: "Solara Coastal Spritz · Juniper Bottle House",
+    detail: "No reorder in 38 days · 17 days beyond expected cadence",
+    status: "Needs rep approval",
+    tone: "attention",
   },
   {
-    id: "fleetwood",
-    name: "Fleetwood Spirits",
-    place: "Hoboken, NJ",
-    signal: "31d since reorder",
-    reason: "Missed expected order window",
-    owner: "Marcus Vale",
-    initials: "MV",
-    priority: "High",
-    product: "Nila Reserve Gin · 750ml",
-    status: "Rep review",
-    tone: "high",
+    id: "allocation",
+    type: "NEW ALLOCATION ALERT",
+    title: "Nila Reserve Gin · Audience rule ready",
+    detail: "Awaiting category-fit and allocation-policy configuration",
+    status: "Next workflow",
+    tone: "planned",
   },
   {
-    id: "corner",
-    name: "Corner Cellars",
-    place: "Maplewood, NJ",
-    signal: "26d since reorder",
-    reason: "Category cadence slowing",
-    owner: "Elise Park",
-    initials: "EP",
-    priority: "Medium",
-    product: "Northline Brut · 750ml",
-    status: "Monitor",
-    tone: "medium",
-  },
-  {
-    id: "garnet",
-    name: "Garnet & Grain",
-    place: "Jersey City, NJ",
-    signal: "23d since reorder",
-    reason: "Approaching expected cadence",
-    owner: "Renee Lewis",
-    initials: "RL",
-    priority: "Medium",
-    product: "Kestrel Red Blend · 750ml",
-    status: "Monitor",
-    tone: "medium",
+    id: "promo",
+    type: "PRICE / PROMO NOTICE",
+    title: "Eligible-audience message controls",
+    detail: "Available after terms, audience, and policy gates are configured",
+    status: "Policy gate",
+    tone: "planned",
   },
 ];
 
-const initialEvents = [
-  { time: "08:12", label: "Cadence signal detected", detail: "38d gap exceeds 21d expected cadence", icon: Gauge, state: "signal" },
-  { time: "08:13", label: "Eligibility confirmed", detail: "Account channel preference and owner assignment checked", icon: BadgeCheck, state: "verified" },
-  { time: "08:14", label: "Outreach prepared", detail: "Approved availability-check template selected", icon: Mail, state: "prepared" },
+const steps = [
+  { id: "trigger", title: "Trigger detected", detail: "38d since last reorder", icon: Gauge },
+  { id: "eligible", title: "Eligibility checked", detail: "Account, owner, channel", icon: BadgeCheck },
+  { id: "message", title: "Message prepared", detail: "Approved availability check", icon: Mail },
+  { id: "action", title: "Rep approval", detail: "Named human action", icon: ClipboardCheck },
+  { id: "exception", title: "Reply & exception", detail: "Route judgment to rep", icon: MessageSquareWarning },
 ];
-
-const guidedSteps = [
-  { n: "01", name: "Coverage", detail: "Start with what needs attention" },
-  { n: "02", name: "Signal", detail: "Explain the account story" },
-  { n: "03", name: "Control", detail: "Review approved outreach" },
-  { n: "04", name: "Evidence", detail: "Open the audit trail" },
-  { n: "05", name: "Handoff", detail: "Give judgment back to the rep" },
-];
-
-const configurationDetails = [
-  { title: "Operating records", eyebrow: "DATA FOUNDATION", statement: "Map the records your team already trusts.", examples: ["Retail account and contact fields", "Product and package catalog", "Order and replenishment history", "Territory and rep ownership"] },
-  { title: "Coverage rules", eyebrow: "DECISION LOGIC", statement: "Define what deserves attention and what does not.", examples: ["Expected reorder cadence", "Risk windows and queue priority", "Allocation review qualification", "Excluded accounts and exception rules"] },
-  { title: "Communication controls", eyebrow: "CONTROLLED OUTREACH", statement: "Preserve your voice, approval path, and channel preferences.", examples: ["Template library and allowed language", "Contact preference and eligibility", "Rep review or manager approval", "Approved delivery configuration"] },
-  { title: "Human ownership", eyebrow: "ACCOUNTABILITY", statement: "Keep every important customer moment with the right person.", examples: ["Named account owner", "Manager queue visibility", "Commercial judgment handoff", "Escalation service level"] },
-  { title: "Evidence policy", eyebrow: "TRUST AND TRACEABILITY", statement: "Make activity inspectable before it becomes scalable.", examples: ["Signal and action event trail", "Message and ownership record", "Exception reporting", "Configured retention and access policy"] },
-];
-
-function LogoMark() {
-  return <img className="brand-mark" src="/manus-storage/enterprise-ai-route-mark_eb2b5507.png" alt="Route and signal mark" />;
-}
 
 function Avatar({ initials, small = false }: { initials: string; small?: boolean }) {
-  return <span className={`avatar ${small ? "avatar-small" : ""}`}>{initials}</span>;
+  return <span className={`ops-avatar ${small ? "small" : ""}`}>{initials}</span>;
 }
 
-function Metric({ value, label, delta, tone = "neutral" }: { value: string; label: string; delta?: string; tone?: "neutral" | "risk" | "good" }) {
-  return (
-    <article className="metric-block">
-      <div className="metric-top"><span>{label}</span>{delta ? <em className={`metric-delta ${tone}`}>{delta}</em> : null}</div>
-      <strong>{value}</strong>
-    </article>
-  );
+function StatePill({ state }: { state: WorkflowState }) {
+  const copy = state === "approval" ? "Needs rep approval" : state === "sent" ? "Send recorded" : "Exception assigned";
+  return <span className={`ops-state-pill ${state}`}>{state === "approval" ? <Clock3 size={13} /> : state === "sent" ? <Send size={13} /> : <UserRound size={13} />}{copy}</span>;
 }
 
 export default function Home() {
-  const initialView: View = typeof window !== "undefined" && ["account", "allocation", "audit", "configuration"].includes(window.location.hash.slice(1))
+  const initialView: View = typeof window !== "undefined" && ["workflow", "replies", "accounts", "audit"].includes(window.location.hash.slice(1))
     ? window.location.hash.slice(1) as View
-    : "command";
+    : "workflows";
+  const initialDemoState: WorkflowState = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("demo") === "exception"
+    ? "exception"
+    : typeof window !== "undefined" && new URLSearchParams(window.location.search).get("demo") === "sent"
+      ? "sent"
+      : "approval";
+  const initiallyAssigned = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("assigned") === "true";
   const [view, setView] = useState<View>(initialView);
+  const [state, setState] = useState<WorkflowState>(initialDemoState);
+  const [mode, setMode] = useState<Mode>("rep");
+  const [assigned, setAssigned] = useState(initiallyAssigned && initialDemoState === "exception");
   const [guided, setGuided] = useState(false);
-  const [guidedStep, setGuidedStep] = useState(0);
-  const [outreachOpen, setOutreachOpen] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [escalated, setEscalated] = useState(false);
-  const [allocationReviewed, setAllocationReviewed] = useState(false);
-  const [allocationEscalated, setAllocationEscalated] = useState(false);
-  const [configFocus, setConfigFocus] = useState(0);
-  const [showReadiness, setShowReadiness] = useState(false);
-
-  const events = useMemo(() => {
-    const list = [...initialEvents];
-    if (sent) list.push({ time: "09:02", label: "Approved outreach simulated", detail: "Availability-check email staged for demo recipient", icon: Send, state: "sent" });
-    if (escalated) list.push({ time: "09:08", label: "Reply escalated to Renee Lewis", detail: "Pricing-related request requires human review", icon: UserRound, state: "escalated" });
-    return list;
-  }, [sent, escalated]);
 
   useEffect(() => {
-    const hash = view === "command" ? "" : `#${view}`;
+    const hash = view === "workflows" ? "" : `#${view}`;
     window.history.replaceState(null, "", `${window.location.pathname}${hash}`);
   }, [view]);
 
+  const events = useMemo(() => {
+    const list = [
+      { time: "08:12", title: "Cadence rule matched", detail: "Juniper has not reordered Solara Coastal Spritz for 38 days; expected cadence is 21 days.", icon: Gauge, tone: "signal" },
+      { time: "08:13", title: "Eligibility confirmed", detail: "Lina Cho is an approved account contact; Renee Lewis owns the relationship; preferred channel is email.", icon: BadgeCheck, tone: "control" },
+      { time: "08:14", title: "Availability-check template prepared", detail: "Template RR-04 selected. Price, promotion, and commercial terms are excluded.", icon: Mail, tone: "control" },
+    ];
+    if (state === "sent" || state === "exception") list.push({ time: "09:02", title: "Rep-approved send simulated", detail: "A fictional email event was recorded for Lina Cho. No production message was delivered.", icon: Send, tone: "sent" });
+    if (state === "exception") list.push({ time: "09:08", title: assigned ? "Exception assigned to Renee Lewis" : "Non-routine reply received", detail: assigned ? "Pricing-related question assigned to the named account owner; no automated response created." : "Lina asked about prior pricing. Human commercial judgment is required.", icon: UserRound, tone: "exception" });
+    return list;
+  }, [state, assigned]);
+
   const resetDemo = () => {
-    setView("command");
+    setView("workflows");
+    setState("approval");
+    setMode("rep");
+    setAssigned(false);
     setGuided(false);
-    setGuidedStep(0);
-    setOutreachOpen(false);
-    setSent(false);
-    setEscalated(false);
-    setAllocationReviewed(false);
-    setAllocationEscalated(false);
-    setConfigFocus(0);
-    setShowReadiness(false);
   };
 
-  const selectJuniper = () => {
-    setView("account");
-    if (guided) setGuidedStep(1);
+  const openWorkflow = () => setView("workflow");
+  const approveSend = () => {
+    setState("sent");
   };
+  const simulateException = () => {
+    setState("exception");
+    setView("replies");
+  };
+  const assignRenee = () => setAssigned(true);
 
-  const selectFleetwood = () => {
-    setView("allocation");
-    if (guided) setGuidedStep(1);
-  };
+  const navigation = [
+    { id: "workflows" as View, label: "Workflow center", icon: LayoutList },
+    { id: "replies" as View, label: "Replies & exceptions", icon: MessageSquareWarning },
+    { id: "accounts" as View, label: "Accounts", icon: UsersRound },
+    { id: "audit" as View, label: "Audit & policy", icon: FileCheck2 },
+  ];
 
-  const openOutreach = () => {
-    setView("account");
-    setOutreachOpen(true);
-    if (guided) setGuidedStep(2);
-  };
-
-  const showAudit = () => {
-    setView("audit");
-    if (guided) setGuidedStep(3);
-  };
-
-  const simulateSend = () => {
-    setSent(true);
-    setOutreachOpen(false);
-    setView("audit");
-    if (guided) setGuidedStep(3);
-  };
-
-  const simulateReply = () => {
-    setEscalated(true);
-    setView("audit");
-    if (guided) setGuidedStep(4);
-  };
+  const breadcrumb = {
+    workflows: "WORKFLOW CENTER",
+    workflow: "REORDER REMINDER",
+    replies: "REPLIES & EXCEPTIONS",
+    accounts: "ACCOUNT CONTEXT",
+    audit: "AUDIT RECORD",
+  }[view];
 
   return (
-    <div className="demo-app">
-      <aside className="demo-sidebar">
+    <div className="ops-app">
+      <aside className="ops-sidebar">
         <div>
-          <div className="brand-lockup">
-            <LogoMark />
-            <div><strong>HARBORLINE</strong><span>COMMAND</span></div>
-          </div>
-          <div className="environment-pill"><span /> DEMO ENVIRONMENT</div>
-          <nav className="primary-nav" aria-label="Product navigation">
-            <button className={view === "command" ? "active" : ""} onClick={() => setView("command")}><LayoutDashboard size={18} /> Command center</button>
-            <button className={view === "account" ? "active" : ""} onClick={selectJuniper}><UsersRound size={18} /> Account stories</button>
-            <button className={view === "allocation" ? "active" : ""} onClick={selectFleetwood}><PackageCheck size={18} /> Allocation review</button>
-            <button className={view === "audit" ? "active" : ""} onClick={showAudit}><FileCheck2 size={18} /> Audit evidence</button>
-            <button className={view === "configuration" ? "active" : ""} onClick={() => setView("configuration")}><SlidersHorizontal size={18} /> Implementation design</button>
+          <div className="ops-brand"><Route size={30} /><div><strong>HARBORLINE</strong><span>COMMUNICATION OPS</span></div></div>
+          <div className="ops-environment"><span /> FICTIONAL DEMO ENVIRONMENT</div>
+          <nav className="ops-nav" aria-label="Product navigation">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              const active = view === item.id || (item.id === "workflows" && view === "workflow");
+              return <button key={item.id} className={active ? "active" : ""} onClick={() => setView(item.id)}><Icon size={18} /><span>{item.label}</span>{item.id === "replies" && state === "exception" ? <b>1</b> : null}</button>;
+            })}
           </nav>
         </div>
-
-        <div className="sidebar-bottom">
-          <div className="owner-mini"><Avatar initials="RL" small /><div><span>DEMO OWNER</span><strong>Renee Lewis</strong></div></div>
-          <button className="reset-button" onClick={resetDemo}><RefreshCcw size={14} /> Reset demo</button>
-        </div>
+        <div className="ops-sidebar-footer"><div className="ops-owner"><Avatar initials="RL" small /><div><span>DEMO OWNER</span><strong>Renee Lewis</strong></div></div><button className="ops-reset" onClick={resetDemo}><RefreshCcw size={15} /> Reset demo</button></div>
       </aside>
 
-      <main className="demo-main">
-        <header className="topbar">
-          <div className="breadcrumb"><span>HARBORLINE /</span> <strong>{view === "command" ? "ACCOUNT COVERAGE" : view === "account" ? "ACCOUNT STORY" : view === "allocation" ? "ALLOCATION REVIEW" : view === "audit" ? "CONTROL LOG" : "IMPLEMENTATION DESIGN"}</strong></div>
-          <div className="topbar-actions">
-            <span className="fictional-badge"><Sparkles size={13} /> Fictional scenario</span>
-            <button className="icon-button" aria-label="Search"><Search size={18} /></button>
-            <button className="icon-button" aria-label="Notifications"><BellRing size={18} /><i /></button>
-            <button className="avatar-button"><Avatar initials="OL" small /></button>
-          </div>
-        </header>
+      <main className="ops-main">
+        <header className="ops-topbar"><div className="ops-breadcrumb"><span>HARBORLINE /</span><strong>{breadcrumb}</strong></div><div className="ops-top-actions"><span className="ops-fictional"><Sparkles size={13} /> Fictional scenario</span><button aria-label="Search" className="ops-icon"><Search size={18} /></button><button aria-label="Notifications" className="ops-icon"><BellRing size={18} /></button><Avatar initials="OL" small /></div></header>
 
-        {guided ? (
-          <section className="pitch-strip" aria-label="Guided pitch flow">
-            <div className="pitch-strip-heading"><Play size={14} fill="currentColor" /> <span>LIVE PITCH PATH</span></div>
-            <div className="pitch-steps">
-              {guidedSteps.map((step, index) => (
-                <button key={step.n} onClick={() => setGuidedStep(index)} className={index === guidedStep ? "current" : index < guidedStep ? "done" : ""}>
-                  <span>{step.n}</span><strong>{step.name}</strong>
-                </button>
-              ))}
-            </div>
-            <p>{guidedSteps[guidedStep].detail}</p>
-          </section>
-        ) : null}
+        {view === "workflows" ? (
+          <section className="ops-workspace workflow-center">
+            <div className="ops-heading"><div><p className="ops-eyebrow">COMMUNICATION OPERATIONS</p><h1>Run the <em>right</em> message.<br />Keep the relationship human.</h1><p>Each workflow turns a defined account moment into a controlled, traceable communication process. Nothing is sent without the configured rule, owner, and approval mode.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setGuided(!guided)}><Play size={15} /> {guided ? "Hide flow guide" : "Show flow guide"}</button><button className="ops-primary" onClick={openWorkflow}>Open active workflow <ArrowRight size={16} /></button></div></div>
 
-        {view === "command" ? (
-          <section className="workspace command-workspace">
-            <div className="workspace-heading">
-              <div>
-                <p className="eyebrow">MONDAY, AUGUST 24 · 08:42</p>
-                <h1>Coverage, with <em>context.</em></h1>
-                <p className="workspace-dek">See the accounts that need attention, the evidence behind each signal, and the representative accountable for the relationship.</p>
-              </div>
-              <div className="heading-actions">
-                <button className="secondary-button" onClick={() => setView("configuration")}><BookOpen size={16} /> Implementation view</button>
-                <button className="primary-button" onClick={() => { setGuided(true); setGuidedStep(0); }}><Play size={15} fill="currentColor" /> Start guided pitch</button>
-              </div>
-            </div>
+            {guided ? <div className="ops-flow-guide">{steps.map((step, index) => { const Icon = step.icon; return <div key={step.id}><span>{String(index + 1).padStart(2, "0")}</span><Icon size={16} /><strong>{step.title}</strong><small>{step.detail}</small></div>; })}</div> : null}
 
-            <section className="command-summary">
-              <div className="summary-story">
-                <div className="summary-flag"><Route size={16} /> ACTIVE COVERAGE WINDOW</div>
-                <h2>12 account moments deserve a human look today.</h2>
-                <p>Harborline’s command center does not replace the sales relationship. It makes the routine signals visible before an account falls through the cracks.</p>
-                <button onClick={selectJuniper} className="text-link">Open highest-priority account <ArrowRight size={16} /></button>
-              </div>
-              <div className="summary-metrics">
-                <Metric value="12" label="ATTENTION QUEUE" delta="+4 today" tone="risk" />
-                <Metric value="4" label="READY FOR REVIEW" delta="Eligible" tone="good" />
-                <Metric value="8" label="REP-OWNED" delta="No auto-send" />
-                <Metric value="100%" label="AUDIT VISIBLE" delta="Controlled" tone="good" />
-              </div>
-            </section>
-
-            <div className="dashboard-grid">
-              <section className="priority-panel">
-                <div className="section-heading"><div><span className="eyebrow">PRIORITY SIGNALS</span><h3>Account coverage queue</h3></div><button className="filter-button"><Filter size={15} /> Filter</button></div>
-                <div className="queue-list">
-                  {riskAccounts.map((account, index) => (
-                    <button className={`queue-row ${account.id === "juniper" ? "featured" : ""}`} key={account.id} onClick={account.id === "juniper" ? selectJuniper : account.id === "fleetwood" ? selectFleetwood : () => setView("account")}>
-                      <span className={`risk-dot ${account.tone}`} />
-                      <div className="queue-account"><strong>{account.name}</strong><span>{account.place} · {account.product}</span></div>
-                      <div className="queue-signal"><strong>{account.signal}</strong><span>{account.reason}</span></div>
-                      <div className="queue-owner"><Avatar initials={account.initials} small /><span>{account.owner}</span></div>
-                      <ChevronRight size={18} className="queue-chevron" />
-                      {index === 0 ? <span className="queue-tag">START HERE</span> : null}
-                    </button>
-                  ))}
-                </div>
-                <div className="queue-foot"><span><CircleCheck size={15} /> Signals are ranked by account context, not sent automatically.</span><button onClick={() => setView("audit")}>View evidence log <ArrowRight size={14} /></button></div>
-              </section>
-
-              <section className="coverage-panel">
-                <div className="section-heading"><div><span className="eyebrow">TEAM LOAD</span><h3>Coverage balance</h3></div><MoreHorizontal size={19} /></div>
-                <div className="coverage-visual">
-                  <div className="coverage-ring"><span>18</span><small>REPS</small></div>
-                  <div className="coverage-info"><strong>91%</strong><span>accounts touched within planned coverage window</span></div>
-                </div>
-                <div className="rep-stack">
-                  <div><span><Avatar initials="RL" small /> Renee Lewis</span><b>3 signals</b></div>
-                  <div><span><Avatar initials="MV" small /> Marcus Vale</span><b>2 signals</b></div>
-                  <div><span><Avatar initials="EP" small /> Elise Park</span><b>2 signals</b></div>
-                </div>
-                <p className="panel-note"><ShieldCheck size={15} /> Ownership stays visible at every action point.</p>
-              </section>
+            <div className="ops-center-layout">
+              <section className="ops-workflow-list"><div className="ops-section-title"><div><p className="ops-eyebrow">ACTIVE COMMUNICATION WORKFLOWS</p><h2>What is running now</h2></div><button className="ops-filter"><Filter size={15} /> All statuses</button></div>{workflowCards.map((workflow) => <button key={workflow.id} className={`ops-workflow-card ${workflow.id === "reorder" ? "primary-workflow" : ""}`} onClick={workflow.id === "reorder" ? openWorkflow : undefined} disabled={workflow.id !== "reorder"}><span className={`ops-card-mark ${workflow.tone}`}><Mail size={17} /></span><span className="ops-card-copy"><small>{workflow.type}</small><strong>{workflow.title}</strong><em>{workflow.detail}</em></span><span className={`ops-card-status ${workflow.tone}`}>{workflow.status}</span><ChevronRight size={18} /></button>)}</section>
+              <aside className="ops-right-rail"><section className="ops-review-card"><div className="ops-section-title"><div><p className="ops-eyebrow">NEEDS HUMAN REVIEW</p><h2>{state === "exception" ? "One exception is waiting" : "No active exceptions"}</h2></div><MessageSquareWarning size={19} /></div>{state === "exception" ? <button className="ops-exception-preview" onClick={() => setView("replies")}><span><Avatar initials="LC" small /><div><strong>Lina Cho · Juniper</strong><small>Asked about prior pricing</small></div></span><ChevronRight size={16} /></button> : <div className="ops-empty"><CircleCheck size={19} /><p>Non-routine replies will appear here with the named rep and original message context.</p></div>}</section><section className="ops-guardrail-card"><ShieldCheck size={19} /><div><strong>Control before scale</strong><p>Automation mode, message copy, eligibility, owner, and evidence remain visible on every workflow.</p></div></section></aside>
             </div>
           </section>
         ) : null}
 
-        {view === "account" ? (
-          <section className="workspace account-workspace">
-            <button className="back-link" onClick={() => { setView("command"); if (guided) setGuidedStep(0); }}><ArrowLeft size={15} /> Back to coverage</button>
-            <div className="account-heading">
-              <div className="account-identity"><div className="account-monogram">JB</div><div><p className="eyebrow">HIGH-OPPORTUNITY ACCOUNT · MONTCLAIR, NJ</p><h1>Juniper Bottle House</h1><p><span className="status-live" /> Account owner <strong>Renee Lewis</strong> · Preferred channel <strong>Rep-approved email</strong></p></div></div>
-              <div className="account-actions"><button className="secondary-button" onClick={showAudit}><FileCheck2 size={16} /> Open audit</button><button className="primary-button" onClick={openOutreach}><Mail size={16} /> Review outreach</button></div>
-            </div>
+        {view === "workflow" ? (
+          <section className="ops-workspace workflow-detail">
+            <button className="ops-back" onClick={() => setView("workflows")}><ArrowLeft size={15} /> Workflow center</button>
+            <div className="ops-heading compact"><div><p className="ops-eyebrow">ACTIVE WORKFLOW · REORDER REMINDER</p><h1>Reorder reminder<br />for <em>Juniper.</em></h1><p>One account, one approved availability check, and one accountable human owner. The workflow is deliberately narrow so every control is visible.</p></div><div className="ops-heading-actions"><StatePill state={state} /><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
 
-            <section className="signal-banner">
-              <div className="signal-badge"><AlertTriangle size={18} /></div>
-              <div><span className="eyebrow">REORDER-RISK SIGNAL</span><h2>38 days since last order—17 days beyond this account’s expected cadence.</h2><p>Juniper ordered 30 cases across the prior three cycles. The system is prompting a relationship-led availability check, not an unapproved offer.</p></div>
-              <button onClick={openOutreach}>See controlled next step <ArrowRight size={16} /></button>
-            </section>
-
-            <div className="account-grid">
-              <section className="cadence-panel">
-                <div className="section-heading"><div><span className="eyebrow">PRODUCT HISTORY</span><h3>Solara Coastal Spritz · Citrus 4-pack</h3></div><span className="cadence-pill">Expected cadence · 21d</span></div>
-                <div className="chart-wrap">
-                  <ResponsiveContainer width="100%" height={230}>
-                    <AreaChart data={cadenceData} margin={{ left: -20, right: 4, top: 10, bottom: 0 }}>
-                      <defs><linearGradient id="cadenceFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#e6533c" stopOpacity={0.35} /><stop offset="100%" stopColor="#e6533c" stopOpacity={0.02} /></linearGradient></defs>
-                      <CartesianGrid stroke="#dde2df" strokeDasharray="2 4" vertical={false} />
-                      <XAxis dataKey="cycle" tick={{ fill: "#74808a", fontSize: 10 }} tickLine={false} axisLine={false} />
-                      <YAxis tick={{ fill: "#74808a", fontSize: 10 }} tickLine={false} axisLine={false} width={34} />
-                      <Tooltip contentStyle={{ background: "#122235", border: "none", borderRadius: 0, color: "#fff", fontSize: 11 }} labelStyle={{ color: "#b8c9d0" }} />
-                      <Area type="monotone" dataKey="cases" stroke="#e6533c" strokeWidth={3} fill="url(#cadenceFill)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="chart-caption"><div><span>LAST ORDER</span><strong>Jul 17 · 10 cases</strong></div><div><span>EXPECTED NEXT ORDER</span><strong>Aug 07</strong></div><div><span>RISK STATUS</span><strong className="risk-copy">Needs review</strong></div></div>
-              </section>
-
-              <aside className="account-facts">
-                <div className="fact-section"><span className="eyebrow">ACCOUNT CONTEXT</span><dl><div><dt>Category behavior</dt><dd>Strong RTD reorder pattern</dd></div><div><dt>Contact preference</dt><dd>Email before visit</dd></div><div><dt>Last rep activity</dt><dd>14 days ago</dd></div></dl></div>
-                <div className="fact-section"><span className="eyebrow">SYSTEM RECOMMENDATION</span><p>Ask whether the latest Solara Coastal Spritz availability aligns with their current demand.</p><button className="text-link" onClick={openOutreach}>Review approved outreach <ArrowRight size={15} /></button></div>
-              </aside>
-            </div>
-
-            <section className="ownership-panel"><div className="ownership-person"><Avatar initials="RL" /><div><span className="eyebrow">HUMAN ACCOUNT OWNER</span><h3>Renee Lewis</h3><p>Renee remains accountable for commercial judgment, account health, and non-routine communication.</p></div></div><div className="ownership-state"><BadgeCheck size={18} /><span>Outreach is prepared, not autonomously sent.</span></div></section>
-
-            {outreachOpen ? (
-              <section className="outreach-drawer">
-                <div className="drawer-heading"><div><span className="eyebrow">CONTROLLED OUTREACH · READY FOR REVIEW</span><h2>Availability check for Juniper Bottle House</h2></div><button className="close-button" onClick={() => setOutreachOpen(false)}>Close</button></div>
-                <div className="outreach-grid"><div className="message-card"><div className="message-meta"><span>TO · Lina Cho</span><span>CHANNEL · EMAIL</span></div><p>Hi Lina—Renee here from Harborline. We noticed it may be time to check in on Solara Coastal Spritz Citrus. Would it be helpful if I confirmed current availability for your next order window?</p><span>— Renee Lewis, Harborline Beverage Distribution</span></div><div className="control-card"><div><ClipboardCheck size={18} /><strong>Eligibility checked</strong><span>Preferred channel and account ownership confirmed.</span></div><div><ShieldCheck size={18} /><strong>Approved template</strong><span>Availability check only. No price, promotion, or deal terms.</span></div><button className="primary-button full-width" onClick={simulateSend}><Send size={16} /> Simulate approved send</button></div></div>
-              </section>
-            ) : null}
+            <div className="ops-workflow-layout"><aside className="ops-step-rail">{steps.map((step, index) => { const Icon = step.icon; const complete = index < 3 || (index === 3 && state !== "approval") || (index === 4 && state === "exception"); const current = (state === "approval" && index === 3) || (state === "sent" && index === 4); return <div className={`ops-step ${complete ? "complete" : ""} ${current ? "current" : ""}`} key={step.id}><span><Icon size={15} /></span><div><small>{String(index + 1).padStart(2, "0")}</small><strong>{step.title}</strong><em>{step.detail}</em></div></div>; })}</aside>
+              <div className="ops-workflow-canvas"><section className="ops-trigger-card"><div className="ops-trigger-icon"><Gauge size={20} /></div><div><p className="ops-eyebrow">TRIGGER DETECTED</p><h2>Juniper has not reordered Solara Coastal Spritz for 38 days.</h2><p>Expected cadence is 21 days. The workflow has identified a routine coverage moment—not a reason to make a commercial offer.</p></div><span>RR-04<br /><small>CADENCE RULE</small></span></section>
+                <div className="ops-context-grid"><section className="ops-context-card"><p className="ops-eyebrow">ELIGIBLE ACCOUNT</p><div className="ops-account-row"><span className="ops-monogram">JB</span><div><strong>Juniper Bottle House</strong><small>Montclair, NJ · Lina Cho, Buyer</small></div></div><dl><div><dt>PRODUCT</dt><dd>Solara Coastal Spritz · Citrus 4-pack</dd></div><div><dt>LAST ORDER</dt><dd>Jul 17 · 10 cases</dd></div><div><dt>ACCOUNT OWNER</dt><dd>Renee Lewis</dd></div><div><dt>PREFERRED CHANNEL</dt><dd>Rep-approved email</dd></div></dl></section><section className="ops-mode-card"><p className="ops-eyebrow">AUTOMATION MODE</p><h3>Choose the level of human control.</h3><button className={mode === "draft" ? "selected" : ""} onClick={() => setMode("draft")}><span><ClipboardCheck size={17} /><strong>Draft for rep</strong><small>Prepare only; Renee decides whether to send.</small></span>{mode === "draft" ? <Check size={16} /> : null}</button><button className={mode === "rep" ? "selected" : ""} onClick={() => setMode("rep")}><span><UserRound size={17} /><strong>Rep-approved send</strong><small>Renee approves before the message is recorded.</small></span>{mode === "rep" ? <Check size={16} /> : null}</button><div className="ops-future-mode"><ShieldCheck size={16} /><span><strong>Policy-approved send</strong><small>Available only after validated rules and review.</small></span></div></section></div>
+                <section className="ops-message-card"><div className="ops-message-heading"><div><p className="ops-eyebrow">APPROVED OUTREACH</p><h3>Availability check · Template RR-04</h3></div><span><ShieldCheck size={15} /> Terms excluded</span></div><div className="ops-message-meta"><span>TO · LINA CHO</span><span>CHANNEL · EMAIL</span><span>OWNER · RENEE LEWIS</span></div><p>Hi Lina—Renee here from Harborline. We noticed it may be time to check in on Solara Coastal Spritz Citrus. Would it be helpful if I confirmed current availability for your next order window?</p><small>— Renee Lewis, Harborline Beverage Distribution</small><div className="ops-message-foot"><span><CircleCheck size={15} /> Account, owner, channel, and template checks passed.</span>{state === "approval" ? <button className="ops-primary" onClick={approveSend}>{mode === "draft" ? "Mark draft for Renee" : "Approve & simulate send"} <Send size={16} /></button> : state === "sent" ? <button className="ops-primary" onClick={simulateException}>Simulate non-routine reply <MessageSquareWarning size={16} /></button> : <button className="ops-secondary" onClick={() => setView("replies")}>Open assigned exception <ArrowRight size={16} /></button>}</div></section>
+              </div></div>
           </section>
         ) : null}
 
-        {view === "allocation" ? (
-          <section className="workspace allocation-workspace">
-            <button className="back-link" onClick={() => setView("command")}><ArrowLeft size={15} /> Back to coverage</button>
-            <div className="allocation-heading">
-              <div className="account-identity"><div className="account-monogram allocation-monogram">FS</div><div><p className="eyebrow">SPECIALTY SPIRITS RETAILER · HOBOKEN, NJ</p><h1>Fleetwood Spirits</h1><p><span className="status-live" /> Account owner <strong>Marcus Vale</strong> · Allocation workflow <strong>Rep review required</strong></p></div></div>
-              <div className="account-actions"><button className="secondary-button" onClick={() => setView("configuration")}><SlidersHorizontal size={16} /> View configuration</button><button className="primary-button" onClick={() => setAllocationReviewed(true)}><ClipboardCheck size={16} /> {allocationReviewed ? "Review recorded" : "Mark ready for rep review"}</button></div>
-            </div>
-
-            <section className="allocation-banner"><div className="allocation-signal"><PackageCheck size={20} /></div><div><span className="eyebrow">LIMITED ALLOCATION · CONTROLLED REVIEW WINDOW</span><h2>12 cases of Nila Reserve Gin are available for a human allocation review.</h2><p>Fleetwood is surfaced because it received six cases in the last comparable allocation and has verified specialty-spirits category fit. The workflow does not promise quantity, price, or commercial terms.</p></div><span className="allocation-window"><Clock3 size={15} /> Review window · 18h</span></section>
-
-            <div className="allocation-grid">
-              <section className="allocation-evidence"><div className="section-heading"><div><span className="eyebrow">ACCOUNT QUALIFICATION</span><h3>Why Fleetwood is in the review lane</h3></div><span className="cadence-pill">Evidence-based</span></div><div className="qualification-grid"><div><span>PRIOR ALLOCATION</span><strong>6 cases</strong><p>Received in the last comparable release.</p></div><div><span>CATEGORY FIT</span><strong>Verified</strong><p>Specialty gin sell-through pattern is on file.</p></div><div><span>ACCOUNT OWNER</span><strong>Marcus Vale</strong><p>Commercial judgment stays with the assigned rep.</p></div><div><span>ACCOUNT STATUS</span><strong>In good standing</strong><p>No active hold or unresolved service exception.</p></div></div><div className="allocation-evidence-note"><ShieldCheck size={17} /><span><strong>No automatic allocation:</strong> this evidence prepares a review, not a commercial commitment.</span></div></section>
-              <aside className="allocation-control-card"><span className="eyebrow">CONTROLLED OUTREACH</span><h3>Availability check prepared</h3><p>Marcus can confirm interest before any allocation decision is made.</p><div className="allocation-message"><span>TO · Dani Rivera, Buyer</span><p>Hi Dani—Marcus from Harborline here. We are reviewing availability for a small Nila Reserve Gin allocation. Would it be helpful to discuss whether there is current interest on your side?</p><small>— Marcus Vale</small></div><div className="allocation-status"><BadgeCheck size={16} /><span>Template approved · quantity and terms excluded</span></div>{!allocationEscalated ? <button className="primary-button full-width" onClick={() => { setAllocationReviewed(true); setAllocationEscalated(true); }}><UserRound size={16} /> Simulate quantity question</button> : <div className="allocation-handoff"><Avatar initials="MV" /><div><strong>Marcus review required</strong><span>Fleetwood asked about available quantity. No response was generated.</span></div></div>}</aside>
-            </div>
-            <section className="allocation-footer"><div><Route size={18} /><span><strong>Second workflow, same operating principle.</strong> Signal → evidence → controlled preparation → named human judgment.</span></div><button onClick={() => setView("configuration")}>See how this becomes client-specific <ArrowRight size={16} /></button></section>
+        {view === "replies" ? (
+          <section className="ops-workspace replies-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">HUMAN JUDGMENT QUEUE</p><h1>Replies that need<br /><em>a person.</em></h1><p>Harborline does not negotiate price, resolve disputes, or imitate a rep. Non-routine conversation stays visibly with the assigned account owner.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={() => setView("workflow")}><ArrowLeft size={15} /> Return to workflow</button><button className="ops-secondary" onClick={() => setView("audit")}><FileCheck2 size={15} /> Open audit</button></div></div>
+            {state !== "exception" ? <div className="ops-reply-empty"><CircleCheck size={26} /><h2>No exceptions waiting</h2><p>Simulate a non-routine reply from the Reorder Reminder workflow to demonstrate the named-human handoff.</p><button className="ops-primary" onClick={openWorkflow}>Open reorder workflow <ArrowRight size={16} /></button></div> : <div className="ops-reply-layout"><section className="ops-reply-card"><div className="ops-reply-top"><span className="ops-reply-unread" /><div><Avatar initials="LC" /><div><strong>Lina Cho</strong><small>Juniper Bottle House · received at 09:08</small></div></div><StatePill state="exception" /></div><div className="ops-reply-quote"><span>REPLY TO · AVAILABILITY CHECK RR-04</span><p>“Thanks, Renee. Before I look at availability, can you offer us the same price we had the last time?”</p></div><div className="ops-reply-reason"><MessageSquareWarning size={18} /><div><strong>Commercial judgment required</strong><p>The message asks about price. Harborline records the context but does not generate, negotiate, or send a response.</p></div></div><div className="ops-reply-actions"><div><Avatar initials="RL" /><span><small>ASSIGNED ACCOUNT OWNER</small><strong>Renee Lewis</strong></span></div>{assigned ? <span className="ops-assigned"><Check size={15} /> Renee has been assigned</span> : <button className="ops-primary" onClick={assignRenee}>Assign to Renee <UserRound size={16} /></button>}</div></section><aside className="ops-reply-context"><p className="ops-eyebrow">ORIGINAL WORKFLOW CONTEXT</p><dl><div><dt>TRIGGER</dt><dd>38d without reorder</dd></div><div><dt>MESSAGE</dt><dd>Availability check RR-04</dd></div><div><dt>MODE</dt><dd>Rep-approved send</dd></div><div><dt>AUDIT</dt><dd>5 recorded events</dd></div></dl><button className="ops-text-button" onClick={() => setView("audit")}>View complete audit record <ArrowRight size={15} /></button></aside></div>}
           </section>
+        ) : null}
+
+        {view === "accounts" ? (
+          <section className="ops-workspace accounts-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">RELATIONSHIP CONTEXT</p><h1>Account details<br />support <em>the action.</em></h1><p>Account records provide the contact, order pattern, owner, and history needed to run a controlled workflow. They are not the product’s main destination.</p></div><div className="ops-heading-actions"><button className="ops-primary" onClick={openWorkflow}>Open Juniper workflow <ArrowRight size={16} /></button></div></div><section className="ops-account-panel"><div className="ops-account-head"><span className="ops-monogram large">JB</span><div><p className="ops-eyebrow">RETAIL ACCOUNT · MONTCLAIR, NJ</p><h2>Juniper Bottle House</h2><p><span className="ops-live-dot" /> Assigned representative <strong>Renee Lewis</strong> · Contact preference <strong>Email before visit</strong></p></div></div><div className="ops-account-facts"><div><span>ORDER PATTERN</span><strong>Strong RTD reorder cadence</strong><small>Expected every 21 days</small></div><div><span>ACTIVE WORKFLOW</span><strong>Reorder Reminder RR-04</strong><small>{state === "approval" ? "Awaiting Renee’s approval" : state === "sent" ? "Send event recorded" : "Exception assigned to Renee"}</small></div><div><span>LAST REP ACTIVITY</span><strong>14 days ago</strong><small>No open service exception</small></div></div><div className="ops-account-timeline"><span className="ops-eyebrow">WORKFLOW HISTORY</span>{events.map((event) => <div key={event.time + event.title}><span>{event.time}</span><i /><p><strong>{event.title}</strong>{event.detail}</p></div>)}</div></section></section>
         ) : null}
 
         {view === "audit" ? (
-          <section className="workspace audit-workspace">
-            <div className="workspace-heading compact"><div><p className="eyebrow">JUNIPER BOTTLE HOUSE · CONTROL LOG</p><h1>Evidence before <em>automation.</em></h1><p className="workspace-dek">A clear record of what happened, why it happened, and who owns the next decision.</p></div><div className="heading-actions"><button className="secondary-button" onClick={selectJuniper}><UsersRound size={16} /> Return to account</button>{!sent ? <button className="primary-button" onClick={openOutreach}><Mail size={16} /> Review outreach</button> : null}</div></div>
-
-            <section className="audit-layout">
-              <div className="audit-timeline">
-                <div className="audit-intro"><span className="eyebrow">AUDIT EVENT TRAIL</span><p>Fictional demo evidence. Production delivery and retention policies are configured after a client implementation.</p></div>
-                {events.map((event, index) => {
-                  const Icon = event.icon;
-                  return <article className={`audit-event ${event.state}`} key={`${event.label}-${index}`}><div className="event-rail"><span><Icon size={16} /></span>{index < events.length - 1 ? <i /> : null}</div><div className="event-copy"><div><strong>{event.label}</strong><time>{event.time}</time></div><p>{event.detail}</p></div></article>;
-                })}
-              </div>
-              <aside className="audit-side">
-                <section className="control-summary"><span className="eyebrow">CURRENT CONTROL STATE</span><div className={escalated ? "state-card escalated" : sent ? "state-card sent" : "state-card ready"}>{escalated ? <UserRound size={22} /> : sent ? <Send size={22} /> : <ClipboardCheck size={22} />}<div><strong>{escalated ? "Human review required" : sent ? "Outreach simulated" : "Ready for review"}</strong><span>{escalated ? "Renee Lewis owns the pricing-related reply." : sent ? "No real message was delivered." : "The rep controls the next action."}</span></div></div></section>
-                {!sent ? <button className="primary-button full-width" onClick={openOutreach}><Mail size={16} /> Review approved outreach</button> : null}
-                {sent && !escalated ? <button className="secondary-button full-width urgent-action" onClick={simulateReply}><UserRound size={16} /> Simulate non-routine reply</button> : null}
-                {escalated ? <div className="handoff-card"><div><Avatar initials="RL" /><span><b>Assigned to Renee Lewis</b><small>Next step: review client request before response</small></span></div><button onClick={() => setShowReadiness(true)}>View implementation boundary <ArrowRight size={14} /></button></div> : null}
-              </aside>
-            </section>
-          </section>
-        ) : null}
-
-        {view === "configuration" ? (
-          <section className="workspace configuration-workspace">
-            <div className="workspace-heading compact"><div><p className="eyebrow">FROM DEMO TO CLIENT OPERATING SYSTEM</p><h1>Same command center.<br /><em>Your operating rules.</em></h1><p className="workspace-dek">Harborline Command is not installed as a generic template. The system is configured around the client’s records, coverage logic, communication controls, accountable owners, and evidence policy.</p></div><div className="heading-actions"><button className="secondary-button" onClick={() => setView("command")}><LayoutDashboard size={16} /> Return to demo</button><button className="primary-button" onClick={() => setConfigFocus(0)}><RefreshCcw size={15} /> Reset configuration view</button></div></div>
-            <div className="configuration-hero"><div className="configuration-route"><span>01</span><i /><span>02</span><i /><span>03</span><i /><span>04</span><i /><span>05</span></div><div><span className="eyebrow">CLIENT CONFIGURATION CANVAS</span><h2>Five deliberate layers turn the demo into a trusted operating workflow.</h2></div><div className="configuration-hero-note"><ShieldCheck size={18} /><span><strong>Implementation principle</strong> Configure controls before enabling activity.</span></div></div>
-            <div className="configuration-grid"><section className="config-layers">{[
-              { code: "01", title: "Operating records", note: "Accounts, products, order history, territory and owner mapping.", icon: PackageCheck, color: "green" },
-              { code: "02", title: "Coverage rules", note: "Cadence thresholds, allocation windows, priority logic, and exclusions.", icon: Gauge, color: "verm" },
-              { code: "03", title: "Communication controls", note: "Approved templates, channel preferences, eligibility, and review gates.", icon: Mail, color: "green" },
-              { code: "04", title: "Human ownership", note: "Rep routing, manager visibility, exception queues, and escalation pathways.", icon: UserRound, color: "navy" },
-              { code: "05", title: "Evidence policy", note: "Audit events, retention, operational reporting, and decision visibility.", icon: FileCheck2, color: "navy" },
-            ].map((layer, index) => { const Icon = layer.icon; return <button key={layer.code} className={`config-layer ${configFocus === index ? "selected" : ""}`} onClick={() => setConfigFocus(index)}><span className="config-code">{layer.code}</span><span className={`config-icon ${layer.color}`}><Icon size={18} /></span><span className="config-copy"><strong>{layer.title}</strong><small>{layer.note}</small></span><ChevronRight size={17} /></button>; })}</section><aside className="config-inspector">{configurationDetails.slice(configFocus, configFocus + 1).map((item) => <div key={item.title}><span className="eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.statement}</p><div className="inspector-list">{item.examples.map((example) => <span key={example}><CircleCheck size={15} /> {example}</span>)}</div><div className="inspector-note"><Workflow size={16} /><span><strong>Buyer takeaway</strong> This is configured to the client’s process; it is not a black-box automation layer.</span></div></div>)}</aside></div>
-          </section>
-        ) : null}
-
-        {showReadiness ? (
-          <div className="readiness-overlay" role="dialog" aria-modal="true" aria-label="Implementation readiness">
-            <div className="readiness-modal"><button className="modal-close" onClick={() => setShowReadiness(false)}>Close</button><span className="eyebrow">FROM DEMO TO YOUR OPERATING SYSTEM</span><h2>Same flow. Your rules.</h2><p>What you are seeing is a fictional, seller-operated product experience. After a client agrees to proceed, Harborline Command is configured with their account data, users, ownership rules, approved templates, delivery channel, and review process.</p><div className="readiness-list"><div><PackageCheck size={18} /><span><strong>Connect operating records</strong> Client account, product, and order data.</span></div><div><UserRound size={18} /><span><strong>Assign owners and permissions</strong> The right manager and rep see the right actions.</span></div><div><ShieldCheck size={18} /><span><strong>Approve controlled workflows</strong> Templates, eligibility, channel, audit, and exception rules.</span></div></div><button className="primary-button" onClick={() => setShowReadiness(false)}>Return to demo <ArrowRight size={16} /></button></div>
-          </div>
+          <section className="ops-workspace audit-view"><div className="ops-heading compact"><div><p className="ops-eyebrow">CONTROLLED COMMUNICATION RECORD</p><h1>One workflow.<br /><em>Complete evidence.</em></h1><p>Every visible action is tied to a trigger, eligible account, approved template, automation mode, owner, and next decision.</p></div><div className="ops-heading-actions"><button className="ops-secondary" onClick={openWorkflow}><ArrowLeft size={15} /> Return to workflow</button><StatePill state={state} /></div></div><div className="ops-audit-layout"><section className="ops-audit-trail"><div className="ops-audit-intro"><div><p className="ops-eyebrow">EVENT TRAIL · RR-04</p><h2>Juniper Bottle House reorder reminder</h2></div><span>Fictional demo evidence</span></div>{events.map((event, index) => { const Icon = event.icon; return <article className={`ops-audit-event ${event.tone}`} key={event.time + event.title}><div className="ops-event-rail"><span><Icon size={16} /></span>{index < events.length - 1 ? <i /> : null}</div><div><div><strong>{event.title}</strong><time>{event.time}</time></div><p>{event.detail}</p></div></article>; })}</section><aside className="ops-policy-card"><ShieldCheck size={20} /><p className="ops-eyebrow">POLICY VIEW</p><h3>What is recorded</h3><ul><li><Check size={14} /> Rule and trigger condition</li><li><Check size={14} /> Account, owner, and channel</li><li><Check size={14} /> Exact template and automation mode</li><li><Check size={14} /> Send state and reply exception</li><li><Check size={14} /> Named human handoff</li></ul><button className="ops-text-button" onClick={() => setView("replies")}>Open replies & exceptions <ArrowRight size={15} /></button></aside></div></section>
         ) : null}
       </main>
     </div>

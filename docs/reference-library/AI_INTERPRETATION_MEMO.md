@@ -37,7 +37,7 @@ The demo should feel like the product the buyer will receive, but it uses fictio
 | ID | Current decision | Evidence basis | Build implication |
 | --- | --- | --- | --- |
 | **D-01** | Lead with the distributor communication product. | Sandbox Brief; Strategic Analysis. | Build the sales demo around distributor operations, not the financial model. |
-| **D-02** | Begin with reorder risk. | Sandbox Brief priority order. | Make this the first dashboard and account-flow narrative. |
+| **D-02** | Begin with reorder risk. | Sandbox Brief priority order. | Make this the first **controlled communication workflow**: trigger, eligibility, approved message, automation mode, exception, human handoff, and audit trace. |
 | **D-03** | Extend the rep; do not replace the rep. | Strategic Analysis. | Every relevant screen must show a responsible human owner and exception path. |
 | **D-04** | The demo is a realistic product experience, not a slide deck. | Project-lead decision. | Build operational screens and controlled interactions; use fictional data. |
 | **D-05** | Track B financial modeling remains separate. | Financial Model Brief; project roadmap. | Do not add financial-model modules to the active sales demo. |
@@ -67,7 +67,7 @@ The demo should feel like the product the buyer will receive, but it uses fictio
 | --- | --- | --- |
 | Which distributor profile should the demo represent? | Sales partner + project lead | It determines language, account volume, products, and pitch relevance. |
 | Which outreach channel is shown first: email, SMS, or rep-approval queue? | Sales partner + prospective users | It affects trust, control, and the pitch narrative. |
-| Which three buyer pains create the strongest urgency? | Sales partner | It determines the opening dashboard and demo storyline. |
+| Which workflow-specific buyer pains create the strongest urgency? | Sales partner | It determines the active Workflow Center priorities and the first client-specific pilot. |
 | Who will review a future live workflow? | Project lead + client | It sets the boundary between a sales demo and production implementation. |
 
 ## Conflict-resolution rules
