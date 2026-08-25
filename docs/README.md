@@ -13,6 +13,8 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | `DEMO_SCENARIO_AND_PITCH_FLOW.md` | Fictional distributor data, primary account story, seller script, required states, and acceptance test for the live demo. |
 | `SALES_DEMO_RUNBOOK.md` | Ten-minute seller script, difficult-question responses, recovery instructions, and safe product claims. |
 | `PROJECT_LEAD_WORKBOOK.md` | Plain-English guide for explaining the project, leading meetings, and updating the sales partner. |
+| `BUYER_VALIDATION_PACKAGE.md` | The partner-ready interview audience, questions, demo script, evidence criteria, and conversation routine for validating the first workflow. |
+| `PILOT_READINESS_PROTOCOL.md` | The controlled stop/go scorecard and pilot-definition rules after the first interview round. |
 | `EXECUTION_ROADMAP.md` | The original staged roadmap for the product and financial-model tracks. |
 
 ## `strategy/` — Why are we building it this way?
@@ -37,6 +39,8 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | `BACKUP_INSTRUCTIONS.md` | Local backup and portable-archive guidance. |
 | `SESSION_VERIFICATION_CHECKLIST.md` | Required pre-build and post-build checks proving the interpretation layer was used. |
 | `IMPROVEMENT_BACKLOG.md` | Ranked significant improvements, what not to build yet, and the recommended next product build. |
+| `INTERVIEW_EVIDENCE_LOG.md` | Copy-ready per-conversation notes, evidence score, and weekly pattern roll-up template. |
+| `WEEKLY_VALIDATION_ROUTINE.md` | The simple weekly rhythm for preparing conversations, logging evidence, reviewing patterns, and deciding whether to pilot. |
 
 ## `reference-library/` — Where did the product direction come from?
 
