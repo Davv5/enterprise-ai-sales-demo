@@ -38,3 +38,7 @@
 - [ ] Replace the Harborline naming direction with a new candidate brand system aligned to the product’s differentiated promise.
 - [ ] Define the operator-in-the-seat demo narrative, visible business impact, product surfaces, and controlled workflows needed to make the product feel like an indispensable operating system rather than a three-card workflow showcase.
 - [ ] Produce a phased, evidence-aware upgrade plan distinguishing the next premium demo experience from later real-product capabilities.
+
+## AI Operations Lead Direction
+
+- [x] Define the AI Operations Lead product role, explicit human-control boundaries, Daily Operating Brief, seller story, and focused implementation brief for the next demo experience.
