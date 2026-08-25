@@ -21,6 +21,9 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | --- | --- |
 | `RESEARCH_FINDINGS.md` | Source synthesis, major findings, control gates, and validated public-source checks. |
 | `DESIGN_DIRECTION.md` | The visual and brand philosophy behind the existing strategy report. |
+| `COMPETITIVE_RESEARCH_FRAMEWORK.md` | The categories and evaluation criteria used for the current beverage-software market scan. |
+| `COMPETITIVE_RESEARCH_NOTES.md` | Primary-source notes on verified incumbent and adjacent product capabilities. |
+| `COMPETITIVE_LANDSCAPE_AND_HARBORLINE_THESIS.md` | Source-cited market synthesis, differentiation thesis, risks, and validation plan. |
 
 ## `operations/` — How does the team work on it?
 
