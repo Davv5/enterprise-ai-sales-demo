@@ -27,12 +27,14 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | `TASKS.md` | The active project checklist. |
 | `GITHUB_WORKFLOW.md` | The source-of-truth repository rule and cross-tool synchronization routine. |
 | `BACKUP_INSTRUCTIONS.md` | Local backup and portable-archive guidance. |
+| `SESSION_VERIFICATION_CHECKLIST.md` | Required pre-build and post-build checks proving the interpretation layer was used. |
 
 ## `reference-library/` — Where did the product direction come from?
 
 | File or folder | Meaning |
 | --- | --- |
 | `ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md` | The standalone integrated plan connecting the original materials to the current product build. |
+| `AI_INTERPRETATION_MEMO.md` | The explicit current interpretation of evidence, decisions, assumptions, constraints, and open questions. |
 | `originals/` | The four original partner-provided Word documents, preserved without edits. |
 
 ## Source materials

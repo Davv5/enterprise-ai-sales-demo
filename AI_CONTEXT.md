@@ -14,10 +14,12 @@ Build a **premium live sales-demo** for a distributor account-communication prod
 
 ## Read these files in order
 
-1. [`docs/product/PRODUCT_BRIEF.md`](docs/product/PRODUCT_BRIEF.md) — the current scope and build task.
-2. [`docs/operations/AI_IMPLEMENTATION_PROMPTS.md`](docs/operations/AI_IMPLEMENTATION_PROMPTS.md) — the required implementation protocol.
-3. [`docs/operations/DECISION_LOG.md`](docs/operations/DECISION_LOG.md) — prior decisions and current evidence.
-4. [`docs/operations/TASKS.md`](docs/operations/TASKS.md) — active work checklist.
+1. [`docs/reference-library/AI_INTERPRETATION_MEMO.md`](docs/reference-library/AI_INTERPRETATION_MEMO.md) — how to interpret evidence, decisions, assumptions, constraints, and open questions.
+2. [`docs/product/PRODUCT_BRIEF.md`](docs/product/PRODUCT_BRIEF.md) — the current scope and build task.
+3. [`docs/operations/AI_IMPLEMENTATION_PROMPTS.md`](docs/operations/AI_IMPLEMENTATION_PROMPTS.md) — the required implementation protocol.
+4. [`docs/operations/DECISION_LOG.md`](docs/operations/DECISION_LOG.md) — prior decisions and current evidence.
+5. [`docs/operations/TASKS.md`](docs/operations/TASKS.md) — active work checklist.
+6. [`docs/operations/SESSION_VERIFICATION_CHECKLIST.md`](docs/operations/SESSION_VERIFICATION_CHECKLIST.md) — the required session safety check.
 
 ## Non-negotiable product rules
 
@@ -42,4 +44,4 @@ Implement **one visible, testable task** at a time. State the user-visible outco
 
 ## Need more context?
 
-Read [`README.md`](README.md) for the repository map, then [`docs/README.md`](docs/README.md) for document purposes. For the original source documents and the integrated strategy plan, use [`docs/reference-library/README.md`](docs/reference-library/README.md).
+Read [`README.md`](README.md) for the repository map, then [`docs/README.md`](docs/README.md) for document purposes. For the original source documents, integrated strategy plan, and interpretation layer, use [`docs/reference-library/README.md`](docs/reference-library/README.md).

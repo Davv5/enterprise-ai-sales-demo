@@ -9,6 +9,7 @@ This folder preserves the **original materials supplied for the project** and ad
 | File | What it is | Use it when |
 | --- | --- | --- |
 | [`ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md`](ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md) | The integrated roadmap created from the original materials. | You need to understand the overall product direction, build order, roles, controls, or sales-demo objective. |
+| [`AI_INTERPRETATION_MEMO.md`](AI_INTERPRETATION_MEMO.md) | The explicit reasoning layer: current decisions, assumptions, constraints, conflicts, and open questions. | Any AI or developer needs to decide what the original materials mean for current work. |
 
 ## Original materials
 
@@ -22,9 +23,10 @@ This folder preserves the **original materials supplied for the project** and ad
 ## Reading order
 
 1. `../../AI_CONTEXT.md` — quick build rules.
-2. `../product/PRODUCT_BRIEF.md` — the current product and next build task.
-3. `ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md` — the complete project logic.
-4. One original document only if the current task needs evidence or details beyond the synthesis.
+2. `AI_INTERPRETATION_MEMO.md` — interpretation rules and current decisions.
+3. `../product/PRODUCT_BRIEF.md` — the current product and next build task.
+4. `ENTERPRISE_AI_STRATEGY_AND_BUILD_PLAN.md` — the complete project logic.
+5. One original document only if the current task needs evidence or details beyond the synthesis.
 
 ## Important boundary
 

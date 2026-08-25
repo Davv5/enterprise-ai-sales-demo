@@ -49,3 +49,11 @@
 - [x] Add the Enterprise AI Strategy & Build Plan as a standalone reference document.
 - [x] Update the documentation index and AI context with the source-library location.
 - [x] Verify and publish the expanded reference library.
+
+# AI Interpretation Layer — Delivery Checklist
+
+- [x] Define which evidence, decisions, assumptions, constraints, and open questions every AI must distinguish.
+- [x] Create an AI Interpretation Memo linking each original source to its current project meaning.
+- [x] Add a source-to-decision map and a verification checklist for future work sessions.
+- [x] Require the AI entry point and implementation prompt to read the interpretation memo.
+- [x] Verify and publish the interpretation layer.
