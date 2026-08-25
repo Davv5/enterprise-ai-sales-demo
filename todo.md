@@ -23,4 +23,4 @@
 
 ## Fable 5 Handoff
 
-- [ ] Add the max-effort kickoff brief to the canonical repository and synchronize the completed handoff.
+- [x] Add the max-effort kickoff brief to the canonical repository and synchronize the completed handoff.
