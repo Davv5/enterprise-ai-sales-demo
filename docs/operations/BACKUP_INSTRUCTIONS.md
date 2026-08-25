@@ -23,10 +23,10 @@ Enterprise-AI-Project/
 ## How to continue with Fable or Claude
 
 1. Open the copied project folder in your preferred coding environment.
-2. Read `SOURCE_OF_TRUTH.md` first.
-3. Copy the **Start-of-session prompt** from `FABLE_CLAUDE_PROMPTS.md` into your implementation session.
+2. Read `docs/product/PRODUCT_BRIEF.md` first.
+3. Copy the **Start-of-session prompt** from `docs/operations/AI_IMPLEMENTATION_PROMPTS.md` into your implementation session.
 4. Give the AI only the current build task.
-5. Test the result, record the outcome in `DECISION_LOG.md`, and save a dated backup.
+5. Test the result, record the outcome in `docs/operations/DECISION_LOG.md`, and save a dated backup.
 
 ## Important limitations
 

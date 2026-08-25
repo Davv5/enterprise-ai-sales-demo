@@ -36,8 +36,8 @@ The current local archive remains useful as a backup, but **GitHub is now the ca
 
 ```text
 1. Open or clone https://github.com/Davv5/enterprise-ai-sales-demo.git
-2. Read SOURCE_OF_TRUTH.md
-3. Read FABLE_CLAUDE_PROMPTS.md
+2. Read `docs/product/PRODUCT_BRIEF.md`
+3. Read `docs/operations/AI_IMPLEMENTATION_PROMPTS.md`
 4. Implement only the Current Build Task
 5. Test the demo flow
 6. Commit and push the working change

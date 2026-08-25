@@ -4,7 +4,7 @@
 
 We are building a **premium live sales-demo version** of an account-communication product for wine and spirits distributors. A sales partner should be able to open the system in a client meeting and demonstrate exactly how a distributor would identify reorder risk, communicate through an approved workflow, preserve a record of that activity, and return complex conversations to the assigned sales rep.
 
-**Canonical code repository:** `https://github.com/Davv5/enterprise-ai-sales-demo.git` on branch `main`. Read `GITHUB_SOURCE_OF_TRUTH.md` before starting an implementation session in another environment.
+**Canonical code repository:** `https://github.com/Davv5/enterprise-ai-sales-demo.git` on branch `main`. Read [`../operations/GITHUB_WORKFLOW.md`](../operations/GITHUB_WORKFLOW.md) before starting an implementation session in another environment.
 
 The demo should look and behave like the product a client will buy. It uses fictional or preloaded data. After a sale, the same experience would be configured with the client’s users, data, business rules, approved communication channel, and controls.
 

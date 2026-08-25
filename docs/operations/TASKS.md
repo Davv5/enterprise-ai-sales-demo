@@ -20,7 +20,7 @@
 - [x] Define what Manus owns and what Claude reviews in the project workflow.
 - [x] Create a concise project handoff guide and reusable Claude prompts.
 - [x] Assemble a local archive of the project source, working documents, and uploaded source materials.
-- [ ] Deliver the workflow guide and the downloadable archive.
+- [x] Deliver the workflow guide and the downloadable archive.
 
 # Tool-Agnostic Local Handoff — Delivery Checklist
 
@@ -35,3 +35,10 @@
 - [x] Confirm the project source is ready for export without local build artifacts.
 - [x] Connect or create the project repository under the user’s GitHub account.
 - [x] Add the plain-English GitHub routine to the local workflow documentation.
+
+# AI-Friendly Repository Organization — Delivery Checklist
+
+- [x] Audit the current file layout and identify documents that should be grouped.
+- [x] Create a concise root guide and an AI-first entry-point file.
+- [x] Move project strategy, workflow, and record documents into intuitive folders.
+- [x] Verify the moved documents are referenced correctly and publish the clean structure.

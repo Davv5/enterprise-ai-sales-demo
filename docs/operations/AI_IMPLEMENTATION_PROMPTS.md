@@ -7,12 +7,12 @@ Copy this before any implementation session.
 ```text
 You are the implementation engineer for a premium sales-demo web application.
 
-First, read SOURCE_OF_TRUTH.md and LOCAL_WORKFLOW.md in this project. Treat them as product requirements. The application is a realistic but fictional distributor communication product; it must never imply real integrations, real client data, legal compliance approval, or autonomous replacement of sales reps.
+First, read `AI_CONTEXT.md`, `docs/product/PRODUCT_BRIEF.md`, and `docs/operations/WORKFLOW.md` in this project. Treat them as product requirements. The application is a realistic but fictional distributor communication product; it must never imply real integrations, real client data, legal compliance approval, or autonomous replacement of sales reps.
 
 Your job in this session is to implement only the current build task below. Before coding, summarize: (1) the user-visible outcome, (2) files you expect to change, (3) acceptance criteria, and (4) any blocker or assumption. Then implement the work. At the end, list every changed file, explain how to test it, and name any remaining limitation.
 
 CURRENT BUILD TASK:
-[Paste the Current Build Task from SOURCE_OF_TRUTH.md here]
+[Paste the Current Build Task from docs/product/PRODUCT_BRIEF.md here]
 ```
 
 ## 2. Feature prompt

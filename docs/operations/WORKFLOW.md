@@ -21,15 +21,15 @@ Pick an outcome a client could see in a five-minute demonstration. Examples incl
 
 ### 2. Write or update the build brief
 
-Open `SOURCE_OF_TRUTH.md`. Add the desired outcome under **Current Build Task**, including what success looks like and what must not change. This file is the context you give Fable/Claude first.
+Open [`../product/PRODUCT_BRIEF.md`](../product/PRODUCT_BRIEF.md). Add the desired outcome under **Current Build Task**, including what success looks like and what must not change. This file is the context you give Fable/Claude first.
 
 ### 3. Give Fable/Claude one task
 
-Copy the appropriate prompt from `FABLE_CLAUDE_PROMPTS.md`, paste in the task from the source-of-truth file, and attach or paste the relevant code only if the tool cannot access your local folder. Ask it to change the code, explain the files changed, and give you exact steps to test the work.
+Copy the appropriate prompt from [`AI_IMPLEMENTATION_PROMPTS.md`](AI_IMPLEMENTATION_PROMPTS.md), paste in the task from the product brief, and attach or paste the relevant code only if the tool cannot access your local folder. Ask it to change the code, explain the files changed, and give you exact steps to test the work.
 
 ### 4. Test the output as a salesperson would
 
-Do not only look at the code. Open the demo and perform the click sequence your partner would use in a meeting. Check the happy path first, then one obvious failure or exception state. Record what worked and what looked confusing in `DECISION_LOG.md`.
+Do not only look at the code. Open the demo and perform the click sequence your partner would use in a meeting. Check the happy path first, then one obvious failure or exception state. Record what worked and what looked confusing in [`DECISION_LOG.md`](DECISION_LOG.md).
 
 ### 5. Save the working version locally
 
@@ -48,13 +48,12 @@ Send Manus four things: a screenshot or short screen recording, what was built, 
 | Folder or file | Why it exists | Do not delete it because |
 | --- | --- | --- |
 | `client/` | The actual web application source. | This is the demo you will show during a sales meeting. |
-| `source-materials/` | Original briefs, video, and partner research. | This proves where the product direction came from. |
-| `SOURCE_OF_TRUTH.md` | Current product context and the next implementation task. | It prevents new AI chats from losing context. |
-| `FABLE_CLAUDE_PROMPTS.md` | Reusable prompts for implementation and review. | It keeps requests specific and avoids random rewrites. |
-| `DECISION_LOG.md` | A record of what you decided, why, and who owns the next move. | It becomes your “show your work” record. |
-| `Project_Lead_Workbook.md` | Plain-English guide for running the project and updating your partner. | It tells you how to explain the product and your role. |
-| `LOCAL_WORKFLOW.md` | This operating routine. | It tells you how the parts work together. |
-| `GITHUB_SOURCE_OF_TRUTH.md` | The repository location and shared-code routine. | It prevents separate tools from building from different versions. |
+| `docs/product/PRODUCT_BRIEF.md` | Current product context and the next implementation task. | It prevents new AI chats from losing context. |
+| `docs/operations/AI_IMPLEMENTATION_PROMPTS.md` | Reusable prompts for implementation and review. | It keeps requests specific and avoids random rewrites. |
+| `docs/operations/DECISION_LOG.md` | A record of what you decided, why, and who owns the next move. | It becomes your “show your work” record. |
+| `docs/product/PROJECT_LEAD_WORKBOOK.md` | Plain-English guide for running the project and updating your partner. | It tells you how to explain the product and your role. |
+| `docs/operations/WORKFLOW.md` | This operating routine. | It tells you how the parts work together. |
+| `docs/operations/GITHUB_WORKFLOW.md` | The repository location and shared-code routine. | It prevents separate tools from building from different versions. |
 
 ## Non-negotiable rules
 
@@ -68,4 +67,4 @@ Send Manus four things: a screenshot or short screen recording, what was built, 
 
 ## Shared-code rule
 
-The application code now has one canonical home: `https://github.com/Davv5/enterprise-ai-sales-demo.git`. Before any external implementation session, start from its latest `main` branch; after testing a completed change, return that change to `main`. Read `GITHUB_SOURCE_OF_TRUTH.md` for the exact routine.
+The application code now has one canonical home: `https://github.com/Davv5/enterprise-ai-sales-demo.git`. Before any external implementation session, start from its latest `main` branch; after testing a completed change, return that change to `main`. Read [`GITHUB_WORKFLOW.md`](GITHUB_WORKFLOW.md) for the exact routine.
