@@ -20,3 +20,7 @@
 - [x] Replace the two placeholder workflow cards with full interactive workflow experiences.
 - [x] Extend shared Replies & Exceptions and Audit & Policy to reflect all three workflow types.
 - [x] Test direct pitch states for each workflow and update the seller runbook.
+
+## Fable 5 Handoff
+
+- [ ] Add the max-effort kickoff brief to the canonical repository and synchronize the completed handoff.
