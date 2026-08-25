@@ -28,3 +28,13 @@
 ## Claude Demo Integrity Slice — Independent Review
 
 - [x] Pull Claude’s completed integrity-slice changes, independently verify the control fixes and user paths, and document the review outcome.
+
+## Product Foundation Clarification
+
+- [ ] Explain the non-demo Harborline operating model and recommend a staged production architecture covering application runtime, data, LLM role, hosting, integrations, human approvals, and audit controls.
+
+## Brand and Immersive Demo Reset
+
+- [ ] Replace the Harborline naming direction with a new candidate brand system aligned to the product’s differentiated promise.
+- [ ] Define the operator-in-the-seat demo narrative, visible business impact, product surfaces, and controlled workflows needed to make the product feel like an indispensable operating system rather than a three-card workflow showcase.
+- [ ] Produce a phased, evidence-aware upgrade plan distinguishing the next premium demo experience from later real-product capabilities.
