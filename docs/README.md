@@ -28,6 +28,7 @@ The documentation is grouped by **why you would open it**, not by when it was cr
 | `GITHUB_WORKFLOW.md` | The source-of-truth repository rule and cross-tool synchronization routine. |
 | `BACKUP_INSTRUCTIONS.md` | Local backup and portable-archive guidance. |
 | `SESSION_VERIFICATION_CHECKLIST.md` | Required pre-build and post-build checks proving the interpretation layer was used. |
+| `IMPROVEMENT_BACKLOG.md` | Ranked significant improvements, what not to build yet, and the recommended next product build. |
 
 ## `reference-library/` — Where did the product direction come from?
 

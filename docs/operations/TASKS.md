@@ -57,3 +57,10 @@
 - [x] Add a source-to-decision map and a verification checklist for future work sessions.
 - [x] Require the AI entry point and implementation prompt to read the interpretation memo.
 - [x] Verify and publish the interpretation layer.
+
+# Significant Improvement Audit — Delivery Checklist
+
+- [x] Assess product-demo readiness, sales workflow, AI implementation reliability, and project continuity.
+- [x] Separate essential improvements from later enhancements.
+- [x] Define the recommended first improvement and its success condition.
+- [x] Deliver the prioritized improvement backlog.
