@@ -98,7 +98,22 @@
 - [x] Rebuild the home experience as a Workflow Center rather than a generic command dashboard.
 - [x] Test the full event-to-escalation path against the original Sandbox Build Brief.
 
-# Three-Workflow Sales Demo — Active Checklist
+# Demo Integrity Slice — Active Checklist
+
+Source: `FABLE_FIRST_REVIEW.md` (2026-08-25). Every item below was reproduced against `main` @ `1c6486c`; each is independently testable.
+
+- [ ] Model a real drafted state for the Reorder workflow so "Record draft for Renee" records a draft event, not a simulated send, and the audit trail matches the clicks exactly.
+- [ ] Close the promo-gate URL loophole: no reachable state may show "Policy-gated distribution simulated" without a recorded gate event.
+- [ ] Correct state-pill truthfulness: style the drafted pill, show "Needs assignment" until an exception is assigned, and use policy language for the promo post-gate state.
+- [ ] Fix the automation-mode card grid so mode descriptions no longer wrap one word per line in the 18px icon column.
+- [ ] Replace the stale browser-tab identity in `client/index.html`: Harborline title, honest description, working favicon (current one 404s), in dev and production build.
+- [ ] Load Manrope and IBM Plex Mono so the documented typography system actually renders.
+- [ ] Restore navigation, Reset demo, and a persistent sandbox disclosure below 1024px; make Accounts reachable on mobile.
+- [ ] Reword the "LIVE DECISION RECORD" stamp to avoid the word "live"; decide (with the project lead) whether dead chrome (search, bell, status filter) is removed or made honest.
+- [ ] Re-verify all runbook recovery URLs, typecheck, and production build; record a corrective decision-log entry for the mobile-verification claim.
+- [ ] Project-lead decision requested: keep or remove the Manus runtime/analytics injection from client-facing pitch builds (privacy and payload trade-off documented in the review).
+
+# Three-Workflow Sales Demo — Completed Checklist
 
 - [x] Define the Allocation Alert and Policy-Gated Price/Promotion workflow scenarios.
 - [x] Design and build each scenario as a full controlled communication flow.
