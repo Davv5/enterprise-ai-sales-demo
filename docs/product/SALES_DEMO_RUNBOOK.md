@@ -14,7 +14,7 @@ The demonstration uses fictional data and simulated delivery states. It is not c
 | --- | --- |
 | **Starting state** | Open `/` and confirm that **Workflow Center** displays all three workflows: Reorder Reminder, New Allocation Alert, and Price / Promotion Notice. |
 | **Demo order** | Show Reorder first, Allocation second, and the Policy-Gated Notice third. The sequence moves from routine coverage to scarce inventory to policy-sensitive communication. |
-| **Reset control** | If an interaction goes wrong, select **Reset demo** in the lower-left rail. |
+| **Reset control** | If an interaction goes wrong, select **Reset demo** in the command rail: lower-left on a laptop, top-of-page on a tablet or phone. |
 | **Truthfulness** | Say that all accounts, contacts, products, program details, terms references, and delivery states are fictional/simulated. |
 | **Opening question** | Ask: “Which retailer communication is most likely to be missed, inconsistently handled, or hard to govern on your team today?” |
 
@@ -37,6 +37,7 @@ These address-bar states are controlled demo entry points, not production links.
 | --- | --- |
 | `/` | Normal start with all three workflow cards. |
 | `/#workflow` | Begin directly at the Juniper Reorder Reminder. |
+| `/?demo=drafted#workflow` | Resume after Renee’s availability-check draft is recorded (Draft-for-rep mode). |
 | `/?demo=exception#replies` | Begin at the Reorder Reminder’s price exception. |
 | `/?workflow=allocation#workflow` | Begin at the Allocation Alert draft. |
 | `/?workflow=allocation&demo=drafted#workflow` | Resume after Marcus’s interest-check draft is recorded. |
