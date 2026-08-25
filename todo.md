@@ -43,3 +43,10 @@
 
 - [x] Define the AI Operations Lead product role, explicit human-control boundaries, Daily Operating Brief, seller story, and focused implementation brief for the next demo experience.
 - [x] Build, test, document, checkpoint, and synchronize the Daily Operating Brief premium demo slice, including the AI Operations Lead briefing, operational posture, decision queue, operating memory, and state-aware workflow drill-downs.
+
+## Beverage-Distributor Website Version
+
+- [x] Preserve the approved generic Communication Ops website as an immutable baseline and Git tag.
+- [x] Create a separate beverage-distributor website copy without changing the baseline site.
+- [x] Refine positioning, scenarios, and product language around beverage-distributor account rhythms and owned communication decisions.
+- [x] Validate, checkpoint, and synchronize the beverage-specific version as an independent deliverable.
