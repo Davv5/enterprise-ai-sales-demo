@@ -104,6 +104,18 @@ The replacement should be short, ownable, modern, and not so alcohol-specific th
 
 The name-selection process should generate several genuinely different candidate families, select a direction based on the desired product feeling, and only then perform a domain and trademark review. Until that decision, use **“the product”** or **“TBD”** in newly written strategy work rather than deepening the old name.
 
+### Exploratory naming territories
+
+These are **creative starting points only**. They have not been screened for trademark, domain, company-name, or product-name availability. Their purpose is to help choose the emotional and strategic direction before any identity work begins.
+
+| Territory | Product feeling | Exploratory candidates | Why it may fit |
+| --- | --- | --- | --- |
+| **Accountable stewardship** | Calm, premium, responsible, human. | **Mantle**, **Steward**, **Corda** | Centers the product on carrying responsibility well—especially when a commercial decision needs a named person. |
+| **The decisive moment** | Crisp, operational, selective, clear. | **Crux**, **Vero**, **Meridian** | Frames the product as the place where a signal becomes a deliberate, traceable next action. |
+| **Relationship continuity** | Connected, contextual, relationship-first. | **Thread**, **Tandem**, **Relay** | Emphasizes that the account history, message, reply, and human handoff remain connected rather than fragmented across systems. |
+
+The strongest initial territory is **Accountable stewardship**. It is most differentiated from generic “AI sales” language and best supports the product’s promise that the system helps a team act while a person retains responsibility. **Mantle** is the current leading creative candidate because it is concise, premium, and suggests responsible ownership; it is not yet an approved product name.
+
 ## Phased upgrade plan
 
 ### Phase A — Reframe the premium demo
