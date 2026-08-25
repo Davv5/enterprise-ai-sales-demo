@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Harborline route-and-node mark: sea-green verified nodes routed to a coral human-decision node. -->
+  <rect width="32" height="32" rx="7" fill="#14283a"/>
+  <path d="M7 23h7l6-13h5" fill="none" stroke="#59ae94" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="7" cy="23" r="3" fill="#59ae94"/>
+  <circle cx="14" cy="23" r="2" fill="#59ae94"/>
+  <circle cx="25" cy="10" r="3.5" fill="#e6533c"/>
+</svg>
