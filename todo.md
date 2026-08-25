@@ -24,3 +24,7 @@
 ## Fable 5 Handoff
 
 - [x] Add the max-effort kickoff brief to the canonical repository and synchronize the completed handoff.
+
+## Claude Demo Integrity Slice — Independent Review
+
+- [x] Pull Claude’s completed integrity-slice changes, independently verify the control fixes and user paths, and document the review outcome.
