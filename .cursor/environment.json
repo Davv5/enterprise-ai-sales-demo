@@ -1,0 +1,17 @@
+{
+  "name": "Harborline Communication Ops",
+  "install": "pnpm install --frozen-lockfile",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "pnpm dev",
+      "description": "Vite dev server for the primary sales-demo app, served on http://localhost:3000 with hot module reload."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 3000
+    }
+  ]
+}
