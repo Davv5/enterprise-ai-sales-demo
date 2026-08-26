@@ -65,6 +65,7 @@
 
 ## Partner Operating Hub Discovery
 
-- [ ] Define the purpose, partner roles, high-value operating moments, information boundaries, and phased build plan for a shared nontechnical operating hub that complements—not replaces—the client-facing product demo.
-- [ ] Re-evaluate the Partner Operating Hub blueprint against the founders’ actual working relationship and simplify or correct it before selecting a first hub experience.
-- [ ] Redefine the Partner Operating Hub as a transparency-first product-building window that shows meaningful behind-the-scenes progress, decisions, research, releases, and remaining uncertainty without exposing technical noise.
+- [x] Define the purpose, partner roles, high-value operating moments, information boundaries, and phased build plan for a shared nontechnical operating hub that complements—not replaces—the client-facing product demo.
+- [x] Re-evaluate the Partner Operating Hub blueprint against the founders’ actual working relationship and simplify or correct it before selecting a first hub experience.
+- [x] Redefine the Partner Operating Hub as a transparency-first product-building window that shows meaningful behind-the-scenes progress, decisions, research, releases, and remaining uncertainty without exposing technical noise.
+- [x] Design, build, validate, document, checkpoint, and synchronize the first Partner Build Window visual experience around the approved north star: what we are becoming, what has been accomplished, why it matters, and where the market-facing partner fits.

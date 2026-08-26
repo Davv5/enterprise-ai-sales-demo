@@ -13,6 +13,14 @@ Build a **premium live sales-demo** for a distributor account-communication prod
 5. The Policy-Gated Notice demonstrates locked audience → terms-packet reference → review gate → simulated distribution → eligibility exception.
 6. Every workflow records the same evidence chain: trigger, audience/eligibility, message boundary, control mode, action, exception, and accountable owner.
 
+## The internal partner layer
+
+The Partner Build Window at `/partner` is a separate, internal founder-facing translation layer. It shows meaningful product progress, market learning, releases, unresolved proof, and founder context in business language. It is deliberately distinct from the client-facing `/` sales demo.
+
+- It is a static, share-safe visual experience—not an authenticated private workspace, CRM, technical console, or client product.
+- It must not show raw GitHub activity, agent prompts, build logs, sensitive prospect data, fabricated buyer activity, or unsupported commercial claims.
+- Its north star is: **“I can see what we are becoming, what has been accomplished, why it matters, and where I fit.”**
+
 ## Read these files in order
 
 1. [`docs/reference-library/AI_INTERPRETATION_MEMO.md`](docs/reference-library/AI_INTERPRETATION_MEMO.md) — how to interpret evidence, decisions, assumptions, constraints, and open questions.
@@ -22,10 +30,12 @@ Build a **premium live sales-demo** for a distributor account-communication prod
 5. [`docs/product/MULTI_WORKFLOW_SUITE_SPEC.md`](docs/product/MULTI_WORKFLOW_SUITE_SPEC.md) — the active three-workflow suite, control boundaries, and fictional scenario details.
 6. [`docs/product/OPERATOR_EXPERIENCE_AND_NAMING_RESET.md`](docs/product/OPERATOR_EXPERIENCE_AND_NAMING_RESET.md) — the approved shift toward an immersive operator experience and provisional brand-reset rules.
 7. [`docs/product/AI_OPERATIONS_LEAD_DAILY_BRIEF_SPEC.md`](docs/product/AI_OPERATIONS_LEAD_DAILY_BRIEF_SPEC.md) — the active specification for the new Daily Operating Brief experience and the AI Operations Lead control boundaries.
-8. [`docs/operations/AI_IMPLEMENTATION_PROMPTS.md`](docs/operations/AI_IMPLEMENTATION_PROMPTS.md) — the required implementation protocol.
-9. [`docs/operations/DECISION_LOG.md`](docs/operations/DECISION_LOG.md) — prior decisions and current evidence.
-10. [`docs/operations/TASKS.md`](docs/operations/TASKS.md) — active work checklist.
-11. [`docs/operations/SESSION_VERIFICATION_CHECKLIST.md`](docs/operations/SESSION_VERIFICATION_CHECKLIST.md) — the required session safety check.
+8. [`docs/product/PARTNER_OPERATING_HUB_BLUEPRINT.md`](docs/product/PARTNER_OPERATING_HUB_BLUEPRINT.md) — the boundary and content model for the transparency-first internal Partner Build Window.
+9. [`docs/product/PARTNER_BUILD_WINDOW_IMPLEMENTATION_SPEC.md`](docs/product/PARTNER_BUILD_WINDOW_IMPLEMENTATION_SPEC.md) — route, interaction, content, and acceptance criteria for the implemented `/partner` experience.
+10. [`docs/operations/AI_IMPLEMENTATION_PROMPTS.md`](docs/operations/AI_IMPLEMENTATION_PROMPTS.md) — the required implementation protocol.
+11. [`docs/operations/DECISION_LOG.md`](docs/operations/DECISION_LOG.md) — prior decisions and current evidence.
+12. [`docs/operations/TASKS.md`](docs/operations/TASKS.md) — active work checklist.
+13. [`docs/operations/SESSION_VERIFICATION_CHECKLIST.md`](docs/operations/SESSION_VERIFICATION_CHECKLIST.md) — the required session safety check.
 
 ## Non-negotiable product rules
 
@@ -47,6 +57,7 @@ Implement **one visible, testable task** at a time. State the user-visible outco
 | Need | Primary location |
 | --- | --- |
 | Main sales-demo page | `client/src/pages/Home.tsx` |
+| Internal Partner Build Window | `client/src/pages/PartnerBuildWindow.tsx` |
 | Global visual system | `client/src/index.css` |
 | Application routing | `client/src/App.tsx` |
 | Reusable interface components | `client/src/components/` |

@@ -128,3 +128,10 @@ Source: `FABLE_FIRST_REVIEW.md` (2026-08-25). Every item below was reproduced ag
 - [x] Build the Daily Operating Brief with a simulated operating posture, priority account moments, named human decision queue, and Operating Memory preview.
 - [x] Preserve the Reorder, Allocation, Policy-Gated Notice, exception, account, audit, Reset demo, and direct recovery paths as governed drill-downs.
 - [x] Verify desktop and mobile presentation, direct recovery states, typecheck, production build, repository integrity, and seller-runbook alignment.
+
+# Partner Build Window — Completed Checklist
+
+- [x] Define the internal-founder boundary: a share-safe product-building translation layer, not a client product, CRM, developer console, or private workspace.
+- [x] Build the separate `/partner` route with Current Chapter, Build Window, Product Story Map, Market Loop, and Founder Lens narrative surfaces.
+- [x] Preserve the public sales demo at `/` and provide a clear return path between the two experiences.
+- [x] Verify desktop/mobile presentation, selected Build Window movement interaction, direct routing, typecheck, and production build.
