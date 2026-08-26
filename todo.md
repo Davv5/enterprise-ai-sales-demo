@@ -71,3 +71,4 @@
 - [x] Design, build, validate, document, checkpoint, and synchronize the first Partner Build Window visual experience around the approved north star: what we are becoming, what has been accomplished, why it matters, and where the market-facing partner fits.
 - [ ] Separate the Partner Build Window from the client-facing demo as a distinct founder product with its own page identity, public entry point, and release path.
 - [ ] Rewrite the founder-product copy and information architecture around concrete partnership utility: product intelligence, current build work, market activity, decisions, evidence, and action—not abstract narrative alone.
+- [ ] Build the separate Company Pulse founder product around the approved first behavior: the market-facing partner can always see meaningful build progress, what changed, why it matters, what remains unproven, and what is ready to use.
