@@ -1,54 +1,48 @@
-# Harborline Reference Architecture and Integration Sandbox
+# Harborline Google Cloud Reference Architecture
 
 ## Purpose
 
-This document turns the existing sales demonstration into a credible **technical-stack reference build**. The objective is to show the real application shape, system boundaries, message contracts, and operational controls that a production Harborline implementation would use, without representing any external service as connected or sending any customer communication.
+This reference architecture explains the **Google Cloud–native build path** for Harborline. It demonstrates how a governed communication-operations layer can connect systems of record to an approved communication path without acting as a CRM, ERP, inventory system, pricing engine, allocation engine, or autonomous seller.
 
-> **Product boundary:** Harborline is a governed communication-operations layer. It complements systems of record; it does not replace CRM, ERP, ordering, inventory, pricing, allocation, or legal-compliance systems.
+> **Core principle:** The platform may detect a signal, apply visible rules, prepare a bounded draft, and preserve evidence. A named person retains commercial judgment; the application never invents price, quantity, terms, eligibility exceptions, or an external send authority.
 
-## Selected implementation posture
+## Target stack
 
-The reference build follows the current repository’s Cloudflare delivery path but evolves the static demo into a thin application shell with a dedicated edge API, durable workflow execution, asynchronous event handling, and auditable data model. The public `/stack` experience uses fixture-backed responses and labels every event as a sandbox event. The server reference layer uses the same event contracts a production Worker would own, letting the visual demo and technical proof reinforce one another.
+The target implementation prioritizes serverless Google Cloud services that match the product’s event-driven, approval-gated shape. The current public page remains a fixture-backed visual reference; it deliberately does not connect to live customer systems or invoke a provider.
 
-| Concern | Reference technology | Why it belongs in the product | Showcase proof |
-| --- | --- | --- | --- |
-| Product interface | **React 19, TypeScript, Vite, Tailwind CSS, Wouter** | Retains the existing, fast product interface and controlled route structure. | A new `/stack` route provides interactive system tracing beside the sales demo. |
-| Web delivery | **Cloudflare Pages** | Matches the existing GitHub-triggered demo deployment. | The UI remains static-deployable, with safe fixture fallback if the optional reference API is absent. |
-| API and integration façade | **Cloudflare Workers + Hono-style TypeScript handlers** | Keeps provider credentials, webhook verification, and workflow commands outside the browser. | Express reference endpoints mirror Worker request/response and event shapes for local/demo deployment. |
-| System of record | **Cloudflare D1 + Drizzle ORM** | Provides a relational store for account references, workflow versions, approvals, communications, exceptions, and immutable audit events. | The stack view exposes the bounded schema and shows which record each step writes. |
-| Durable orchestration | **Cloudflare Workflows** | A workflow can pause for rep approval, resume from an approved event, and retry safe integration steps instead of depending on a long HTTP request. | The trace visibly advances from trigger through approval, delivery receipt, and exception handoff. |
-| Asynchronous event transport | **Cloudflare Queues with a dead-letter queue** | Decouples ingestion, delivery, reply handling, and audit persistence; failures remain observable. | Each trace exposes an event envelope, queue status, retry posture, and failure boundary. |
-| AI service boundary | **Server-side structured-output LLM adapter** | Supports bounded drafting and reply classification only. It cannot determine prices, allocation, policy exceptions, or delivery. | The trace displays a typed, policy-scoped draft/classification result and the required human control. |
-| Source-system adapters | **CRM, ERP/order, inventory, and identity adapter interfaces** | Distributor installations differ; Harborline must normalize source events rather than claim it owns all source data. | Clickable source cards show read-only input contracts and adapter status, not invented integrations. |
-| Delivery adapters | **Approved email/SMS provider interfaces** | Channel and consent must be enforced at a server-side gateway. | The sandbox records a simulated receipt only; no live delivery provider is configured. |
-| Observability and secrets | **Cloudflare logs/analytics, OpenTelemetry-compatible events, Worker secrets** | Gives operators diagnostics while keeping credentials and client data out of the browser and repository. | The stack view highlights redaction, correlation IDs, audit events, and server-only secrets. |
+| Concern | Google Cloud service | Reference responsibility |
+| --- | --- | --- |
+| Product UI and integration API | **Cloud Run** | Serves the React application and authenticated API/webhook façade from a containerized service. Cloud Run is fully managed and serverless, and it can host services, jobs, and worker processes. [1] |
+| Source-event transport | **Pub/Sub** | Decouples inbound CRM/ERP/order/inventory events from downstream processing. Topics, subscriptions, retry policy, and a dead-letter topic form the controlled handoff. [2] |
+| Durable workflow | **Google Cloud Workflows** | Orchestrates the versioned business process: evaluate eligibility, prepare a bounded draft, pause at a human approval callback, resume after a trusted approval, and write evidence. Workflows can hold state, retry, and wait for callbacks. [3] |
+| Deterministic policy logic | **Cloud Run policy service** | Evaluates audience rule, template version, channel, consent, policy state, and action boundary in code rather than in an LLM prompt. |
+| AI boundary | **Vertex AI Gemini** | Creates schema-bound draft or exception-classification output from allowed fields only. Gemini has no provider credentials, no ability to emit delivery commands, and no authority to change a business decision. [4] |
+| Operational and audit records | **Cloud SQL for PostgreSQL** | Stores tenant-scoped workflow runs, approvals, communication attempts, exceptions, versioned policies, and append-only audit events. Cloud SQL provides managed PostgreSQL operations including backups, monitoring, and logging. [5] |
+| Secrets and external connectors | **Secret Manager + service accounts** | Keeps API keys, webhook secrets, and connector credentials out of the browser and source control, with IAM-scoped access and versioned secret lifecycle. [6] |
+| Platform observability | **Cloud Logging + Cloud Audit Logs** | Captures Cloud Run, Workflows, and platform activity, while application-level audit events preserve the product evidence trail. [3] |
+| Periodic trigger checks | **Cloud Scheduler** | Starts controlled routines such as reorder-cadence evaluation without an always-on worker. [3] |
+| Build and deployment | **Cloud Build / Cloud Deploy** | A later production release path can build the Cloud Run container from the GitHub repository and promote explicitly reviewed releases. |
 
-Cloudflare documents Workers as a serverless platform for full-stack applications and integrations, with bindings for durable workflows, queues, and data products.[1] Cloudflare Workflows support multi-step durable execution, waiting for external events or approval, retries, and observability—features well aligned with human approval gates.[2] D1 is a managed serverless SQL store available from Workers and Pages, and Queues supports asynchronous delivery, batching, retries, and dead-letter paths.[3] [4]
+## Visual workflow: allocation alert
 
-## The reference workflow: allocation alert
+The interactive stack explorer uses **New Allocation Alert (AL-09)** as the reference path. It is deliberately narrow: the product can determine which accounts meet an approved rule and prepare an interest check, but it cannot promise an allocation or set commercial terms.
 
-The interactive stack trace will use **New Allocation Alert (AL-09)** because it proves the full governed loop without asserting that the product makes allocation or commercial decisions. The trace has a fixed sample account and a deterministic outcome.
+| Stage | Google Cloud path | Governing boundary |
+| --- | --- | --- |
+| 1. Signal | ERP or inventory adapter → authenticated **Cloud Run** ingestion API | The ERP/inventory system remains authoritative for allocation and availability. |
+| 2. Connect | Cloud Run API → versioned event → **Pub/Sub** topic | A verified source is normalized and decoupled from later work. Failures route to a controlled dead-letter topic. |
+| 3. Govern | Pub/Sub consumer → **Workflows** → Cloud Run rule service → **Vertex AI** adapter | Deterministic policy checks precede a schema-bound AI draft. Prohibited fields include price, quantity, terms, and allocation commitments. |
+| 4. Decide | Workflows callback waits for the named rep’s approval event | A person accepts or rejects a bounded action. The callback is not a browser bypass; the API validates role, scope, policy, and workflow state. |
+| 5. Prove | Approved command → optional Cloud Run delivery adapter → **Cloud SQL** audit record and **Cloud Logging** | The public reference simulates a receipt only. Any later production send must retain the approval, channel, consent, template version, receipt, exception state, and correlation ID. |
 
-| Step | Produces | Control boundary | Event contract |
-| --- | --- | --- | --- |
-| 1. Source event | Inventory allocation signal and product reference | Inventory remains authoritative in the source system. | `allocation.recorded.v1` |
-| 2. Audience evaluation | Eligible-account list with rule version | Eligibility is deterministic and visible; exceptions do not auto-pass. | `audience.evaluated.v1` |
-| 3. Draft preparation | Structured message proposal with prohibited fields absent | AI may draft within a template; it cannot add quantity, price, terms, or a commitment. | `draft.prepared.v1` |
-| 4. Human approval | Named rep approval request | A rep must approve the send path. | `approval.requested.v1` |
-| 5. Simulated delivery | Fixture receipt and correlation ID | The sandbox never calls an email or SMS provider. | `delivery.simulated.v1` |
-| 6. Non-routine reply | Exception record assigned to the named owner | AI only classifies and routes; no commercial response is produced. | `exception.assigned.v1` |
-| 7. Audit evidence | Append-only sequence of event records | Each record retains actor, workflow version, correlation ID, and redaction status. | `audit.appended.v1` |
+## Event and data contracts
 
-## Data and event contracts
-
-Production data models should remain narrowly scoped: external references and minimal operational metadata are stored locally; systems of record retain their primary data ownership. The initial tables are `accounts`, `contacts`, `workflow_definitions`, `workflow_runs`, `approvals`, `communication_attempts`, `exceptions`, and `audit_events`. Use stable external IDs, versioned rule/template identifiers, and one correlation ID per workflow run.
-
-Every integration event should follow a versioned envelope:
+Every integration event should carry a stable correlation ID, a versioned name, a tenant ID, an actor, a sandbox/production classification, and redaction posture. Provider-specific payloads should terminate in a Cloud Run adapter and be converted to a canonical Harborline event before Workflows or other domain services consume them.
 
 ```ts
 type HarborlineEvent<T> = {
   id: string;
-  name: string;                 // e.g. "audience.evaluated.v1"
+  name: string; // e.g. "audience.evaluated.v1"
   occurredAt: string;
   correlationId: string;
   tenantId: string;
@@ -59,25 +53,25 @@ type HarborlineEvent<T> = {
 };
 ```
 
-Provider adapters should consume and produce these contract types, rather than leaking provider-specific objects into the workflow engine. Webhook handlers must verify provider signatures, write a canonical event, return quickly, and hand off longer work to a queue or durable workflow. Client-side code never has provider API keys, direct delivery credentials, or permission to bypass a policy or approval check.
+Cloud SQL should own only the local operational model: `accounts`, `contacts`, `workflow_definitions`, `workflow_runs`, `approvals`, `communication_attempts`, `exceptions`, and `audit_events`. Source-system identifiers remain external references. The CRM, ERP, inventory, and delivery platforms retain their primary data ownership.
 
-## Clickable scope
+## Credit-conscious rollout
 
-The `/stack` route will be built as an interactive architecture explorer rather than a slide or a generic admin dashboard. A visitor will select the allocation workflow and press **Run sandbox trace**. The UI will progressively reveal the source signal, eligible audience, constrained AI output, rep approval gate, simulated delivery receipt, exception routing, and audit ledger. Visitors can inspect an event payload at each step and toggle between a system diagram, data records, and control explanation.
+The initial public demonstrator uses static fixture data and has no Google Cloud runtime dependency. The first connected proof of concept should introduce only the components that prove the workflow boundary: Cloud Run, Pub/Sub, Workflows, Secret Manager, Cloud Logging, and an agreed minimal data store. Begin with one read-only source adapter and a **draft-for-rep** flow for a small consented account set.
 
-The reference API will expose `GET /api/reference/stack` and `POST /api/reference/traces`. It returns only static fixture data and records the resulting event sequence in process memory for the duration of the running reference build. This endpoint is deliberately not a production API, does not accept free-form message content, and cannot contact an external service.
+Introduce Cloud SQL once the proof needs durable multi-user workflow records, relational audit queries, and managed PostgreSQL behavior. Do not activate a live delivery adapter merely because the infrastructure is available. Before delivery is enabled, require tenant isolation, least-privilege service accounts, validated webhooks, consent and channel policy, named approval ownership, retry/recovery handling, and audit review.
 
-## Explicitly excluded
+> **Release gate:** Live actions are enabled only after the client’s operating owners agree the data map, consent basis, policy boundary, exception process, recovery routine, and evidence review. Google Cloud infrastructure supports the workflow; it does not replace those product controls.
 
-The first reference build does not include authentication, a tenant database, actual CRM/ERP connections, model calls, webhook receivers, real email/SMS, file uploads, analytics exports, or an automated policy decision. The code and documentation will identify where each capability belongs when a design partner and source-system choice make live integration appropriate.
+## Explicitly excluded from the reference build
 
-## Production evolution
-
-The next technical milestone after a validated design partner is a **single read-only source adapter plus draft-for-rep workflow**. This should begin with one agreed CRM/ERP/order source and one approved channel, applied to a small consented account set. Add real authentication and tenant isolation before accepting any customer data. Enable sending only after the customer’s policy, consent, delivery, and exception handling rules are reviewed, tested, and assigned to accountable people.
+The current build has no customer data, authentication, live source integrations, webhook verification, paid model invocation, Cloud SQL instance, provider secret, email/SMS delivery, or autonomous commercial decision. It remains a clickable reference layer that shows exactly where those capabilities will belong once the client and workflow scope are validated.
 
 ## References
 
-[1]: https://developers.cloudflare.com/workers/ "Cloudflare Workers documentation"
-[2]: https://developers.cloudflare.com/workflows/ "Cloudflare Workflows documentation"
-[3]: https://developers.cloudflare.com/d1/ "Cloudflare D1 documentation"
-[4]: https://developers.cloudflare.com/queues/ "Cloudflare Queues documentation"
+[1]: https://cloud.google.com/run/docs "Cloud Run documentation"
+[2]: https://cloud.google.com/pubsub/docs/overview "Google Cloud Pub/Sub overview"
+[3]: https://cloud.google.com/workflows/docs/overview "Google Cloud Workflows overview"
+[4]: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/overview "Google Cloud Gemini Enterprise Agent Platform beginner’s guide"
+[5]: https://cloud.google.com/sql/docs/introduction "Cloud SQL overview"
+[6]: https://cloud.google.com/secret-manager/docs/overview "Google Cloud Secret Manager overview"

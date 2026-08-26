@@ -1,20 +1,53 @@
-# Technical Stack Reference: Deployment and Extension Guide
+# Google Cloud Deployment and Extension Guide
 
-## What is deployable now
+## Current state versus target state
 
-The repository now includes a **public, static-safe architecture explorer at `/stack`** and an optional, fixture-only reference API. The route is intentionally useful in both of the deployment modes below.
+The public reference page is currently a **static fixture showcase**. It remains safe to share because it uses no client data, secrets, provider credentials, or live delivery path. The target implementation is Google Cloud–native and should be introduced progressively in a dedicated Google Cloud project.
 
-| Deployment mode | Command or platform | What works | What does not happen |
+| Stage | Deployment posture | What it proves | What remains intentionally disabled |
 | --- | --- | --- | --- |
-| Existing Cloudflare Pages demo | GitHub-triggered static build, as configured for `ai-operations-demo.pages.dev` | The `/stack` interface, all architecture components, the full six-step clickable trace, contract inspection, and the route back to the product demo. The client automatically falls back to typed static fixtures. | The browser has no `/api/reference/*` endpoint on a static-only Pages deployment. It remains in **Static Fixture Mode**, which is expected and safe. |
-| Local or Node-hosted reference build | `pnpm build && pnpm start` | Everything above, plus `GET /api/reference/stack` and `POST /api/reference/traces`. The UI marks the API as connected and uses those safe fixture responses. | The API does not create a database record, call a provider, invoke a model, read credentials, or deliver a communication. |
-| Future connected application | Cloudflare Worker-based API with Pages/static UI | Authenticated API, verified webhooks, source adapters, durable workflow runs, async jobs, database records, and approved output adapters. | Commercial decisions, policy exceptions, and real delivery remain disabled until client-specific operating controls are implemented and tested. |
+| Current visual reference | Static React build at `/stack` | The system flow, Google Cloud service boundaries, human approval model, and auditable event contracts. | All live integrations, secrets, model calls, database writes, and delivery. |
+| Google Cloud proof of concept | Cloud Run API + Pub/Sub + Workflows + Secret Manager + Cloud Logging | One source event can become a governed, draft-for-rep workflow under named human ownership. | Automatic sending, commercial decisioning, broad data ingestion, and unvalidated provider connectors. |
+| Controlled pilot | Add Cloud SQL, authenticated tenants, one source adapter, and one approved output adapter | A real but bounded client workflow with durable evidence, role controls, and exception routing. | Cross-client data access, autonomous policy exceptions, autonomous offers, and uncapped source sync. |
 
-The build continues to use the repository’s existing React, TypeScript, Vite, and Tailwind application. The new optional local API is deliberately an **Express fixture façade**, not a claim that production should run an Express server on Cloudflare Pages. It mirrors the versioned contracts that should later be hosted in a dedicated edge API.
+## Target Google Cloud deployment topology
 
-## Build and verification
+The intended deployment starts with a Cloud Run application service that exposes authenticated user/API routes and a separate Cloud Run integration service for inbound webhooks and provider adapters. Cloud Run provides a fully managed environment for containerized services; it also supports application APIs and webhook-style business integrations.[1]
 
-Run the following from the repository root:
+Pub/Sub becomes the asynchronous event backbone. An authenticated ingestion service verifies and normalizes a source event, assigns a correlation ID, writes a minimal record where necessary, then publishes an event to a topic. Subscriptions trigger the relevant process, while retry policy and a dead-letter topic preserve failed events for controlled investigation. Pub/Sub decouples producers from consumers and is suitable for service integration and task parallelization.[2]
+
+Google Cloud Workflows represents the governed business sequence. It calls Cloud Run policy and integration services, records state, retries safe technical steps, and waits for an authenticated callback from the approval service. Workflows can combine Cloud Run, HTTP APIs, and other Google Cloud services in an observable serverless process; it can wait on callbacks and hold state rather than relying on a long-lived request.[3]
+
+Cloud SQL for PostgreSQL is the target persistent operational store once the proof needs durable multi-user workflow records. It retains workflow runs, approvals, exceptions, communication attempts, and append-only audit events. Cloud SQL supplies managed relational-database functions such as backups, monitoring, logging, and optional high availability.[4]
+
+| Responsibility | GCP service | Required implementation boundary |
+| --- | --- | --- |
+| UI and user/API service | Cloud Run | Authenticate every non-public route; use separate service accounts for UI/API and integration work. |
+| Inbound source event | Cloud Run integration service | Verify webhook signatures; normalize provider payloads; return quickly; publish canonical event to Pub/Sub. |
+| Event handoff | Pub/Sub + dead-letter topic | Apply IAM per topic/subscription; define retry, dead-letter, and replay ownership. |
+| Orchestration | Google Cloud Workflows | Use idempotency keys, versioned definitions, explicit human approval callback, retry policy, and a termination procedure. |
+| Policy evaluation | Cloud Run policy service | Evaluate policy and eligibility deterministically; never encode commercial authority in a model prompt. |
+| AI boundary | Vertex AI Gemini | Enforce a schema, field allowlist, refusal/fallback behavior, and evaluation review. Gemini cannot call delivery providers directly. |
+| Data and audit | Cloud SQL for PostgreSQL | Tenant-scope all tables; retain correlation IDs, actor, version, redaction state, and immutable audit append records. |
+| Secrets | Secret Manager | Use least-privilege service account access; rotate secrets; keep secret values out of browser code and Git. [5] |
+| Observability | Cloud Logging + Cloud Audit Logs | Use platform logs for technical diagnosis and application audit records for operational evidence. |
+| Scheduled triggers | Cloud Scheduler | Trigger controlled periodic jobs such as reorder evaluation; avoid always-on polling workers. [3] |
+
+## Recommended activation sequence
+
+Start by creating a dedicated Google Cloud project with a budget alert, billing owner, separate environments, and a region selected for the intended data residency. Enable only the APIs required for the first proof: Cloud Run, Pub/Sub, Workflows, Secret Manager, Cloud Logging, Cloud Scheduler, and IAM. Keep Cloud SQL optional until the proof actually needs durable relational records.
+
+Build one Cloud Run integration endpoint for one read-only source adapter. The adapter should normalize a single business event—such as a new allocation or a reorder cadence signal—into the versioned event contract. It should publish the canonical event to Pub/Sub and retain enough metadata to detect duplicates. Do not replicate a customer’s entire CRM or ERP data set.
+
+Create a Workflows definition that invokes the deterministic policy service and then either records a typed draft or starts an internal approval task. Where Gemini is used, the service must enforce a structured response schema and only send approved, minimized context. The workflow must then wait for the named approver’s authenticated callback instead of treating a browser click as an authorization bypass.
+
+After the client’s policy, consent, channel, owner, recovery, and audit expectations are agreed, add Cloud SQL and one output adapter. A delivery command must originate inside the server-side workflow path and require a linked approval record. The public visual reference does **not** exercise this path; its delivery result remains simulated.
+
+> **Implementation rule:** The Google Cloud project should make a small governed workflow easier to inspect and operate. It should not be used to justify a broad CRM replacement, unrestricted data ingestion, or an autonomous sales agent.
+
+## Current build commands
+
+The present repository remains a static reference application. Its local fixture API is available when running the Node reference server, but the production design moves authenticated runtime services to Cloud Run.
 
 ```bash
 pnpm install --frozen-lockfile
@@ -23,57 +56,10 @@ pnpm build
 pnpm start
 ```
 
-The production reference server listens on `http://localhost:3000`. Verify both safe endpoints with:
+## Google Cloud references
 
-```bash
-curl -fsS http://localhost:3000/api/reference/stack
-curl -fsS -X POST http://localhost:3000/api/reference/traces \
-  -H 'Content-Type: application/json' \
-  -d '{"workflow":"AL-09"}'
-```
-
-Both endpoints return only `sandbox` data. The trace endpoint returns the static `AL-09` sequence with six versioned events; it accepts no free-form message, contact, delivery, or credential input.
-
-## Cloudflare delivery posture
-
-Keep the current public demo on its static Cloudflare Pages deployment. The `/stack` page will function there without any configuration change because it carries a fixture-backed implementation path. This is the appropriate posture for a partner-facing reference demonstration.
-
-When a validated implementation is ready for authenticated inputs, create a separate Worker-based API boundary. Cloudflare Workers supports full-stack API workloads, data bindings, durable workflows, queues, and observability.[1] Cloudflare documents Workflows as durable multi-step execution that can pause for external events or approvals and retry failed technical steps.[2] Use Queues to decouple inbound events, delivery commands, reply processing, and audit writes; configure a dead-letter consumer before live integration.[3]
-
-| Production responsibility | Cloudflare-oriented implementation | Required control before activation |
-| --- | --- | --- |
-| Edge API | Worker route handlers behind authenticated application access | Tenant authentication, authorization, rate limiting, request validation, and server-side secrets. |
-| Data | D1 with migrations and an ORM such as Drizzle | Tenant-scoped schema, backup/recovery strategy, retention policy, and tested audit immutability. D1 is a managed serverless SQL database available from Workers and Pages.[4] |
-| Orchestration | Cloudflare Workflows | Idempotency keys, named approval event, pause/resume semantics, retry policy, and termination/kill-switch procedure. |
-| Event transport | Cloudflare Queues + dead-letter queue | Consumer ownership, failure investigation workflow, replay approval, and data redaction policy. |
-| Source adapters | CRM/ERP/order/inventory provider adapters | Signed webhook verification or read-only credential access, source-of-truth mapping, data-minimization review, and source version tracking. |
-| AI adapter | Server-side structured-output service | Locked schema, template version, permitted source fields, prompt/evaluation review, refusal/fallback behavior, and no-delivery authority. |
-| Output adapter | Server-side email/SMS provider interface | Consent, channel preference, approval linkage, provider verification, delivery/reply event handling, and human escalation rules. |
-
-## Recommended build sequence
-
-Begin with a single client-approved **read-only source adapter** and a **draft-for-rep** workflow. Do not ingest broad CRM or ERP extracts. Identify a small consented pilot audience and map only the external IDs and facts that the workflow needs: account, approved contact, owner, preferred channel, consent status, product reference, and trigger metadata.
-
-Next, persist workflow runs, approvals, exceptions, and append-only audit events in a tenant-scoped database. At this stage, a durable workflow may pause for a named person’s approval, but its only downstream result should remain a reviewable draft or internal task. Test retry, duplicate-event, rule-version, policy-gate, and exception paths before enabling any delivery adapter.
-
-Only after the operating owners sign off on the channel, consent, templates, exception process, and evidence requirements should an approved delivery provider be introduced. Deliveries must be emitted only from server-side code after the workflow sees the required policy and approval records. A browser must never have the credentials or authority to bypass that chain.
-
-> **Release gate:** A real external action is not enabled because a technical connector exists. It is enabled only after the client has a defined workflow owner, data map, consent basis, policy boundary, failure/recovery routine, and audit review process.
-
-## Repository map
-
-| File | Purpose |
-| --- | --- |
-| `client/src/pages/StackReference.tsx` | Interactive architecture explorer and six-stage fixture trace. |
-| `shared/referenceStack.ts` | Versioned, shared stack components, event types, and deterministic fixture data. |
-| `server/index.ts` | Static server plus two fixture-only reference API endpoints. |
-| `docs/product/TECH_STACK_REFERENCE_ARCHITECTURE.md` | Architecture decision, stack, contracts, data model, and explicit non-goals. |
-| `docs/operations/TECH_STACK_SHOWCASE_ASSESSMENT.md` | Current-demo assessment and verification record. |
-| `docs/operations/TECH_STACK_DEPLOYMENT_AND_EXTENSION.md` | This deployment and production-evolution guide. |
-
-## References
-
-[1]: https://developers.cloudflare.com/workers/ "Cloudflare Workers documentation"
-[2]: https://developers.cloudflare.com/workflows/ "Cloudflare Workflows documentation"
-[3]: https://developers.cloudflare.com/queues/ "Cloudflare Queues documentation"
-[4]: https://developers.cloudflare.com/d1/ "Cloudflare D1 documentation"
+[1]: https://cloud.google.com/run/docs "Cloud Run documentation"
+[2]: https://cloud.google.com/pubsub/docs/overview "Google Cloud Pub/Sub overview"
+[3]: https://cloud.google.com/workflows/docs/overview "Google Cloud Workflows overview"
+[4]: https://cloud.google.com/sql/docs/introduction "Cloud SQL overview"
+[5]: https://cloud.google.com/secret-manager/docs/overview "Google Cloud Secret Manager overview"

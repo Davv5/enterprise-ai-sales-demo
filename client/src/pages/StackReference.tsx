@@ -101,8 +101,8 @@ const visualFlowSteps = [
     id: "ingest",
     phase: "02 · CONNECT",
     title: "One secure gateway turns it into a usable event.",
-    short: "Edge API + queue",
-    detail: "A server-side integration façade verifies the source and gives the event a stable ID. A queue separates an incoming signal from the work that follows.",
+    short: "Cloud Run + Pub/Sub",
+    detail: "An authenticated Cloud Run integration façade verifies the source and gives the event a stable ID. Pub/Sub separates an incoming signal from the work that follows.",
     note: "Credentials and webhooks stay off the browser.",
     icon: Waypoints,
     tone: "orchestration",
@@ -111,8 +111,8 @@ const visualFlowSteps = [
     id: "govern",
     phase: "03 · GOVERN",
     title: "The workflow checks what is allowed before anything happens.",
-    short: "Rules + bounded AI",
-    detail: "A durable workflow applies the approved audience rule, channel, template, and policy boundary. AI may prepare a typed draft, but it cannot decide price, quantity, or terms.",
+    short: "Workflows + Vertex AI",
+    detail: "Google Cloud Workflows applies the approved audience rule, channel, template, and policy boundary. Vertex AI may prepare a typed draft, but it cannot decide price, quantity, or terms.",
     note: "Controls are evaluated before output, not after.",
     icon: ShieldCheck,
     tone: "control",
@@ -131,8 +131,8 @@ const visualFlowSteps = [
     id: "evidence",
     phase: "05 · PROVE",
     title: "The outcome is recorded so the team can trust it.",
-    short: "Safe output + audit",
-    detail: "Only an approved path can reach an output adapter. The workflow then retains the receipt, exception handoff, and decision trail as evidence—this page simulates that step only.",
+    short: "Cloud SQL + audit",
+    detail: "Only an approved path can reach an output adapter. Cloud SQL then retains the receipt, exception handoff, and decision trail as evidence—this page simulates that step only.",
     note: "No live message is sent in this reference build.",
     icon: FileCheck2,
     tone: "evidence",
@@ -300,9 +300,9 @@ export default function StackReference() {
       <main>
         <section className="stack-hero" aria-labelledby="stack-title">
           <div className="stack-hero-copy">
-            <div className="stack-kicker"><Network size={14} /> TECHNICAL REFERENCE · {apiState === "reference-api" ? "REFERENCE API CONNECTED" : "STATIC FIXTURE MODE"}</div>
-            <h1 id="stack-title">A real operating stack,<br /><em>shown without theater.</em></h1>
-            <p>Harborline sits between systems of record and approved customer communication. This reference build makes the data path, decision boundaries, and technical contracts visible—without connecting to a CRM, ERP, model, or delivery provider.</p>
+            <div className="stack-kicker"><Network size={14} /> GOOGLE CLOUD REFERENCE · {apiState === "reference-api" ? "REFERENCE API CONNECTED" : "STATIC FIXTURE MODE"}</div>
+            <h1 id="stack-title">A Google Cloud operating stack,<br /><em>shown without theater.</em></h1>
+            <p>Harborline sits between systems of record and approved customer communication. This reference build makes the Google Cloud data path, decision boundaries, and technical contracts visible—without connecting to a CRM, ERP, model, or delivery provider.</p>
             <div className="stack-hero-actions">
               <button className="stack-primary" onClick={startTrace} disabled={running}>
                 {running ? <RefreshCw size={16} className="stack-spin" /> : <Play size={16} />}
@@ -369,7 +369,7 @@ export default function StackReference() {
 
         <section id="architecture" className="stack-architecture" aria-labelledby="architecture-title">
           <div className="stack-section-heading">
-            <div><p className="stack-kicker"><GitBranch size={14} /> DEPLOYABLE REFERENCE ARCHITECTURE</p><h2 id="architecture-title">The technical shape <em>behind the product.</em></h2><p>Every box is a concrete implementation concern. The colored focus path reflects the selected allocation-trace stage.</p></div>
+            <div><p className="stack-kicker"><GitBranch size={14} /> DEPLOYABLE REFERENCE ARCHITECTURE</p><h2 id="architecture-title">The Google Cloud shape <em>behind the product.</em></h2><p>Every box is a concrete implementation concern. The colored focus path reflects the selected allocation-trace stage.</p></div>
             <div className="stack-legend"><span className="source">Sources</span><span className="orchestration">Orchestration</span><span className="control">Controls</span><span className="delivery">Output</span><span className="evidence">Evidence</span></div>
           </div>
 
@@ -394,7 +394,7 @@ export default function StackReference() {
         </section>
 
         <section id="contracts" className="stack-contracts" aria-labelledby="contract-title">
-          <div className="stack-section-heading"><div><p className="stack-kicker"><ScanSearch size={14} /> IMPLEMENTATION CONTRACTS</p><h2 id="contract-title">Inspectable by design, <em>replaceable by provider.</em></h2><p>The reference code shares a typed event model between the explorer and API. Production adapters will map provider objects at the edge instead of leaking them through the application.</p></div></div>
+          <div className="stack-section-heading"><div><p className="stack-kicker"><ScanSearch size={14} /> IMPLEMENTATION CONTRACTS</p><h2 id="contract-title">Inspectable by design, <em>replaceable by provider.</em></h2><p>The reference code shares a typed event model between the explorer and API. Production adapters will map provider objects inside authenticated Cloud Run services instead of leaking them through the application.</p></div></div>
           <div className="stack-contract-tabs" role="tablist" aria-label="Contract details">
             <button role="tab" aria-selected={contractPanel === "event"} className={contractPanel === "event" ? "active" : ""} onClick={() => setContractPanel("event")}><Brackets size={15} /> Event envelope</button>
             <button role="tab" aria-selected={contractPanel === "data"} className={contractPanel === "data" ? "active" : ""} onClick={() => setContractPanel("data")}><Database size={15} /> Operational data</button>
@@ -409,11 +409,11 @@ export default function StackReference() {
 
         <section className="stack-next-step">
           <div><p className="stack-kicker"><TimerReset size={14} /> BUILD SEQUENCE</p><h2>Start connected only when<br /><em>the operating boundary is agreed.</em></h2></div>
-          <div className="stack-next-grid"><div><span>01</span><p><strong>Choose one source</strong>Begin with a read-only CRM, ERP, or order data adapter and stable external IDs.</p></div><div><span>02</span><p><strong>Prove draft-for-rep</strong>Run a single consented workflow before enabling an approved channel adapter.</p></div><div><span>03</span><p><strong>Add tenant controls</strong>Introduce authentication, tenant isolation, secrets, monitoring, and audited policy configuration before customer data.</p></div></div>
+          <div className="stack-next-grid"><div><span>01</span><p><strong>Choose one source</strong>Begin with a read-only CRM, ERP, or order data adapter and stable external IDs.</p></div><div><span>02</span><p><strong>Prove draft-for-rep</strong>Run a single consented workflow before enabling an approved channel adapter.</p></div><div><span>03</span><p><strong>Add Google Cloud controls</strong>Introduce Cloud IAM, tenant isolation, Secret Manager, Cloud Logging, and audited policy configuration before customer data.</p></div></div>
         </section>
       </main>
 
-      <footer className="stack-footer"><span>HARBORLINE REFERENCE BUILD · SANDBOX ONLY</span><span>React + TypeScript · Cloudflare-oriented edge architecture · fixture-backed contracts</span></footer>
+      <footer className="stack-footer"><span>HARBORLINE REFERENCE BUILD · SANDBOX ONLY</span><span>React + TypeScript · Google Cloud–native target architecture · fixture-backed contracts</span></footer>
     </div>
   );
 }

@@ -48,3 +48,13 @@ The local product demo now exposes a visible **Reference stack** entry point in 
 ## Visual explainer enhancement verification
 
 The `/stack` route now places a five-stage visual story directly below the introduction. The browser confirms that visitors can select **Signal**, **Connect**, **Govern**, **Decide**, or **Prove** and the page updates its plain-English explanation, control rationale, icon treatment, flow progression, and highlighted station. The “Govern” state was specifically verified: it explains the durable workflow, rule/template/policy checks, bounded-AI limitation, and pre-output control posture in one visual frame.
+
+## Publication verification
+
+Commit `309053b` was pushed to `main`. An immediate public check showed that `https://ai-operations-demo.pages.dev/` still served the preceding build without the Reference stack link, and `/stack` returned the existing application’s 404 screen. The Cloudflare deployment had not yet reflected the newly published commit at that check.
+
+## Google Cloud reference verification
+
+The local `/stack` build now presents the Google Cloud–native target consistently: Cloud Run, Pub/Sub with a dead-letter topic, Google Cloud Workflows, Vertex AI Gemini, Cloud SQL for PostgreSQL, Secret Manager, and Cloud Logging. The visual story uses the five plain-English stations **Signal → Connect → Govern → Decide → Prove**, with Cloud Run/Pub/Sub, Workflows/Vertex AI, and Cloud SQL/audit shown in the relevant stages.
+
+The Secret Manager architecture node was exercised in the browser. Its inspector correctly explains that webhook keys, provider credentials, and connector configuration remain versioned and server-only behind least-privilege service accounts; no secret value is placed in the browser or repository.
