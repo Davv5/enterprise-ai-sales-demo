@@ -24,6 +24,7 @@ import {
   LayoutList,
   Mail,
   MessageSquareWarning,
+  Network,
   PackageCheck,
   Play,
   RefreshCcw,
@@ -459,7 +460,7 @@ export default function Home() {
       </aside>
 
       <main className="ops-main">
-        <header className="ops-topbar"><div className="ops-breadcrumb"><span>HARBORLINE /</span><strong>{breadcrumb}</strong></div><div className="ops-top-actions"><span className="ops-fictional"><Sparkles size={13} /> Sandbox record</span><button aria-label="Search" className="ops-icon"><Search size={18} /></button><button aria-label="Notifications" className="ops-icon"><BellRing size={18} /></button><Avatar initials="OL" small /></div></header>
+        <header className="ops-topbar"><div className="ops-breadcrumb"><span>HARBORLINE /</span><strong>{breadcrumb}</strong></div><div className="ops-top-actions"><a className="ops-stack-link" href="/stack"><Network size={13} /> Reference stack</a><span className="ops-fictional"><Sparkles size={13} /> Sandbox record</span><button aria-label="Search" className="ops-icon"><Search size={18} /></button><button aria-label="Notifications" className="ops-icon"><BellRing size={18} /></button><Avatar initials="OL" small /></div></header>
 
         {view === "brief" ? (
           <section className="ops-workspace daily-brief">
