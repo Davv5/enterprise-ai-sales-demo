@@ -19,3 +19,7 @@ Create a new Cloudflare Pages project from the existing `Davv5/enterprise-ai-sal
 | Build output directory | `dist` |
 
 The sales-demo Pages project remains unchanged. This new Pages project should receive its own URL. Only after the founders demonstrate repeated use should the product gain authentication, saved signals, decisions, or shared editing.
+
+## Current independent release
+
+The separate Cloudflare Pages project is now created at **https://founders-desk.pages.dev**. It is configured to deploy only verified pushes to `main`; preview-branch deployments are disabled. The next GitHub commit after project creation triggers its first production build.
