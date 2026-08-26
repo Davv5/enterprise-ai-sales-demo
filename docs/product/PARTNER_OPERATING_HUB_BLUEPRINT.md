@@ -1,123 +1,105 @@
-# Partner Operating Hub Blueprint
+# Partner Operating Hub Blueprint — Corrected
 
-## The opportunity
+## Honest verdict
 
-The product demo is for distributor prospects. The **Partner Operating Hub** is for the two founders. Its job is not to expose repositories, development tools, agent prompts, or a technical backlog. Its job is to give each partner a calm, shared answer to five questions:
+The original idea was **directionally right but too large too early**. It correctly identified a real problem: the market-facing partner should not need to enter GitHub, Manus, Claude, development logs, or long planning documents to understand and move the business forward.
 
-> What are we building, what will we show next, what did the market tell us, what requires a founder decision, and what happens this week?
+However, calling the first version a **Founder Command Room** and giving it five surfaces risks creating a second product before the partnership has demonstrated that it will use one shared operating page consistently.
 
-The hub should make the partnership feel more coordinated and more capable without pretending to be a fully autonomous company operating system.
+> **Corrected recommendation:** Do not build an “OS” first. Build one premium, shared **Partner Brief** that earns the right to become an OS.
 
-## The two operating roles
+The Partner Brief is a plain-English bridge between what is being built and what your partner needs to do next in the market. If both founders naturally use it before and after real conversations, it becomes the foundation for a later shared workspace. If not, we learn that a live hub is not yet the constraint.
 
-| Role | Primary contribution | What the hub must make easy |
+## The real coordination problem
+
+| Founder reality | What should not happen | What the Partner Brief solves |
 | --- | --- | --- |
-| **Product & build lead** | Owns product story, demo quality, source-of-truth decisions, implementation sequence, and technical risk. | Turn current build work into a plain-English update, ask for one clear decision, and show what is ready to use. |
-| **Market & relationship lead** | Opens doors, leads in-person conversations, carries prospect context, gathers reactions, and helps win trust. | Prepare for a meeting, show the right live demo story, capture what was learned, and know the next follow-up. |
-| **Shared founder responsibility** | Decide what matters, protect the product thesis, and choose the next business move. | See a short decision queue with context and a clear recommendation—not a sea of tasks. |
+| The product/build lead is working across strategy, design, source documents, GitHub, live hosting, and implementation. | The market-facing partner receives a vague update or has to open technical tools to understand what changed. | It turns the current build into one usable business update: **what is ready, what it means, and what needs a response.** |
+| The market/relationship lead has access to people, meetings, and buyer reactions. | Good field context stays in text messages, memory, or scattered conversations. | It makes the next conversation intentional and captures the one learning that should influence the product. |
+| Both founders are learning the category together. | The team acts as if it already knows the final product, buyer, or pilot path. | It makes assumptions, unanswered questions, and the next proof point visible without killing ambition. |
 
-## What this is not
+## The two doors
 
-The first hub must not become a CRM, an issue tracker, a full financial system, a client portal, or an “AI runs the company” claim. It also should not store sensitive prospect details, contracts, pricing, or regulated client communications until a real data, permission, and retention model exists.
+There should be two clearly separate experiences:
 
-The first hub is a **founder coordination layer**. It translates the real work into a shared operating picture.
-
-## The high-value operating moments
-
-| Moment | Partner question | Hub response |
+| Door | Audience | Job |
 | --- | --- | --- |
-| **Monday alignment** | “What are we trying to accomplish this week?” | A one-screen weekly mission, one product objective, one market objective, and the three highest-leverage next actions. |
-| **Before a prospect conversation** | “What should I say and show?” | A Prospect Room with the client-safe demo link, a one-minute framing line, the meeting objective, demo sequence, and three questions to learn from the buyer. |
-| **After a prospect conversation** | “What did they actually tell us?” | A simple evidence capture card: exact quote, workflow mentioned, confidence, follow-up owner, and product implication. |
-| **When a decision is needed** | “What do you need from me?” | A Decision Card: recommendation, why now, trade-off, owner, and a one-click decision state. |
-| **When product changes** | “What changed and can I use it?” | A nontechnical release card with the live link, what is new, what remains fictional, and the seller impact. |
-| **Before an in-person pitch** | “Can I run the demo confidently?” | A Demo Room with a concise seller route, direct recovery links, boundaries, and a reset control. |
+| **Product Demo** | Distributor prospects | Make a buyer feel the value of an AI Operations Lead through a fictional, controlled, client-safe experience. |
+| **Partner Brief** | You and your business partner | Align the story, prepare the next market conversation, capture the useful learning, and make the next founder decision. |
 
-## Three possible hub concepts
+The Partner Brief must never be presented as part of the client product. It is internal founder infrastructure.
 
-### 1. The Founder Briefing Room
+## Minimum viable first release: one page, four questions
 
-This is a calm, editorial weekly home. It opens with a short founder brief, then shows the current live demo, this week’s mission, decisions, and only the most important movement from the market.
+The first release is one page. It should take less than two minutes to understand, and it should answer only these four questions:
 
-**Best for:** Building shared clarity quickly when the partnership is still forming its operating rhythm.
+1. **What are we trying to prove right now?**
+2. **What is ready for you to use in the next conversation?**
+3. **What is the next conversation or action that matters?**
+4. **What do I need from you?**
 
-**Risk:** It can become passive reading material if it does not connect directly to prospect preparation and follow-up.
+The user experience should feel like a concise partner briefing, not a dashboard, CRM, backlog, or executive-reporting system.
 
-### 2. The Field-to-Product Loop
-
-This is a learning engine. The center of the hub is not a dashboard; it is the chain from a prospect conversation to a quote, a product implication, a founder decision, and a future demo change.
-
-**Best for:** Preventing the product from drifting away from what the partner is hearing in the field.
-
-**Risk:** It can feel too research-heavy before there are enough real conversations.
-
-### 3. The Founder Command Room
-
-This is a deliberately narrow operating center. It combines a weekly founder briefing with Meeting Rooms, Decision Cards, a live-demo launch point, and a Build Pulse.
-
-**Best for:** The current stage. It gives the market lead a polished nontechnical home and gives the build lead a way to ask for decisions without explaining development machinery.
-
-**Risk:** It must remain opinionated; adding every task or metric would dilute the calm operating purpose.
-
-## Recommended direction: Founder Command Room
-
-The recommended first experience is the **Founder Command Room**. It should feel like a premium partnership briefing, not a software administration screen.
-
-> **One positioning line:** “One calm place for the two people building the company to align the story, the market, and the next move.”
-
-The default home should answer the day in this order:
-
-1. **The Mission:** One sentence describing what the company is trying to prove now.
-2. **The Moment:** The next market conversation or business action that matters.
-3. **The Decision:** The one choice that needs the partner’s attention.
-4. **The Product:** The live demo, what changed, and the exact story to show.
-5. **The Learning:** The strongest field signal and what it means.
-
-## First release: five intentional surfaces
-
-| Surface | Purpose | Example content for the current project |
+| Section | What it contains | Why it earns its place |
 | --- | --- | --- |
-| **Founder Brief** | Opens the week with focus and shared context. | “This week: make prospects feel the AI Operations Lead’s impact; secure three conversations; decide the brand territory.” |
-| **Demo Room** | Gives the market lead a single safe pitch launch point. | Public demo URL, 60-second opening, reset/recovery links, fictional-data disclosure, and workflow sequence. |
-| **Prospect Rooms** | Prepares and closes one market conversation at a time. | Meeting objective, role, three discovery questions, what to show, and follow-up owner. |
-| **Decision Cards** | Makes founder choices explicit and lightweight. | Product naming territory, ideal target distributor profile, first pilot workflow, or next pitch iteration. |
-| **Signal Board** | Turns feedback into usable evidence. | “Quote,” “what this supports/weakens,” “recommended response,” and “who owns next.” |
+| **This Week’s Proof** | One current company objective and one assumption being tested. | Stops both founders from pursuing disconnected activity. |
+| **Ready to Show** | The live demo link, a one-minute opening line, one suggested demo route, and a factual boundary note. | Lets the market lead use the product without hunting for the correct link or risking an overclaim. |
+| **Next Market Moment** | One upcoming conversation or outreach objective, who it is for, and three questions worth learning from. | Makes the partner’s channel advantage more deliberate. |
+| **Your Decision / My Build** | One founder decision requested, the recommendation, the trade-off, and what happens after an answer. | Gives the build lead a clear business input without forcing a status meeting. |
 
-## Information architecture and boundaries
+## What must not be built first
 
-| Layer | First release | Later, only when justified |
+The initial Partner Brief must not include:
+
+- A client CRM, deal pipeline, or large prospect database.
+- A task board, sprint board, issue tracker, or embedded GitHub view.
+- Fake prospect records, fabricated feedback, invented deal values, or invented activity metrics.
+- A live AI agent, chat interface, automated follow-up, or autonomous founder decision-making.
+- Sensitive meeting notes, contracts, pricing, personal contact details, or client-confidential material.
+- A claim that the static first version is truly private. Until authentication exists, every item on it must be safe if its link is seen by the wrong person.
+
+This is a critical correction from the earlier blueprint: an unprotected static page can be discreet, but it is **not** a confidential workspace.
+
+## The operating roles, stated plainly
+
+| Role | The contribution to protect | What the brief asks from them |
 | --- | --- | --- |
-| **Information source** | Curated founder updates and fictional/sample Prospect Rooms. | Authenticated shared notes, connected meeting records, and controlled prospect data. |
-| **Access** | A private, invite-only founding-team experience. | Role-based access, prospect-specific sharing, and audit controls. |
-| **AI role** | No live AI required. The hub communicates the product strategy. | Meeting summarization or action extraction, always reviewable by a founder. |
-| **Storage** | Static or preloaded content for the first visual version. | Database-backed Decision Cards, evidence records, and activity history. |
-| **Automation** | No automatic external actions. | Reminders and follow-up drafts only after ownership and permission rules are designed. |
+| **You — product/build lead** | Convert vision and implementation into a credible, usable asset. | State what changed, what is ready, what remains simulated, and the one decision you need. |
+| **Partner — market/relationship lead** | Get the right people in the room, carry real buyer context, and communicate the product story with trust. | Use the right demo story, ask strong questions, and return one specific market signal. |
+| **Both founders** | Decide where to place the next unit of attention. | Agree on one proof point rather than trying to solve the entire company at once. |
 
-## Build sequence
+## The first operating rhythm
 
-### Phase A — The visual shared briefing hub
+Do not build a daily system. The first rhythm should be **one partner brief per real market moment**:
 
-Build a polished, private-feeling static founder experience with preloaded content. Its purpose is to make the partner say, “I understand where we are, what I should show, and what you need from me.” No account system, data integration, or background automation is needed.
+1. Before a prospect meeting, the brief gives the partner the current demo link, the story, and what to learn.
+2. After the meeting, the partner adds or sends back one concrete signal: a quote, objection, workflow example, or next introduction.
+3. The build lead turns that signal into either a product implication, an explicit “not now,” or a question requiring a joint decision.
+4. The next version of the brief reflects that movement.
 
-### Phase B — The shared operating layer
+This simple loop is the first meaningful “operating system.” It keeps the product tied to the market without forcing an overbuilt process onto two people who are still establishing their rhythm.
 
-Upgrade to a secure full-stack workspace only after both founders use the visual hub. Add founder login, saved Prospect Rooms, Decision Cards, evidence capture, and a simple activity trail. This is where shared information becomes durable rather than curated.
+## Growth path — only when usage justifies it
 
-### Phase C — The disciplined intelligence layer
+| Stage | What becomes real | Entry condition |
+| --- | --- | --- |
+| **Stage 1: Partner Brief** | A polished one-page founder briefing with curated, safe-to-share content. | Build now only if it will be used for the next real market moment. |
+| **Stage 2: Partner Workspace** | Secure founder login, saved decision records, and structured learning capture. | Both founders use the brief repeatedly and feel the cost of information living in messages/documents. |
+| **Stage 3: Field-to-Product Loop** | Controlled prospect notes, evidence patterns, product implications, and a durable decision history. | The team has enough real conversations that memory and manual recap are failing. |
+| **Stage 4: Bounded AI assistance** | Reviewable meeting-note summaries, signal extraction, and draft follow-up preparation. | A defined data model, permissions, and human review process exist. |
 
-Only after the team has real conversation volume, add bounded assistance: summarize a meeting note, pull out a quoted buyer concern, suggest a follow-up draft, or surface an overdue decision. The AI does not decide strategy, send messages, or manufacture evidence.
+## The only decision needed before visual design
 
-## What success looks like
+Choose the **first real market moment** the Partner Brief must help with. It should be one of these:
 
-The hub is successful if the market lead can walk into a meeting with the right product story without opening GitHub, Claude, Manus, or a long document; and the product lead can receive usable field feedback and a clear founder decision without running an impromptu status meeting.
+| Choice | The brief leads with | Use it when |
+| --- | --- | --- |
+| **A. Upcoming conversation** | Who the partner is meeting, the objective, demo route, and questions to learn from the buyer. | A real prospect meeting or outreach is the next important action. |
+| **B. Founder alignment** | The current proof point, live demo state, one decision, and weekly next move. | The main problem is keeping the two founders aligned between conversations. |
+| **C. Product feedback loop** | One field insight, what it changes, and the build/decision consequence. | You already have a useful conversation or feedback item to act on. |
 
-## Decisions to make before implementation
+## Bottom line
 
-1. Should the first hub feel more like a **weekly briefing room** or a **deal-preparation workspace**?
-2. Should it remain a private two-founder product, or should it be ready to include a future third team member?
-3. What one recurring rhythm should it solve first: weekly alignment, prospect preparation, post-meeting feedback, or founder decisions?
-4. What name should this internal system carry while the external product name remains provisional?
+> The hub is a good idea because it can make your partnership more legible and more decisive. It becomes a bad idea if it distracts from getting in front of real people or if it copies tools you already dislike.
 
-## Recommended next step
-
-Do not build the full “OS” yet. Build **one premium Founder Command Room** first, with the Founder Brief, Demo Room, three sample Prospect Rooms, a small Decision Queue, and a Signal Board. Use it together for two weeks. Then decide which information deserves real storage, logins, and shared editing.
+The correct first move is a **Partner Brief**, not an OS. Build it around one real use in the next two weeks. If it helps your partner show the demo better and return better market intelligence, then build the secure shared workspace behind it.
