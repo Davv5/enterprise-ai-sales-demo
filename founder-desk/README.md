@@ -23,3 +23,5 @@ The sales-demo Pages project remains unchanged. This new Pages project should re
 ## Current independent release
 
 The separate Cloudflare Pages project is now created at **https://founders-desk.pages.dev**. It is configured to deploy only verified pushes to `main`; preview-branch deployments are disabled. The next GitHub commit after project creation triggers its first production build.
+
+The first independent production deployment was triggered by commit `2d84f14` and verified directly at the public address. Founder’s Desk therefore has its own release path; it does not depend on the sales demo’s Cloudflare project or `/partner` prototype route.
