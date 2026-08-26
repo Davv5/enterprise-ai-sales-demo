@@ -69,3 +69,5 @@
 - [x] Re-evaluate the Partner Operating Hub blueprint against the founders’ actual working relationship and simplify or correct it before selecting a first hub experience.
 - [x] Redefine the Partner Operating Hub as a transparency-first product-building window that shows meaningful behind-the-scenes progress, decisions, research, releases, and remaining uncertainty without exposing technical noise.
 - [x] Design, build, validate, document, checkpoint, and synchronize the first Partner Build Window visual experience around the approved north star: what we are becoming, what has been accomplished, why it matters, and where the market-facing partner fits.
+- [ ] Separate the Partner Build Window from the client-facing demo as a distinct founder product with its own page identity, public entry point, and release path.
+- [ ] Rewrite the founder-product copy and information architecture around concrete partnership utility: product intelligence, current build work, market activity, decisions, evidence, and action—not abstract narrative alone.
