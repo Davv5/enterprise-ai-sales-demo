@@ -1,105 +1,165 @@
-# Partner Operating Hub Blueprint — Corrected
+# Partner Build Window Blueprint
 
-## Honest verdict
+## The corrected idea
 
-The original idea was **directionally right but too large too early**. It correctly identified a real problem: the market-facing partner should not need to enter GitHub, Manus, Claude, development logs, or long planning documents to understand and move the business forward.
+The purpose is not only to tell the market-facing partner what to do next. The purpose is to give that partner a **clear window into everything meaningful that is being built behind the scenes**—the product thinking, implementation, research, tests, releases, unresolved questions, and decisions—without forcing them to live inside GitHub, Manus, Claude, terminal output, or a pile of documents.
 
-However, calling the first version a **Founder Command Room** and giving it five surfaces risks creating a second product before the partnership has demonstrated that it will use one shared operating page consistently.
+> The Partner Build Window makes the invisible work visible at the right altitude: enough detail to build confidence and make good decisions, without the technical noise that obscures the story.
 
-> **Corrected recommendation:** Do not build an “OS” first. Build one premium, shared **Partner Brief** that earns the right to become an OS.
+The client-facing demo is the product buyers see. The Partner Build Window is the internal experience that lets the two founders see how that product is being made and why it is moving in a given direction.
 
-The Partner Brief is a plain-English bridge between what is being built and what your partner needs to do next in the market. If both founders naturally use it before and after real conversations, it becomes the foundation for a later shared workspace. If not, we learn that a live hub is not yet the constraint.
+## “Everything” does not mean raw everything
 
-## The real coordination problem
+The hub should be comprehensive about **meaning**, not exhaustive about raw artifacts.
 
-| Founder reality | What should not happen | What the Partner Brief solves |
-| --- | --- | --- |
-| The product/build lead is working across strategy, design, source documents, GitHub, live hosting, and implementation. | The market-facing partner receives a vague update or has to open technical tools to understand what changed. | It turns the current build into one usable business update: **what is ready, what it means, and what needs a response.** |
-| The market/relationship lead has access to people, meetings, and buyer reactions. | Good field context stays in text messages, memory, or scattered conversations. | It makes the next conversation intentional and captures the one learning that should influence the product. |
-| Both founders are learning the category together. | The team acts as if it already knows the final product, buyer, or pilot path. | It makes assumptions, unanswered questions, and the next proof point visible without killing ambition. |
+| Show the partner | Keep out of the default view |
+| --- | --- |
+| What changed in the product and why it matters | Commit hashes, branch names, dependency warnings, build logs, and terminal output |
+| What is currently being built, explored, tested, or blocked | Every micro-task, temporary file, or intermediate experiment |
+| What research says and what remains unproven | Long source dumps and raw research notes unless deliberately opened |
+| What is ready to show a prospect | Implementation machinery behind the demo |
+| What decision needs the partner’s input | Technical implementation choices that do not affect business direction |
+| What is still fictional, simulated, or not built | Overconfident “live product” language |
+
+The rule is simple:
+
+> **Translate each meaningful behind-the-scenes action into: what changed, why it matters, what is now possible, and what remains true.**
 
 ## The two doors
 
-There should be two clearly separate experiences:
-
 | Door | Audience | Job |
 | --- | --- | --- |
-| **Product Demo** | Distributor prospects | Make a buyer feel the value of an AI Operations Lead through a fictional, controlled, client-safe experience. |
-| **Partner Brief** | You and your business partner | Align the story, prepare the next market conversation, capture the useful learning, and make the next founder decision. |
+| **Product Demo** | Distributor prospects | Let a buyer feel the value of an AI Operations Lead through a fictional, controlled, client-safe product story. |
+| **Partner Build Window** | The two founders | Make the full product-building journey legible, connect market learning to product direction, and keep decisions visible. |
 
-The Partner Brief must never be presented as part of the client product. It is internal founder infrastructure.
+The Partner Build Window is internal founder infrastructure. It must never be confused with a distributor-facing product or used to make unsupported product claims.
 
-## Minimum viable first release: one page, four questions
+## The information model: source → translation → partner story
 
-The first release is one page. It should take less than two minutes to understand, and it should answer only these four questions:
+The project already has useful source material: strategy documents, research, product briefs, decision logs, product specifications, test evidence, GitHub releases, and the live demo. The problem is not a lack of work; it is that the work currently lives in formats optimized for building, not for keeping a partner informed.
 
-1. **What are we trying to prove right now?**
-2. **What is ready for you to use in the next conversation?**
-3. **What is the next conversation or action that matters?**
-4. **What do I need from you?**
-
-The user experience should feel like a concise partner briefing, not a dashboard, CRM, backlog, or executive-reporting system.
-
-| Section | What it contains | Why it earns its place |
+| Layer | Existing source | What the Partner Build Window presents |
 | --- | --- | --- |
-| **This Week’s Proof** | One current company objective and one assumption being tested. | Stops both founders from pursuing disconnected activity. |
-| **Ready to Show** | The live demo link, a one-minute opening line, one suggested demo route, and a factual boundary note. | Lets the market lead use the product without hunting for the correct link or risking an overclaim. |
-| **Next Market Moment** | One upcoming conversation or outreach objective, who it is for, and three questions worth learning from. | Makes the partner’s channel advantage more deliberate. |
-| **Your Decision / My Build** | One founder decision requested, the recommendation, the trade-off, and what happens after an answer. | Gives the build lead a clear business input without forcing a status meeting. |
+| **Product direction** | Product Brief, AI Operations Lead spec, naming reset | “What we are building now, what problem it solves, and what we are deliberately not building.” |
+| **Build progress** | Implementation work, test results, release checkpoints | “What shipped, what is being improved, what a prospect can now experience.” |
+| **Market evidence** | Buyer-validation package, partner conversations, research | “What the market appears to want, what we have actually heard, and what still needs proof.” |
+| **Founder decisions** | Decision log, open questions, strategic trade-offs | “The one or two decisions that need your input, with a recommendation and consequence.” |
+| **Sales readiness** | Live demo, seller runbook, pitch sequence | “What is ready to show, how to frame it, and the boundaries that must be stated honestly.” |
+| **Technical reality** | GitHub, build tests, hosting, future architecture plan | “The product is live as a demo, not yet a production system; here is what that means in business language.” |
 
-## What must not be built first
+## The first experience: a Product-Building Narrative
 
-The initial Partner Brief must not include:
+The first screen should not feel like a task manager. It should feel like a **living product story** that proves momentum.
 
-- A client CRM, deal pipeline, or large prospect database.
-- A task board, sprint board, issue tracker, or embedded GitHub view.
-- Fake prospect records, fabricated feedback, invented deal values, or invented activity metrics.
-- A live AI agent, chat interface, automated follow-up, or autonomous founder decision-making.
-- Sensitive meeting notes, contracts, pricing, personal contact details, or client-confidential material.
-- A claim that the static first version is truly private. Until authentication exists, every item on it must be safe if its link is seen by the wrong person.
+### 1. The current chapter
 
-This is a critical correction from the earlier blueprint: an unprotected static page can be discreet, but it is **not** a confidential workspace.
+A concise statement of the current company chapter, the product promise, and the proof point being pursued now.
 
-## The operating roles, stated plainly
+**Example:**
 
-| Role | The contribution to protect | What the brief asks from them |
+> **Current chapter: turning a strong AI Operations Lead vision into a buyer-ready product story.** The demo now shows the operating day before individual workflows. The next proof is whether distributor leaders recognize the coverage and accountability problem in their own teams.
+
+### 2. The Build Window
+
+A visual narrative of what is **live**, **being shaped**, **being validated**, and **intentionally deferred**. Every item expands into a plain-English explanation.
+
+| State | Example current content |
+| --- | --- |
+| **Live now** | Public sales demo with an AI Operations Lead Daily Operating Brief, governed Reorder/Allocation/Policy flows, and a partner-facing launch link. |
+| **Being shaped** | Replacement brand direction and the first real-product foundation. |
+| **Being validated** | Which distributor workflow creates the strongest urgency and what level of human control buyers accept. |
+| **Not built yet** | Real customer accounts, database, integrations, user login, live AI, live message delivery, and production policy controls. |
+
+### 3. The Why Behind It
+
+A short “why this work matters” layer. This keeps development from looking like random screen-making.
+
+**Example:**
+
+> **Why the Daily Operating Brief matters:** It changes the buyer’s first feeling from “this is another workflow tool” to “this is an AI Operations Lead that organizes the day while people keep relationship judgment.”
+
+### 4. The Market Loop
+
+This is the bridge from the partner’s conversations back into product direction. It must distinguish **evidence** from **assumption**.
+
+| Signal type | What appears | Example |
 | --- | --- | --- |
-| **You — product/build lead** | Convert vision and implementation into a credible, usable asset. | State what changed, what is ready, what remains simulated, and the one decision you need. |
-| **Partner — market/relationship lead** | Get the right people in the room, carry real buyer context, and communicate the product story with trust. | Use the right demo story, ask strong questions, and return one specific market signal. |
-| **Both founders** | Decide where to place the next unit of attention. | Agree on one proof point rather than trying to solve the entire company at once. |
+| **Heard in the market** | Specific buyer quote or observed process, with context. | “The rep only notices a lost reorder when they happen to look at a report.” |
+| **Current hypothesis** | A proposition still needing proof. | “A rep-approved availability draft is acceptable for routine coverage work.” |
+| **Product consequence** | What the team will change, preserve, or defer because of the signal. | “Keep price and allocation out of prepared communication; keep a named exception owner.” |
 
-## The first operating rhythm
+### 5. The Founder Lens
 
-Do not build a daily system. The first rhythm should be **one partner brief per real market moment**:
+One small, high-quality section for the partner’s actual role: what is ready to show, what to say, what not to claim, and the one decision or action that would advance the company.
 
-1. Before a prospect meeting, the brief gives the partner the current demo link, the story, and what to learn.
-2. After the meeting, the partner adds or sends back one concrete signal: a quote, objection, workflow example, or next introduction.
-3. The build lead turns that signal into either a product implication, an explicit “not now,” or a question requiring a joint decision.
-4. The next version of the brief reflects that movement.
+This section is not the whole hub. It is the bridge from transparency into action.
 
-This simple loop is the first meaningful “operating system.” It keeps the product tied to the market without forcing an overbuilt process onto two people who are still establishing their rhythm.
+## The first release: five surfaces, one coherent story
 
-## Growth path — only when usage justifies it
-
-| Stage | What becomes real | Entry condition |
+| Surface | Partner experience | Product/build value |
 | --- | --- | --- |
-| **Stage 1: Partner Brief** | A polished one-page founder briefing with curated, safe-to-share content. | Build now only if it will be used for the next real market moment. |
-| **Stage 2: Partner Workspace** | Secure founder login, saved decision records, and structured learning capture. | Both founders use the brief repeatedly and feel the cost of information living in messages/documents. |
-| **Stage 3: Field-to-Product Loop** | Controlled prospect notes, evidence patterns, product implications, and a durable decision history. | The team has enough real conversations that memory and manual recap are failing. |
-| **Stage 4: Bounded AI assistance** | Reviewable meeting-note summaries, signal extraction, and draft follow-up preparation. | A defined data model, permissions, and human review process exist. |
+| **Current Chapter** | Understands what stage the company is in and what it is trying to prove. | Prevents feature work and market activity from drifting apart. |
+| **Build Window** | Sees the complete meaningful portfolio of live work, work in progress, validation, and deliberate deferrals. | Makes build progress legible without exposing technical debris. |
+| **Product Story Map** | Sees how research, product logic, demo experience, and real-product architecture fit together. | Shows that the demo is part of a deliberate product path, not a random prototype. |
+| **Market Loop** | Sees what the partner’s channel is teaching the team and what remains unproven. | Closes the gap between conversations and product decisions. |
+| **Founder Lens** | Knows what is ready to use, the next conversation target, and the one thing needed from them. | Converts clarity into market movement. |
 
-## The only decision needed before visual design
+## What makes this different from a dashboard
 
-Choose the **first real market moment** the Partner Brief must help with. It should be one of these:
+The Partner Build Window should not become a pile of KPIs, generic charts, or cards. Its central unit is a **meaningful project movement**:
 
-| Choice | The brief leads with | Use it when |
+> **Problem or opportunity → work completed → why it matters → what is now possible → what remains uncertain → next founder move.**
+
+For example:
+
+| Project movement | Partner-level translation |
+| --- | --- |
+| The product shifted from a dashboard-led demo to a governed communication-operations model. | “We narrowed the product so prospects see an AI Operations Lead solving a real responsibility gap rather than another generic dashboard.” |
+| The demo expanded from one workflow to three. | “The buyer can now see how the system handles routine coverage, scarce inventory, and policy-sensitive communication without pretending that AI makes commercial decisions.” |
+| The public demo was made Safari-safe and deployed automatically from GitHub. | “You now have one reliable live link for an in-person pitch; verified product updates appear there automatically after release.” |
+
+## The operating rhythm
+
+The Build Window should update when something meaningful moves, not every hour and not only once a week.
+
+1. A meaningful build, research, release, or decision event happens.
+2. It receives a short partner translation: **what, why, now possible, still true**.
+3. The partner can open the hub and see the evolving company story without asking for a status recap.
+4. When market input changes the story, it appears in the Market Loop and generates a deliberate product or founder decision.
+
+This is how the partner sees “everything” without receiving noise.
+
+## Privacy and implementation reality
+
+The first visual version can be a polished static experience with curated, safe-to-share content. It should **not** claim to be private or store real prospect-sensitive information yet.
+
+| Stage | Capability | Honest boundary |
 | --- | --- | --- |
-| **A. Upcoming conversation** | Who the partner is meeting, the objective, demo route, and questions to learn from the buyer. | A real prospect meeting or outreach is the next important action. |
-| **B. Founder alignment** | The current proof point, live demo state, one decision, and weekly next move. | The main problem is keeping the two founders aligned between conversations. |
-| **C. Product feedback loop** | One field insight, what it changes, and the build/decision consequence. | You already have a useful conversation or feedback item to act on. |
+| **Stage 1: Build Window** | Curated product story, milestones, demo access, decisions, and safe market learnings. | Content is preloaded and must be safe if the link is shared. |
+| **Stage 2: Secure founder workspace** | Login, private updates, saved decisions, controlled field notes, and shared editing. | Requires a database, permission design, authentication, and retention rules. |
+| **Stage 3: Connected project intelligence** | Selected GitHub/release events and structured market insights flow into a durable narrative. | Requires a review layer; raw activity must never become auto-published founder truth. |
+| **Stage 4: Bounded AI assistance** | Reviewable summaries, trend grouping, and draft recaps. | AI assists with organization; founders decide what becomes product direction. |
 
-## Bottom line
+## What not to do
 
-> The hub is a good idea because it can make your partnership more legible and more decisive. It becomes a bad idea if it distracts from getting in front of real people or if it copies tools you already dislike.
+- Do not expose raw GitHub commits, code, agent prompts, browser logs, or build output as the partner’s default experience.
+- Do not fabricate customer traction, prospect activity, meeting outcomes, metrics, or feedback to make the hub feel active.
+- Do not let automated activity write the company narrative without founder review.
+- Do not build a full database/AI/CRM system before the visual Build Window proves the partner actually wants this visibility.
+- Do not let the internal hub compete with the client-facing demo; its job is to make the demo and market effort stronger.
 
-The correct first move is a **Partner Brief**, not an OS. Build it around one real use in the next two weeks. If it helps your partner show the demo better and return better market intelligence, then build the secure shared workspace behind it.
+## The decision before visual design
+
+The key design question is not whether the partner needs visibility. They do. The question is **how much of the story should be visible by default**.
+
+| Choice | Opening experience | Best if |
+| --- | --- | --- |
+| **A. Full Build Window** | Opens with the product-building narrative: live, shaping, validating, deferred, and why. | The partner primarily needs confidence in everything being built behind the scenes. |
+| **B. Founder Brief first** | Opens with the current chapter and next action; Build Window is one click deeper. | The partner primarily needs quick orientation before reading the full story. |
+| **C. Market Loop first** | Opens with prospect signals, product consequences, and what the team is learning. | The partnership already has frequent real conversations feeding product direction. |
+
+## Recommended starting point
+
+Start with **A: Full Build Window**. The user explicitly needs the partner to see the meaningful product-building engine, not simply a to-do list. The first screen should lead with the live product story and the entire meaningful current state, with a smaller Founder Lens that turns visibility into the next action.
+
+The visual version should be built only after confirming that this is the feeling wanted: **“I can see what we are becoming, what has been accomplished, why it matters, and where I fit.”**
