@@ -50,3 +50,12 @@
 - [x] Create a separate beverage-distributor website copy without changing the baseline site.
 - [x] Refine positioning, scenarios, and product language around beverage-distributor account rhythms and owned communication decisions.
 - [x] Validate, checkpoint, and synchronize the beverage-specific version as an independent deliverable.
+
+## Local Claude Preview Synchronization
+
+- [ ] Confirm the separate local repository running at `localhost:5199` is pulled to GitHub `main` at `e1a4807` and restarted so it reflects the AI Operations Lead Daily Operating Brief.
+
+## Live Hosting and Release Workflow
+
+- [x] Decide and document the public hosting, staging-preview, and verified-release workflow that will replace localhost as the primary way partners open the Harborline demo.
+- [ ] Connect the canonical GitHub repository to a free continuous-deployment host, protect `main` as the verified production branch, and capture the first public demo URL.
