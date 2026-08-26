@@ -29,7 +29,13 @@ On August 25, 2026, Cloudflare confirmed that the account was connected but had 
 
 Cloudflare’s official remediation is to reinstall the **Cloudflare Workers and Pages** GitHub App, then return to Workers & Pages and connect the intended GitHub account/repository again. The user must complete the GitHub login and installation step because it requires their account credentials and human verification.
 
-After the GitHub authorization was completed, the confirmed Pages project was created successfully with the configuration above. Cloudflare assigned the public address `ai-operations-demo.pages.dev`. At project creation, no initial deployment was recorded; the next verified commit pushed to `main` is intentionally used as the first production deployment trigger.
+After the GitHub authorization was completed, the confirmed Pages project was created successfully with the configuration above. Cloudflare assigned the public address `ai-operations-demo.pages.dev`.
+
+The first production deployment succeeded on August 26, 2026 from GitHub commit `475964a` (`Document Cloudflare Pages release workflow`). It is available at the stable partner-facing address:
+
+> **https://ai-operations-demo.pages.dev**
+
+Cloudflare recorded a successful GitHub-triggered production build and deployment. The public site was then opened and verified at the stable address; it serves the AI Operations Lead Daily Operating Brief rather than a localhost-only preview.
 
 ## Sources
 

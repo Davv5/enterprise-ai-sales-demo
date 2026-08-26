@@ -58,4 +58,4 @@
 ## Live Hosting and Release Workflow
 
 - [x] Decide and document the public hosting, staging-preview, and verified-release workflow that will replace localhost as the primary way partners open the Harborline demo.
-- [ ] Connect the canonical GitHub repository to a free continuous-deployment host, protect `main` as the verified production branch, and capture the first public demo URL.
+- [x] Connect the canonical GitHub repository to a free continuous-deployment host, protect `main` as the verified production branch, and capture the first public demo URL.
