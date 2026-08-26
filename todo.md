@@ -62,3 +62,7 @@
 - [ ] Diagnose and repair the reported blank public Pages experience, then independently confirm the stable partner-facing URL serves the production demo.
 - [ ] Resolve the confirmed end-user access mismatch or establish a reliable alternate public partner-facing delivery route before treating the Cloudflare Pages link as ready for pitching.
 - [ ] Fix the reported Safari blank-load issue and improve initial public-page load performance before relying on the link for in-person demonstrations.
+
+## Partner Operating Hub Discovery
+
+- [ ] Define the purpose, partner roles, high-value operating moments, information boundaries, and phased build plan for a shared nontechnical operating hub that complements—not replaces—the client-facing product demo.
